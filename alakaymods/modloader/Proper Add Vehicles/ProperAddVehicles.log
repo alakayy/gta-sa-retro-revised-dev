@@ -1,0 +1,302 @@
+[02:07:20.568] === ProperAddVehicles initializing ===
+[02:07:20.568] INI path: D:\Games\GTA San Andreas VanillaZIPPED\RetroRevisedalakay\GTA San Andreas RR alakay\modloader\proper add vehicles\ProperAddVehicles.ini
+[02:07:20.568] IsGTASA10US: exe size = 14383616 bytes
+[02:07:20.568] Game version: GTA SA 1.0 US Hoodlum - OK
+[02:07:20.568] SetUpDynamicStructures: extended=0
+[02:07:20.568]   sizeof(tHandlingData_extended) = 224 (raw parent = 224)
+[02:07:20.568]   sizeof(cHandlingDataMgr) = 50724
+[02:07:20.568]   m_standardEntryArray offset = 20
+[02:07:20.568]   m_bikeEntryArray offset = 47060
+[02:07:20.568]   m_flyingEntryArray offset = 47892
+[02:07:20.568]   m_boatEntryArray offset = 50004
+[02:07:20.568] Default limits initialized
+[02:07:20.569] INI values: standard=600 bike=50 flying=50 boat=50 anim=30 cargrp=63
+[02:07:20.569] Handling limits increased - patching required
+[02:07:20.569] Calling PatchHandlingCfgLimit_GTA_SA...
+[02:07:20.569] PatchHandlingCfgLimit_GTA_SA: entry
+[02:07:20.569]   Limits: standard=600 bike=50 flying=50 boat=50 anim=30
+[02:07:20.569] SetUpDynamicStructures: extended=1
+[02:07:20.569]   sizeof(tHandlingData_extended) = 252 (raw parent = 224)
+[02:07:20.569]   sizeof(cHandlingDataMgr) = 161904
+[02:07:20.569]   m_standardEntryArray offset = 104
+[02:07:20.569]   m_bikeEntryArray offset = 151304
+[02:07:20.569]   m_flyingEntryArray offset = 154504
+[02:07:20.569]   m_boatEntryArray offset = 158904
+[02:07:20.569]   Allocating mod_HandlingManager: 161904 bytes
+[02:07:20.569]   mod_HandlingManager allocated at 0x04D2A6A0
+[02:07:20.569]   Calling PatchHandlingCfgLimit_GTA_SA_1_0_US_WIN_X86...
+[02:07:20.569] PatchHandlingCfgLimit_GTA_SA_1_0_US_WIN_X86: entry
+[02:07:20.569]   Exe type for patches: Hoodlum
+[02:07:20.569]   Patched CGarage::RightModTypeForThisGarage (Hoodlum addresses)
+[02:07:20.569]   Patched opcodes 096E, 096F, 09E1
+[02:07:20.569]   Patched CVehicleModelInfo methods
+[02:07:20.569]   Patched CFileLoader, CGame init
+[02:07:20.569]   Patched CAutomobile::ProcessCarWheelPair
+[02:07:20.569]   Patched CAutomobile
+[02:07:20.569]   Patched CBike, CPlane, CQuad
+[02:07:20.569]   Patched CVehicle, CBoat, CTrain
+[02:07:20.569]   Patched drive type checks
+[02:07:20.569]   Patched LoadHandlingData init/convert
+[02:07:20.569]   Patched LoadHandlingData cases (standard/boat/bike/flying)
+[02:07:20.569]   Patched ConvertDataToGameUnits, cHandlingDataMgr ctor, GetHandlingId
+[02:07:20.570]   Patched all CVehicleAnimGroupData references
+[02:07:20.570]   Patched VehicleAudioProperties at 0x4F77CA -> mod array at 0x6DD71C10
+[02:07:20.570] Addons: init done
+[02:07:20.570] PatchHandlingCfgLimit_GTA_SA_1_0_US_WIN_X86: done
+[02:07:20.570] PatchHandlingCfgLimit_GTA_SA: done successfully
+[02:07:20.570] Calling PatchCarcolsLimit_GTA_SA...
+[02:07:20.570] PatchCarcolsLimit_GTA_SA: entry (limit=256)
+[02:07:20.570] PatchCarcolsLimit_GTA_SA: done
+[02:07:20.570] Cargrp limit increased to 63 - patching required
+[02:07:20.570] SetCargrpLimit: entry, carsPerGroup=63
+[02:07:20.570]   Allocated all car group arrays
+[02:07:20.570]   Patched CLoadedCarGroup methods
+[02:07:20.570]   Patched CPopulation/CPopCycle functions
+[02:07:20.570]   Patched CStreaming::AddToLoadedVehiclesList (Hoodlum)
+[02:07:20.570]   Patched CStreaming::StreamZoneModels_Gangs
+[02:07:20.570]   Patched CCarCtrl methods
+[02:07:20.570]   Patched CPopulation::LoadCarGroups
+[02:07:20.570]   Patched CStreaming vehiclesLoaded refs
+[02:07:20.570]   Patched CStreaming::RemoveLoadedVehicle
+[02:07:20.570]   Patched CCarCtrl::Init/ReInit
+[02:07:20.571]   Patched CStreaming::RemoveCarModel (Hoodlum)
+[02:07:20.571]   Patched CStreaming::ReclassifyLoadedCars
+[02:07:20.571]   Patched CPopulation::PickRiotRoadBlockCar
+[02:07:20.571]   Patched CStreaming::StreamOneNewCar (Hoodlum)
+[02:07:20.571]   Scanning for missed m_LoadedGangCars references and multipliers...
+[02:07:20.571]     Auto-patched IMUL 30 at 0x4072C8 to 252
+[02:07:20.571]     Auto-patched reference at 0x4098CB (Opcode: B8)
+[02:07:20.571]     Auto-patched IMUL 30 at 0x40C60F to 252
+[02:07:20.571]     Skipping potential risky IMUL at 430521
+[02:07:20.571]     Skipping potential risky IMUL at 430521
+[02:07:20.571]     Skipping potential risky IMUL at 430521
+[02:07:20.572]     Skipping potential risky IMUL at 430521
+[02:07:20.572]     Skipping potential risky IMUL at 430521
+[02:07:20.572]     Skipping potential risky IMUL at 430521
+[02:07:20.572]     Skipping potential risky IMUL at 430521
+[02:07:20.572] SetCargrpLimit: done, groups=34 carsPerGroup=63
+[02:07:20.572] Addons: init done
+[02:07:20.572] ModelSpecialFeatures: Initializing (584 known addresses)...
+[02:07:20.573]   MSF skip 0x5361F5: E9 46 17 01 70 0F 85 B5
+[02:07:20.573]   MSF skip 0x53654B: E9 20 14 01 70 3D 56 01
+[02:07:20.575] ModelSpecialFeatures: DONE - 582 hooked, 2 skipped (582 stubs used)
+[02:07:20.575] === ProperAddVehicles initialization COMPLETE ===
+[02:07:20.576] Addons: registered: modloader\proper add vehicles\vehicles\sktbd\sktbd.vehdata
+[02:07:28.672] InitVariables: entry, this=0x04D2A6A0
+[02:07:28.672] InitVariables: standardLimit=600, looping to clear entries...
+[02:07:28.672] InitVariables: done
+[02:07:28.673] GetHandlingIdAlways: new entry 'TROPIC' at index 0
+[02:07:28.673] GetHandlingIdAlways: new entry 'BAGBOXA' at index 1
+[02:07:28.673] GetHandlingIdAlways: new entry 'BAGBOXB' at index 2
+[02:07:28.673] GetHandlingIdAlways: new entry 'SOLAIR' at index 3
+[02:07:28.673] GetHandlingIdAlways: new entry 'COMBINE' at index 4
+[02:07:28.673] GetHandlingIdAlways: new entry 'MOWER' at index 5
+[02:07:28.673] GetHandlingIdAlways: new entry 'TUG' at index 6
+[02:07:28.673] GetHandlingIdAlways: new entry 'FLASH' at index 7
+[02:07:28.673] GetHandlingIdAlways: new entry 'SULTAN' at index 8
+[02:07:28.673] GetHandlingIdAlways: new entry 'RCRAIDER' at index 9
+[02:07:28.673] GetHandlingIdAlways: new entry 'MTB' at index 10
+[02:07:28.673] GetHandlingIdAlways: new entry 'PETROL' at index 11
+[02:07:28.673] GetHandlingIdAlways: new entry 'TOPFUN' at index 12
+[02:07:28.673] GetHandlingIdAlways: new entry 'FLATBED' at index 13
+[02:07:28.673] GetHandlingIdAlways: new entry 'CROPDUST' at index 14
+[02:07:28.673] GetHandlingIdAlways: new entry 'PEREN' at index 15
+[02:07:28.673] GetHandlingIdAlways: new entry 'BUFFALO' at index 16
+[02:07:28.673] GetHandlingIdAlways: new entry 'TOWTRUCK' at index 17
+[02:07:28.673] GetHandlingIdAlways: new entry 'STALLION' at index 18
+[02:07:28.673] GetHandlingIdAlways: new entry 'SQUALO' at index 19
+[02:07:28.673] GetHandlingIdAlways: new entry 'DUNE' at index 20
+[02:07:28.673] GetHandlingIdAlways: new entry 'DFT30' at index 21
+[02:07:28.673] GetHandlingIdAlways: new entry 'TAMPA' at index 22
+[02:07:28.673] GetHandlingIdAlways: new entry 'COASTMAV' at index 23
+[02:07:28.674] GetHandlingIdAlways: new entry 'NEBULA' at index 24
+[02:07:28.674] GetHandlingIdAlways: new entry 'ADMIRAL' at index 25
+[02:07:28.674] GetHandlingIdAlways: new entry 'BLOODRA' at index 26
+[02:07:28.674] GetHandlingIdAlways: new entry 'BLOODRB' at index 27
+[02:07:28.674] GetHandlingIdAlways: new entry 'VIRGO' at index 28
+[02:07:28.674] GetHandlingIdAlways: new entry 'BFINJECT' at index 29
+[02:07:28.674] GetHandlingIdAlways: new entry 'ANDROM' at index 30
+[02:07:28.674] GetHandlingIdAlways: new entry 'WASHING' at index 31
+[02:07:28.674] GetHandlingIdAlways: new entry 'HERMES' at index 32
+[02:07:28.674] GetHandlingIdAlways: new entry 'MAJESTIC' at index 33
+[02:07:28.674] GetHandlingIdAlways: new entry 'ARTICT1' at index 34
+[02:07:28.674] GetHandlingIdAlways: new entry 'ARTICT2' at index 35
+[02:07:28.674] GetHandlingIdAlways: new entry 'ARTICT3' at index 36
+[02:07:28.674] GetHandlingIdAlways: new entry 'ROMERO' at index 37
+[02:07:28.674] GetHandlingIdAlways: new entry 'FCR900' at index 38
+[02:07:28.674] GetHandlingIdAlways: new entry 'BARRACKS' at index 39
+[02:07:28.674] GetHandlingIdAlways: new entry 'AT400' at index 40
+[02:07:28.674] GetHandlingIdAlways: new entry 'BROADWAY' at index 41
+[02:07:28.674] GetHandlingIdAlways: new entry 'FBITRUCK' at index 42
+[02:07:28.674] GetHandlingIdAlways: new entry 'RCTIGER' at index 43
+[02:07:28.674] GetHandlingIdAlways: new entry 'BULLET' at index 44
+[02:07:28.674] GetHandlingIdAlways: new entry 'TAXI' at index 45
+[02:07:28.674] GetHandlingIdAlways: new entry 'BUCCANEE' at index 46
+[02:07:28.674] GetHandlingIdAlways: new entry 'NRG500' at index 47
+[02:07:28.674] GetHandlingIdAlways: new entry 'WINDSOR' at index 48
+[02:07:28.674] GetHandlingIdAlways: new entry 'WALTON' at index 49
+[02:07:28.674] GetHandlingIdAlways: new entry 'MESA' at index 50
+[02:07:28.674] GetHandlingIdAlways: new entry 'CLUB' at index 51
+[02:07:28.674] GetHandlingIdAlways: new entry 'LEVIATHN' at index 52
+[02:07:28.674] GetHandlingIdAlways: new entry 'UTIL_TR1' at index 53
+[02:07:28.674] GetHandlingIdAlways: new entry 'LANDSTAL' at index 54
+[02:07:28.674] GetHandlingIdAlways: new entry 'BLISTAC' at index 55
+[02:07:28.674] GetHandlingIdAlways: new entry 'HUNTLEY' at index 56
+[02:07:28.674] GetHandlingIdAlways: new entry 'INTRUDER' at index 57
+[02:07:28.674] GetHandlingIdAlways: new entry 'TAHOMA' at index 58
+[02:07:28.674] GetHandlingIdAlways: new entry 'SLAMVAN' at index 59
+[02:07:28.674] GetHandlingIdAlways: new entry 'CARGOBOB' at index 60
+[02:07:28.674] GetHandlingIdAlways: new entry 'MULE' at index 61
+[02:07:28.674] GetHandlingIdAlways: new entry 'ALPHA' at index 62
+[02:07:28.674] GetHandlingIdAlways: new entry 'STRATUM' at index 63
+[02:07:28.674] GetHandlingIdAlways: new entry 'CABBIE' at index 64
+[02:07:28.674] GetHandlingIdAlways: new entry 'BMX' at index 65
+[02:07:28.674] GetHandlingIdAlways: new entry 'SHAMAL' at index 66
+[02:07:28.674] GetHandlingIdAlways: new entry 'RANGER' at index 67
+[02:07:28.674] GetHandlingIdAlways: new entry 'ENFORCER' at index 68
+[02:07:28.674] GetHandlingIdAlways: new entry 'RDTRAIN' at index 69
+[02:07:28.674] GetHandlingIdAlways: new entry 'TRAM' at index 70
+[02:07:28.674] GetHandlingIdAlways: new entry 'CAMPER' at index 71
+[02:07:28.674] GetHandlingIdAlways: new entry 'CEMENT' at index 72
+[02:07:28.674] GetHandlingIdAlways: new entry 'HPV1000' at index 73
+[02:07:28.674] GetHandlingIdAlways: new entry 'BRAVURA' at index 74
+[02:07:28.674] GetHandlingIdAlways: new entry 'COACH' at index 75
+[02:07:28.674] GetHandlingIdAlways: new entry 'BEAGLE' at index 76
+[02:07:28.674] GetHandlingIdAlways: new entry 'BUS' at index 77
+[02:07:28.674] GetHandlingIdAlways: new entry 'SUNRISE' at index 78
+[02:07:28.674] GetHandlingIdAlways: new entry 'SUPERGT' at index 79
+[02:07:28.674] GetHandlingIdAlways: new entry 'SWEEPER' at index 80
+[02:07:28.675] GetHandlingIdAlways: new entry 'MOONBEAM' at index 81
+[02:07:28.675] GetHandlingIdAlways: new entry 'GREENWOO' at index 82
+[02:07:28.675] GetHandlingIdAlways: new entry 'PRIMO' at index 83
+[02:07:28.675] GetHandlingIdAlways: new entry 'FELTZER' at index 84
+[02:07:28.675] GetHandlingIdAlways: new entry 'BANDITO' at index 85
+[02:07:28.675] GetHandlingIdAlways: new entry 'CSTREAK' at index 86
+[02:07:28.675] GetHandlingIdAlways: new entry 'SWATVAN' at index 87
+[02:07:28.675] GetHandlingIdAlways: new entry 'OCEANIC' at index 88
+[02:07:28.675] GetHandlingIdAlways: new entry 'STREAK' at index 89
+[02:07:28.675] GetHandlingIdAlways: new entry 'VINCENT' at index 90
+[02:07:28.675] GetHandlingIdAlways: new entry 'STUNT' at index 91
+[02:07:28.675] GetHandlingIdAlways: new entry 'MRWHOOP' at index 92
+[02:07:28.675] GetHandlingIdAlways: new entry 'RIO' at index 93
+[02:07:28.675] GetHandlingIdAlways: new entry 'FREIFLAT' at index 94
+[02:07:28.675] GetHandlingIdAlways: new entry 'CHOPPERB' at index 95
+[02:07:28.675] GetHandlingIdAlways: new entry 'CLOVER' at index 96
+[02:07:28.675] GetHandlingIdAlways: new entry 'TORNADO' at index 97
+[02:07:28.675] GetHandlingIdAlways: new entry 'RCGOBLIN' at index 98
+[02:07:28.675] GetHandlingIdAlways: new entry 'UTILITY' at index 99
+[02:07:28.675] GetHandlingIdAlways: new entry 'FARM_TR1' at index 100
+[02:07:28.675] GetHandlingIdAlways: new entry 'CADRONA' at index 101
+[02:07:28.675] GetHandlingIdAlways: new entry 'SEAPLANE' at index 102
+[02:07:28.675] GetHandlingIdAlways: new entry 'URANUS' at index 103
+[02:07:28.675] GetHandlingIdAlways: new entry 'TRACTOR' at index 104
+[02:07:28.675] GetHandlingIdAlways: new entry 'RCBANDIT' at index 105
+[02:07:28.675] GetHandlingIdAlways: new entry 'PREMIER' at index 106
+[02:07:28.675] GetHandlingIdAlways: new entry 'AIRTRAIN' at index 107
+[02:07:28.675] GetHandlingIdAlways: new entry 'FREEWAY' at index 108
+[02:07:28.675] GetHandlingIdAlways: new entry 'CUPBOAT' at index 109
+[02:07:28.675] GetHandlingIdAlways: new entry 'SENTINEL' at index 110
+[02:07:28.675] GetHandlingIdAlways: new entry 'BANSHEE' at index 111
+[02:07:28.675] GetHandlingIdAlways: new entry 'MERIT' at index 112
+[02:07:28.675] GetHandlingIdAlways: new entry 'YOSEMITE' at index 113
+[02:07:28.675] GetHandlingIdAlways: new entry 'CHEETAH' at index 114
+[02:07:28.675] GetHandlingIdAlways: new entry 'DOZER' at index 115
+[02:07:28.675] GetHandlingIdAlways: new entry 'POLRANGER' at index 116
+[02:07:28.675] GetHandlingIdAlways: new entry 'RANCHER' at index 117
+[02:07:28.675] GetHandlingIdAlways: new entry 'DIRTBIKE' at index 118
+[02:07:28.675] GetHandlingIdAlways: new entry 'ESPERANT' at index 119
+[02:07:28.675] GetHandlingIdAlways: new entry 'POLICE_VG' at index 120
+[02:07:28.675] GetHandlingIdAlways: new entry 'PICADOR' at index 121
+[02:07:28.675] GetHandlingIdAlways: new entry 'RHINO' at index 122
+[02:07:28.675] GetHandlingIdAlways: new entry 'COMET' at index 123
+[02:07:28.675] GetHandlingIdAlways: new entry 'FORTUNE' at index 124
+[02:07:28.675] GetHandlingIdAlways: new entry 'RCBARON' at index 125
+[02:07:28.675] GetHandlingIdAlways: new entry 'POLICE_SF' at index 126
+[02:07:28.675] GetHandlingIdAlways: new entry 'FREIGHT' at index 127
+[02:07:28.675] GetHandlingIdAlways: new entry 'WAYFARER' at index 128
+[02:07:28.675] GetHandlingIdAlways: new entry 'POLICE_LA' at index 129
+[02:07:28.675] GetHandlingIdAlways: new entry 'SADLER' at index 130
+[02:07:28.675] GetHandlingIdAlways: new entry 'BENSON' at index 131
+[02:07:28.675] GetHandlingIdAlways: new entry 'JOURNEY' at index 132
+[02:07:28.675] GetHandlingIdAlways: new entry 'DINGHY' at index 133
+[02:07:28.676] GetHandlingIdAlways: new entry 'SPARROW' at index 134
+[02:07:28.676] GetHandlingIdAlways: new entry 'RAINDANC' at index 135
+[02:07:28.676] GetHandlingIdAlways: new entry 'STRETCH' at index 136
+[02:07:28.676] GetHandlingIdAlways: new entry 'POLMAV' at index 137
+[02:07:28.676] GetHandlingIdAlways: new entry 'FIRETRUK' at index 138
+[02:07:28.676] GetHandlingIdAlways: new entry 'JESTER' at index 139
+[02:07:28.676] GetHandlingIdAlways: new entry 'SPEEDER' at index 140
+[02:07:28.676] GetHandlingIdAlways: new entry 'LAUNCH' at index 141
+[02:07:28.676] GetHandlingIdAlways: new entry 'SABRE' at index 142
+[02:07:28.676] GetHandlingIdAlways: new entry 'ELEGY' at index 143
+[02:07:28.676] GetHandlingIdAlways: new entry 'BURRITO' at index 144
+[02:07:28.676] GetHandlingIdAlways: new entry 'RCCAM' at index 145
+[02:07:28.676] GetHandlingIdAlways: new entry 'MTRUCK_B' at index 146
+[02:07:28.676] GetHandlingIdAlways: new entry 'MTRUCK_A' at index 147
+[02:07:28.676] GetHandlingIdAlways: new entry 'COASTGRD' at index 148
+[02:07:28.676] GetHandlingIdAlways: new entry 'PATRIOT' at index 149
+[02:07:28.676] GetHandlingIdAlways: new entry 'SEASPAR' at index 150
+[02:07:28.676] GetHandlingIdAlways: new entry 'FBIRANCH' at index 151
+[02:07:28.676] GetHandlingIdAlways: new entry 'DUMPER' at index 152
+[02:07:28.676] GetHandlingIdAlways: new entry 'LINERUN' at index 153
+[02:07:28.676] GetHandlingIdAlways: new entry 'TURISMO' at index 154
+[02:07:28.676] GetHandlingIdAlways: new entry 'AMBULAN' at index 155
+[02:07:28.676] GetHandlingIdAlways: new entry 'ELEGANT' at index 156
+[02:07:28.676] GetHandlingIdAlways: new entry 'GLENDALE' at index 157
+[02:07:28.676] GetHandlingIdAlways: new entry 'HOTRING' at index 158
+[02:07:28.676] GetHandlingIdAlways: new entry 'PONY' at index 159
+[02:07:28.676] GetHandlingIdAlways: new entry 'VOODOO' at index 160
+[02:07:28.676] GetHandlingIdAlways: new entry 'INFERNUS' at index 161
+[02:07:28.676] GetHandlingIdAlways: new entry 'BOXVILLE' at index 162
+[02:07:28.676] GetHandlingIdAlways: new entry 'DODO' at index 163
+[02:07:28.676] GetHandlingIdAlways: new entry 'HOTKNIFE' at index 164
+[02:07:28.676] GetHandlingIdAlways: new entry 'BOBCAT' at index 165
+[02:07:28.676] GetHandlingIdAlways: new entry 'WILLARD' at index 166
+[02:07:28.676] GetHandlingIdAlways: new entry 'BAGGAGE' at index 167
+[02:07:28.676] GetHandlingIdAlways: new entry 'FORKLIFT' at index 168
+[02:07:28.676] GetHandlingIdAlways: new entry 'PHOENIX' at index 169
+[02:07:28.676] GetHandlingIdAlways: new entry 'KART' at index 170
+[02:07:28.676] GetHandlingIdAlways: new entry 'BIKE' at index 171
+[02:07:28.676] GetHandlingIdAlways: new entry 'HUNTER' at index 172
+[02:07:28.676] GetHandlingIdAlways: new entry 'SANDKING' at index 173
+[02:07:28.676] GetHandlingIdAlways: new entry 'EMPEROR' at index 174
+[02:07:28.676] GetHandlingIdAlways: new entry 'HOTDOG' at index 175
+[02:07:28.676] GetHandlingIdAlways: new entry 'TRASH' at index 176
+[02:07:28.676] GetHandlingIdAlways: new entry 'RUSTLER' at index 177
+[02:07:28.676] GetHandlingIdAlways: new entry 'REEFER' at index 178
+[02:07:28.676] GetHandlingIdAlways: new entry 'ROLLER' at index 179
+[02:07:28.676] GetHandlingIdAlways: new entry 'MANANA' at index 180
+[02:07:28.676] GetHandlingIdAlways: new entry 'SAVANNA' at index 181
+[02:07:28.676] GetHandlingIdAlways: new entry 'BLADE' at index 182
+[02:07:28.676] GetHandlingIdAlways: new entry 'PREVION' at index 183
+[02:07:28.676] GetHandlingIdAlways: new entry 'SKTBD' at index 184
+[02:07:28.677] GetHandlingIdAlways: new entry 'STAFFORD' at index 185
+[02:07:28.677] GetHandlingIdAlways: new entry 'ZR350' at index 186
+[02:07:28.677] GetHandlingIdAlways: new entry 'MAVERICK' at index 187
+[02:07:28.677] GetHandlingIdAlways: new entry 'EUROS' at index 188
+[02:07:28.677] GetHandlingIdAlways: new entry 'MOPED' at index 189
+[02:07:28.677] GetHandlingIdAlways: new entry 'HYDRA' at index 190
+[02:07:28.677] GetHandlingIdAlways: new entry 'MARQUIS' at index 191
+[02:07:28.677] GetHandlingIdAlways: new entry 'GOLFCART' at index 192
+[02:07:28.677] GetHandlingIdAlways: new entry 'PREDATOR' at index 193
+[02:07:28.677] GetHandlingIdAlways: new entry 'SECURICA' at index 194
+[02:07:28.677] GetHandlingIdAlways: new entry 'QUADBIKE' at index 195
+[02:07:28.677] GetHandlingIdAlways: new entry 'REMINGTN' at index 196
+[02:07:28.677] GetHandlingIdAlways: new entry 'BF400' at index 197
+[02:07:28.677] GetHandlingIdAlways: new entry 'NEVADA' at index 198
+[02:07:28.677] GetHandlingIdAlways: new entry 'REGINA' at index 199
+[02:07:28.677] GetHandlingIdAlways: new entry 'PACKER' at index 200
+[02:07:28.677] GetHandlingIdAlways: new entry 'YANKEE' at index 201
+[02:07:28.677] GetHandlingIdAlways: new entry 'STAIRS' at index 202
+[02:07:28.677] GetHandlingIdAlways: new entry 'NEWSVAN' at index 203
+[02:07:28.677] GetHandlingIdAlways: new entry 'BOXBURG' at index 204
+[02:07:28.677] GetHandlingIdAlways: new entry 'HUSTLER' at index 205
+[02:07:28.677] GetHandlingIdAlways: new entry 'RUMPO' at index 206
+[02:07:28.677] GetHandlingIdAlways: new entry 'MONSTER' at index 207
+[02:07:28.677] GetHandlingIdAlways: new entry 'FLOAT' at index 208
+[02:07:28.677] GetHandlingIdAlways: new entry 'PETROTR' at index 209
+[02:07:28.677] GetHandlingIdAlways: new entry 'VORTEX' at index 210
+[02:07:34.592] Addons: audio sktbd(14333) -> rcbaron(464)
+[02:07:34.592] Addons: 'D:\Games\GTA San Andreas VanillaZIPPED\RetroRevisedalakay\GTA San Andreas RR alakay\modloader\proper add vehicles\vehicles\sktbd\sktbd.vehdata' loaded 1 redirect(s)
+[02:07:34.592] Addons: reload done, 1 redirect(s) active
+[02:27:16.560] DLL_PROCESS_DETACH - shutting down
