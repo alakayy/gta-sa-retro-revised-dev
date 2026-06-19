@@ -1,0 +1,26 @@
+objs
+2, helihosb_sfw, sfe_copchop, 150, 2097156
+3, carwash_sign, barrio1_lae, 80, 0
+4, VineSign1_spots, a51_spotlight, 100, 0
+6, station_sign, station_sfse, 80, 0
+8, hshblckdtls_sfs, bdl, 120, 0
+42, vegasWedge16b, vgwsthiway1, 230, 0
+65, laspawnglrt, bdl, 150, 0
+74, gardenbencha, benches, 50, 0
+86, casino_lpillars, casino_props, 50, 0
+2500, CJ_FF_COFFEE, bistro, 50, 0
+end
+tobj
+5, VineSign1_lights, bdl, 150, 2097156, 20, 6
+end
+path
+end
+2dfx
+end
+anim
+end
+txdp
+vgnfremntsgn, bdl
+properf_sf, bdl
+properf_int, skateboard
+end
