@@ -1,0 +1,3 @@
+FxReloadRuntimeCleaner v26 installed. DIAGNOSTIC ONLY: no UnloadFxProject, no Stop/Kill guard, no exception recovery.
+FxReloadRuntimeCleaner v26: project loaded #1 fxMan=00A9AE80 file="models\effects.fxp" gGameState=8 sawGameplay=0
+FxReloadRuntimeCleaner v26: gGameState changed -9999 -> 9 loaded=1 sawGameplay=0 begins=0 ends=1 reinit=0 project="models\effects.fxp" fxMan=00A9AE80

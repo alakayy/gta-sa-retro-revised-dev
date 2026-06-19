@@ -1,0 +1,165 @@
+FX LoadProject begin: fxMan=00A9AE80 file="models\effects.fxp"
+FX LoadProject reload-safe v26 diagnostic-fix begin: fxMan=00A9AE80 file="models\effects.fxp" loadCount=1 reload=0
+Loading PNG texture "models\effects\beach_effects\fomx3x.png"
+Loading PNG texture "models\effects\beach_effects\fomx3x2.png"
+Loading PNG texture "models\effects\beach_effects\fxtest1.png"
+Loading PNG texture "models\effects\beach_effects\fxtest1g.png"
+Loading PNG texture "models\effects\beach_effects\fxtest1sh.png"
+Loading PNG texture "models\effects\heli_dust\7707.png"
+Loading PNG texture "models\effects\heli_dust\frhyrp1.png"
+Loading PNG texture "models\effects\heli_dust\frhyrp4.png"
+Loading PNG texture "models\effects\heli_dust\wtrckt.png"
+Loading PNG texture "models\effects\heli_dust\xxx4.png"
+Loading PNG texture "models\effects\main_wtfx\fxtest2.png"
+Loading PNG texture "models\effects\main_wtfx\fxtest3.png"
+Loading PNG texture "models\effects\ocean_refl\fxtest1.png" - texture was already loaded.
+Loading PNG texture "models\effects\ocean_waves\fom4.png"
+Loading PNG texture "models\effects\ocean_waves\fom5.png"
+Loading PNG texture "models\effects\ocean_waves\fom6.png"
+Loading PNG texture "models\effects\ocean_waves\fom7.png"
+Loading PNG texture "models\effects\ocean_waves\fom8.png"
+Loading PNG texture "models\effects\ocean_waves\fxtest4.png"
+Loading PNG texture "models\effects\prt_wake\boatwake1.png"
+Removing old texture "boatwake1"
+Loading PNG texture "models\effects\prt_wake\boatwake2.png"
+Loading PNG texture "models\effects\prt_watersplash\fomx3x.png" - texture was already loaded.
+Loading PNG texture "models\effects\prt_watersplash\fomx8.png"
+Loading PNG texture "models\effects\sun_sparks\srfl1.png"
+Loading PNG texture "models\effects\sun_sparks\srfl3.png"
+Loading PNG texture "models\effects\thunder\thnd_flsh.png"
+Loading PNG texture "models\effects\thunder\thunder.png"
+Loading PNG texture "models\effects\thunder\thunder3.png"
+Loading PNG texture "models\effects\water_ripples\009b.png"
+Loading PNG texture "models\effects\water_ripples\boatwake1.png" - texture was already loaded.
+Loading PNG texture "models\effects\water_ripples\fomx10.png"
+Loading PNG texture "models\effects\water_splash\009b.png" - texture was already loaded.
+Loading PNG texture "models\effects\water_splash\7707.png" - texture was already loaded.
+Loading PNG texture "models\effects\water_splash\bltwtsr_2.png"
+Loading PNG texture "models\effects\water_splash\bltwtsr_3.png"
+Loading PNG texture "models\effects\water_splash\bltwtsr_4.png"
+Loading PNG texture "models\effects\water_splash\bltwtsr_5.png"
+Loading PNG texture "models\effects\water_splash\wtdrpx.png"
+Loading PNG texture "models\effects\water_splsh_big\009b.png" - texture was already loaded.
+Loading PNG texture "models\effects\water_splsh_big\0x024233.png"
+Loading PNG texture "models\effects\water_splsh_big\6609.png"
+Loading PNG texture "models\effects\water_splsh_big\7707.png" - texture was already loaded.
+Loading PNG texture "models\effects\water_splsh_big\wtdrpx.png" - texture was already loaded.
+Loading PNG texture "models\effects\water_swim\009b.png" - texture was already loaded.
+Loading PNG texture "models\effects\water_swim\6609.png" - texture was already loaded.
+Loading PNG texture "models\effects\water_swim\fomx3.png"
+Loading PNG texture "models\effects\water_swim\fomx7.png"
+Loading PNG texture "models\effects\water_swim\fomx8.png" - texture was already loaded.
+Loading PNG texture "models\effects\water_swim\whlwtsp5.png"
+Loading PNG texture "models\effects\water_swim\wtdrpx.png" - texture was already loaded.
+Loading custom system "models\effects\beach_effects\bcwaved.fxs" ("bcwaved")
+Loading custom system "models\effects\beach_effects\bcwaven.fxs" ("bcwaven")
+Loading custom system "models\effects\beach_effects\shaded.fxs" ("shaded")
+Loading custom system "models\effects\beach_effects\shaded2.fxs" ("shaded2")
+Loading custom system "models\effects\beach_effects\shaded3.fxs" ("shaded3")
+Loading custom system "models\effects\beach_effects\shade_dr.fxs" ("shade_dr")
+Loading custom system "models\effects\beach_effects\shorlined.fxs" ("shorlined")
+Loading custom system "models\effects\beach_effects\shorlined_loner.fxs" ("shorlined_loner")
+Loading custom system "models\effects\beach_effects\shorlinen.fxs" ("shorlinen")
+Loading custom system "models\effects\beach_effects\shorlinen_loner.fxs" ("shorlinen_loner")
+Loading custom system "models\effects\csblood\csblood.fxs" ("csblood")
+Loading custom system "models\effects\exhaust\exhaust.fxs" ("exhaust")
+Loading custom system "models\effects\heli_dust\heli_dust.fxs" ("heli_dust")
+Loading custom system "models\effects\lighter\lighter.fxs" ("lighter")
+Loading custom system "models\effects\lightspark\lightspark.fxs" ("lightspark")
+Loading custom system "models\effects\main_wtfx\main_wtfx.fxs" ("main_wtfx")
+Loading custom system "models\effects\ocean_refl\ocean_refl.fxs" ("ocean_refl")
+Loading custom system "models\effects\ocean_waves\ocean_waves.fxs" ("ocean_waves")
+Loading custom system "models\effects\prt_wake\prt_wake.fxs" ("prt_wake")
+Loading custom system "models\effects\prt_watersplash\prt_watersplash.fxs" ("prt_watersplash")
+Loading custom system "models\effects\spraycanp\spraycanp.fxs" ("spraycanp")
+Loading custom system "models\effects\sun_sparks\sun_sparks.fxs" ("sun_sparks")
+Loading custom system "models\effects\thunder\thunder.fxs" ("thunder")
+Loading custom system "models\effects\water_ripples\water_ripples.fxs" ("water_ripples")
+Loading custom system "models\effects\water_splash\water_splash.fxs" ("water_splash")
+Loading custom system "models\effects\water_splsh_big\water_splsh_big.fxs" ("water_splash_big")
+Loading custom system "models\effects\water_swim\water_swim.fxs" ("water_swim")
+Loading default system "prt_blood"
+Loading default system "prt_boatsplash"
+Loading default system "prt_bubble"
+Loading default system "prt_cardebris"
+Loading default system "prt_collisionsmoke"
+Loading default system "prt_glass"
+Loading default system "prt_gunshell"
+Loading default system "prt_sand"
+Loading default system "prt_sand2"
+Loading default system "prt_smokeII_3_expand"
+Loading default system "prt_smoke_huge"
+Loading default system "prt_spark"
+Loading default system "prt_spark_2"
+Loading default system "prt_splash"
+Loading default system "prt_wake" - this system was already loaded.
+Loading default system "prt_watersplash" - this system was already loaded.
+Loading default system "prt_wheeldirt"
+Loading default system "boat_prop"
+Loading default system "camflash"
+Loading default system "exhale"
+Loading default system "explosion_fuel_car"
+Loading default system "explosion_large"
+Loading default system "explosion_medium"
+Loading default system "explosion_molotov"
+Loading default system "explosion_small"
+Loading default system "explosion_tiny"
+Loading default system "extinguisher"
+Loading default system "fire"
+Loading default system "fire_bike"
+Loading default system "fire_car"
+Loading default system "fire_large"
+Loading default system "fire_med"
+Loading default system "flamethrower"
+Loading default system "gunflash"
+Loading default system "gunsmoke"
+Loading default system "heli_dust" - this system was already loaded.
+Loading default system "jetpack"
+Loading default system "jetthrust"
+Loading default system "molotov_flame"
+Loading default system "nitro"
+Loading default system "overheat_car"
+Loading default system "overheat_car_electric"
+Loading default system "riot_smoke"
+Loading default system "spraycan"
+Loading default system "tank_fire"
+Loading default system "teargas"
+Loading default system "teargasAD"
+Loading default system "water_hydrant"
+Loading default system "water_ripples" - this system was already loaded.
+Loading default system "water_speed"
+Loading default system "water_splash" - this system was already loaded.
+Loading default system "water_splash_big" - this system was already loaded.
+Loading default system "water_splsh_sml"
+Loading default system "water_swim" - this system was already loaded.
+Loading default system "cigarette_smoke"
+Loading default system "Flame"
+Loading default system "insects"
+Loading default system "smoke30lit"
+Loading default system "smoke30m"
+Loading default system "smoke50lit"
+Loading default system "vent"
+Loading default system "vent2"
+Loading default system "waterfall_end"
+Loading default system "water_fnt_tme"
+Loading default system "water_fountain"
+Loading default system "tree_hit_fir"
+Loading default system "tree_hit_palm"
+Loading default system "blood_heli"
+Loading default system "carwashspray"
+Loading default system "cement"
+Loading default system "cloudfast"
+Loading default system "coke_puff"
+Loading default system "coke_trail"
+Loading default system "explosion_barrel"
+Loading default system "explosion_crate"
+Loading default system "explosion_door"
+Loading default system "petrolcan"
+Loading default system "puke"
+Loading default system "shootlight"
+Loading default system "smoke_flare"
+Loading default system "wallbust"
+Loading default system "WS_factorysmoke"
+FX LoadProject reload-safe v26 diagnostic-fix: m_pool.Optimise() executed on first load.
+FX LoadProject reload-safe v26 diagnostic-fix end: systems=27 textures=38 reload=0
+FX LoadProject end: fxMan=00A9AE80 file="models\effects.fxp" result=1

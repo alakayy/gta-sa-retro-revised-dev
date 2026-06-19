@@ -1,0 +1,18 @@
+FxSystemGuard v26.1 installed.
+  (1) Kill->Stop CALL patch at 0x4AA3F3.
+  (2) VEH Kill body 0x4AA3F8-0x4AA42F: 'pop esi; ret'.
+  (3) VEH Update body 0x4AA430-0x4AA640:
+      - Nulls m_SystemBP on the corrupt FxSystem_c (EDI+0 = 0)
+        to prevent heap-corruption silent crash on removal.
+      - Returns EAX=0 (effect done), ESP+=0x10; ret.
+      Offset 0x10 to retAddr verified across 3+ crash instances.
+FxSystemGuard v26.1: VEH installed. Kill body + Update body recovery active.
+FxSystemGuard v26: patched Kill->Stop call at 004AA3F3 -> SafeStopFromKill.
+FxSystemGuard v26: skipped FxSystem_c::Stop from Kill. this=410733A0 m_SystemBP=00000000 skipped=1
+FxSystemGuard v26: skipped FxSystem_c::Stop from Kill. this=4CF54558 m_SystemBP=00000000 skipped=2
+FxSystemGuard v26: skipped FxSystem_c::Stop from Kill. this=4CF4E860 m_SystemBP=00000000 skipped=3
+FxSystemGuard v26: skipped FxSystem_c::Stop from Kill. this=4CF4FC10 m_SystemBP=00000000 skipped=4
+FxSystemGuard v26: skipped FxSystem_c::Stop from Kill. this=4D540198 m_SystemBP=00000000 skipped=5
+FxSystemGuard v26: skipped FxSystem_c::Stop from Kill. this=4D53ECD0 m_SystemBP=00000000 skipped=6
+FxSystemGuard v26: skipped FxSystem_c::Stop from Kill. this=4D53E1E0 m_SystemBP=00000000 skipped=7
+FxSystemGuard v26: skipped FxSystem_c::Stop from Kill. this=4D53ECD0 m_SystemBP=00000000 skipped=8
