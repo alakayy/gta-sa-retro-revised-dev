@@ -1,0 +1,17 @@
+# Object style models configuration file for Urbanize mod
+# You can also add new files like this one, in "CLEO\Urbanize\_Models" folder, so you don't need to replace this.
+
+# 0
+Alcoholic
+DYN_WINE_3
+End
+
+# 1
+Smoke
+CJ_CIGGY
+End
+
+# 2
+BeachUmbrella
+kb_canopy_test
+End
