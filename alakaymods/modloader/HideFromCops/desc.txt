@@ -1,0 +1,69 @@
+HideFromCops (by vladvo)
+
+How it works:
+
+When CJ has a wanted level and gets away from cop's line of sight
+the mod goes into Delay1 phase and a fill bar will appear. 
+Cops will follow CJ, knowing his position. Everything goes the same way as 
+in vanilla game. At the same time the timer is counting. The timer will be 
+reset if any cop will have a clear line of sight to CJ.
+
+When the Delay1 timer runs out the mod will switch into Delay2 phase.
+Cops will just wander around. Still, if they spot CJ - the timers will be reset
+and the mod will go into pre-Delay1 status. Firing any gun (except silenced) will 
+alert the cops and reset both timers.
+
+Delay1 and Delay2 timers can be configured for each wanted level in ini.
+
+Sight distance. SightDist param in ini.
+This setting sets how far the cops can see you. Can be set for each wanted level as well.
+
+LightingAffectsSight setting:
+This will reduce cop's sight range when CJ is in dark area.
+
+LightingAffectsTime setting:
+This will speed up timers when CJ is in dark area.
+
+HowHidingEnds setting:
+If CJ was successful in hiding from cops - it is
+possible to change how it will end.
+Drop wanted level immediately or Go on parole (the flashing stars).
+
+BarPosX and BarPosY are used to point the coords where fill bar will appear.
+
+
+HideFromCops (by vladvo)
+
+Как это работает:
+
+Когда CJ получит уровень розыска и уйдёт из зоны видимости копа (или спрячется за чем-то),
+мод перейдёт в режим Delay1 и появится заполняющаяся шкала.
+Копы всё так же будут бегать за CJ и будут знать где он находится. Т.е. всё как
+в обычной игре, но таймер будет запущен. Если коп увидит CJ - таймер
+сбросится.
+Когда шкала немного заполнится - мод переключится в режим Delay2. Это будет видно по изменению
+цвета шкалы. Копы будут шляться вокруг, но местоположения CJ они уже знать не будут. 
+Если они увидят CJ - оба таймера сбросятся. Если выстрелить из любого оружия (кроме пистолета
+с глушителем) - таймер сбросится.
+Когда шкала полностью заполнится - розыск сбросится.
+
+Таймеры Delay1 и Delay2 можно настроить для каждого уровня в ini.
+
+Остальные фичи и настройки:
+
+SightDist - параметр отвечает за дальность зрения копов. Т.е. как далеко они могут
+увидеть игрока. Настраивается для каждого уровня.
+
+LightingAffectsSight - влияние освещённости на дальность зрения. Если включен - 
+копы будут хуже видеть, если CJ прячется в тёмном месте.
+
+LightingAffectsTime - влияние освещённости на таймеры. Если включен - таймеры
+будет отсчитываться немного быстрее.
+
+HowHidingEnds - настройка того, как всё закончится.
+CJ успешно спрятался. После этого можно выбрать, что будет дальше - 
+Уровень розыска сразу сбросится до нуля 
+или
+Перейдёт в режим "parole", т.е. когда звёзды мигают ещё 20 секунд и нельзя хулиганить.
+
+BarPosX и BarPosY отвечают за расположение шкалы на экране.

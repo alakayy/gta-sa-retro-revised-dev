@@ -1,0 +1,488 @@
+{$CLEO .cs}
+{$USE CLEO+}
+{$USE newOpcodes}
+{$USE ini}
+
+0000: NOP
+
+script_name "Kill Cam"
+
+// By ArtemQa146
+
+const
+    Speed_time = 30@
+    Camera_2 = 29@
+    Tex_1 = 28@
+    percent = 27@
+    Tex_2 = 26@
+    ACtive_key = 25@
+    Filter_R = 24@
+    Filter_G = 23@
+    Filter_b = 22@
+    BFrame = 21@
+    Break_key = 20@
+    player_percent = 19@
+    Bit_sets = 18@
+    Global_time = 5000
+    Second_time = 900
+    Second_ped = 500
+    Mission_only = 2
+    Weapons_check = 1
+    Player_check = 3
+    filter = 4
+    text_show = 5
+    target_blip = 6
+    player_cam_dead = 7
+end
+
+08C3: clear Bit_sets bit Mission_only
+0AF0: 0@ = read_int_from_ini_file "cleo\kill cam.ini" section "Settings" key "Mode"
+if 0@ == 2
+then 08BD: set Bit_sets bit Mission_only
+end
+
+08C3: clear Bit_sets bit Weapons_check
+0AF0: 0@ = read_int_from_ini_file "cleo\kill cam.ini" section "Weapon ID" key "Enable"
+if 0@ == 1
+then 08BD: set Bit_sets bit Weapons_check
+end
+
+08C3: clear Bit_sets bit Player_check
+0AF0: 0@ = read_int_from_ini_file "cleo\kill cam.ini" section "settings" key "Show Player"
+if 0@ == 1
+then 08BD: set Bit_sets bit Player_check
+end
+
+08C3: clear Bit_sets bit filter
+0AF0: 0@ = read_int_from_ini_file "cleo\kill cam.ini" section "Settings" key "Filter"
+if 0@ == 1
+then 08BD: set Bit_sets bit filter
+end
+
+08C3: clear Bit_sets bit player_cam_dead
+0AF0: 0@ = read_int_from_ini_file "cleo\kill cam.ini" section "Settings" key "Camera on a dead player"
+if 0@ == 1
+then 08BD: set Bit_sets bit player_cam_dead
+end
+
+08C3: clear Bit_sets bit text_show
+0AF0: 0@ = read_int_from_ini_file "cleo\kill cam.ini" section "Settings" key "Show text"
+if 0@ == 1
+then 08BD: set Bit_sets bit text_show
+end
+
+0AF0: ACtive_key = read_int_from_ini_file "cleo\kill cam.ini" section "Settings" key "Activation Key"
+0AF0: percent = read_int_from_ini_file "cleo\kill cam.ini" section "Settings" key "percent"
+0AF2: Speed_time = read_float_from_ini_file "cleo\kill cam.ini" section "Settings" key "time speed"
+
+0AF0: Break_key = read_int_from_ini_file "cleo\kill cam.ini" section "Settings" key "Break Key"
+0AF0: player_percent = read_int_from_ini_file "cleo\kill cam.ini" section "Settings" key "Player Percent"
+
+0AF0: Filter_R = read_int_from_ini_file "cleo\kill cam.ini" section "Settings" key "Filter R"
+0AF0: Filter_G = read_int_from_ini_file "cleo\kill cam.ini" section "Settings" key "Filter G"
+0AF0: Filter_B = read_int_from_ini_file "cleo\kill cam.ini" section "Settings" key "Filter B"
+
+0AF0: BFrame = read_int_from_ini_file "cleo\kill cam.ini" section "Settings" key "Black Vignette Alpha"
+
+0390: load_txd_dictionary 'killcam'
+038F: load_texture "blcks" as 1
+038F: load_texture "filtr" as 2
+0E3C: get_texture_from_sprite 1 store_to Tex_1
+0E3C: get_texture_from_sprite 2 store_to Tex_2
+0391: release_textures
+
+while true
+wait 0
+    if
+        player.Defined(0)
+    then
+        31@ = 0
+        while 0EA7: get_any_char_no_save_recursive 31@ progress_to 31@ char_to 0@
+
+        0226: 1@ = actor $PLAYER_ACTOR health // Если гг умер
+        if 1@ < 1
+        then Actor.EmulateFromPlayer(0@, 0)
+        end
+
+            if
+                80DF:   not actor $PLAYER_ACTOR driving
+            then
+
+                if
+                    803B:   not 0@ == $PLAYER_ACTOR  // если не гг, то проверяем нанес урон иль не
+                then
+                    if
+                        051A:   actor 0@ damaged_by_actor $PLAYER_ACTOR
+                    then
+                    else
+                        continue
+                    end
+                else
+                    if
+                        08B7:   test Bit_sets bit player_cam_dead
+                    then
+                    else
+                        continue
+                    end
+                end
+
+                0ECE: get_time_char_is_dead 0@ store_to 2@
+                0226: 1@ = actor 0@ health
+                if and
+                    2@ < 100 // Время трупика
+                    1@ < 1 // Жизни педа
+                then
+
+                    if or
+                        0AB0:   is_key_pressed ACtive_key
+                        003B:   0@ == $PLAYER_ACTOR  // (int)
+                        0E4D: random_percent percent // Процент из ини, если false то пауза и вновь поиск
+                    then
+                        0EC7: get_fade_alpha 2@
+                        0E64: get_camera_mode 1@
+                        if and
+                            2@ == 0.0
+                            not ACtive_key == 0
+                            1@ == 15
+                        then
+                            wait 500
+                            continue
+                        end
+                    else
+                        wait 500
+                        continue
+                    end
+
+                    if
+                        08B7:   test Bit_sets bit Mission_only
+                    then
+                        if
+                            not $ONMISSION == 0
+                        then
+                        else
+                            wait 500
+                            continue
+                        end
+                    end
+
+                    if
+                        08B7:   test Bit_sets bit Weapons_check
+                    then
+                        0470: 6@ = actor $PLAYER_ACTOR current_weapon
+                        0AD3: 1@v = string_format "%d" 6@
+                        0AF0: 1@ = get_int_from_ini_file "CLEO\kill cam.ini" section "Weapon ID" key 1@v
+                        if
+                            1@ == 1
+                        then
+                        else
+                            wait 500
+                            continue
+                        end
+                    end
+
+                    timera = 0
+                    timerb = 250
+                    Camera_2 = 0
+
+                    054E: clear_actor 0@ damage
+
+                    0581: enable_radar 0
+                    0826: enable_hud 0
+
+                    015D: set_gamespeed Speed_time
+
+                    gosub @Camera_Position
+
+                    0209: 17@ = random_int_in_ranges 1 3
+                    if 0E4D: random_percent player_percent
+                    then 16@ = 1
+                    else 16@ = 0
+                    end
+                    
+                    08C3: clear Bit_sets bit target_blip
+                    0A8D: 1@ = read_memory 0x53E1EC size 1 virtual_protect 0
+                    if
+                        1@ == 0x74
+                    then
+                        0A8C: write_memory 0x53E1EC size 1 value 0xEB virtual_protect 0
+                        08BD: set Bit_sets bit target_blip
+                    end
+
+                    repeat
+                    wait 0
+                        if and
+                            timera < Global_time
+                            056D:   actor 0@ defined
+                        then
+                        
+                        if
+                            08B7:   test Bit_sets bit text_show
+                        then
+                            0E63: print "Press key to skip" event 2 at 320.0 430.0 scale 0.4 0.6 fixAR 1 style 2 1 0 640.0 0 255 255 255 100 0 0 0 0 0 0 0 0 0 0 0
+                        end
+
+                        015D: set_gamespeed Speed_time
+
+                            if and
+                                16@ == 1
+                                timera < 300
+                                0E46: is_char_using_gun $PLAYER_ACTOR
+                                08B7:   test Bit_sets bit Player_check
+                            then
+                                0D0B: get_actor $PLAYER_ACTOR bone 24 matrix_pointer_to 10@ // IF and SET
+                                if 17@ == 1
+                                then 0D0A: store_coords_to 7@ 8@ 9@ from_matrix 10@ with_offsets 1.0 1.0 0.0
+                                end
+                                if 17@ == 2
+                                then 0D0A: store_coords_to 7@ 8@ 9@ from_matrix 10@ with_offsets 1.0 -1.0 0.0
+                                end
+                                015D: set_gamespeed 0.15
+                            else
+
+                            // Позиция камеры от кости педа с рандомным оффсетом
+                            0D0B: get_actor 0@ bone 0 matrix_pointer_to 10@ // IF and SET
+                            0D0A: store_coords_to 7@ 8@ 9@ from_matrix 10@ with_offsets 1@ 2@ 3@
+
+                            // Проверка не под землей ли камера
+                            0087: 12@ = 9@ // (float)
+                            12@ += 5.0
+                            02CE: 11@ = ground_z_at 7@ 8@ 12@
+                            11@ += 0.5
+                                if
+                                    0025:   11@ > 9@  // (float)
+                                then
+                                    0087: 9@ = 11@ // (float)
+                                end
+                            end
+
+
+
+                            015F: set_camera_position 7@ 8@ 9@ rotation 0.0 0.0 0.0
+
+                            // направление камеры на кость педа
+                            0D0A: store_coords_to 7@ 8@ 9@ from_matrix 10@ with_offsets 0.0 0.0 0.0
+                            0160: set_camera_point_at 7@ 8@ 9@ switchstyle 2
+
+                            if 08B7:   test Bit_sets bit filter
+                            then 0E1E: draw_texture_plus Tex_2 event 1 pos 320.0 220.0 size 650.0 480.0 angle 0.0 depth 0  0  1  0 rgba Filter_R Filter_G Filter_B 255
+                            end
+                            0E1E: draw_texture_plus Tex_1 event 2 pos 320.0 220.0 size 650.0 480.0 angle 0.0 depth 0  0  0  0 rgba 255 255 255 BFrame
+
+                            // Если умерло двое или больше
+                            if
+                                timera > Second_ped
+                            then
+                                gosub @More_dead
+                            end
+
+                            // Смена ракурса камеры
+                            if and
+                                Camera_2 == 0
+                                timera > Second_time
+                            then
+                                if
+                                    0E4D: random_percent 70
+                                then
+                                    Camera_2 = 1
+                                    gosub @Camera_Position
+                                else
+                                    Camera_2 = 1
+                                end
+                            end
+
+                            // Смена ракурса камеры если между ними предпятствие
+                            0EB2: get_offset_from_camera_in_world_coords 0.0 0.0 0.0 store_to 7@ 8@ 9@
+                            04C4: store_coords_to 10@ 11@ 12@ from_actor 0@ with_offset 0.0 0.0 0.0
+                            0A96: 15@ = ped 0@ struct
+                            get_label_pointer 14@ = label @Buffer // 128
+                            if and
+                                80DF:   not actor 0@ driving
+                                timerb > 200
+                                0D3A: get_collision_between_points 7@ 8@ 9@ and 10@ 11@ 12@ flags 1 1 0 1 0 0 0 0 ignore_entity 15@ store_point_to 7@ 8@ 9@ entity_to 13@ colpoint_data_to 14@
+                            then
+                                timerb = 0
+                                gosub @Camera_Position
+                            end
+
+                            // Если стреляет игрок, создаем эффект попадания в разнеы части тела
+                            0E8B: get_char_weapon_state $PLAYER_ACTOR store_to 7@
+                            if and
+                                timerb > 50
+                                0E8D: is_any_fire_button_pressed 0
+                                7@ == 1
+                            then
+                                0209: 7@ = random_int_in_ranges 1 5
+                                if 7@ == 1
+                                then 8@ = 3
+                                end
+                                if 7@ == 2
+                                then 8@ = 8
+                                end
+                                if 7@ == 3
+                                then 8@ = 34
+                                end
+                                if 7@ == 4
+                                then 8@ = 24
+                                end
+                                0D0B: get_actor 0@ bone 8@ matrix_pointer_to 10@ // IF and SET
+                                0D0A: store_coords_to 7@ 8@ 9@ from_matrix 10@ with_offsets 0.0 0.0 0.0
+                                0209: 10@ = random_int_in_ranges 15 40
+                                09B8: create_blood_gush_at 7@ 8@ 9@ with_offset 0.0 0.0 0.0 density 10@ on_actor 0@
+                                timerb = 0
+                            end
+
+                            // Если игрок окончил анимацию смерти и умер или нажат пробел то сброс
+                            0EFF: get_char_simplest_active_task 0@ id_to 10@ pointer_to 11@
+                            if or
+                                10@ == 218
+                                00E1:   player 0 pressed_key Break_key
+                            then
+                                break
+                            end
+
+                        else
+                            break
+                        end
+                    until not player.Defined(0)
+                    0A8D: 1@ = read_memory 0x53E1EC size 1 virtual_protect 0
+                    if and
+                        08B7:   test Bit_sets bit target_blip
+                        1@ == 0xEB
+                    then
+                        0A8C: write_memory 0x53E1EC size 1 value 0x74 virtual_protect 0
+                    end
+                    02EB: restore_camera_with_jumpcut
+                    0581: enable_radar 1
+                    0826: enable_hud 1
+
+                    // Плавное возвращения времени
+                    0087: 1@ = Speed_time // (float)
+                    repeat
+                    wait 0
+                    1@ += 0.05
+                    015D: set_gamespeed 1@
+                    until 1@ >= 1.0
+                    015D: set_gamespeed 1.0
+                end
+            end
+        end
+    end
+end
+
+:Camera_Position
+0208: 1@ = random_float_in_ranges 1.5 3.5
+0208: 2@ = random_float_in_ranges 1.5 3.5
+0208: 3@ = random_float_in_ranges -0.5 1.0
+0209: 4@ = random_int_in_ranges 1 3
+if 4@ == 1
+then 1@ *= -1.0
+end
+0209: 4@ = random_int_in_ranges 1 3
+if and
+    4@ == 1
+    80DF:   not actor 0@ driving
+then
+    2@ *= -1.0
+end
+if
+    00DF:   actor 0@ driving
+then
+    3@ = 0.0
+end
+0209: 4@ = random_int_in_ranges 1 4
+0208: 5@ = random_float_in_ranges 0.005 0.02
+0208: 6@ = random_float_in_ranges 0.01 0.03
+return
+
+:More_dead
+7@ = 0
+while 0EA7: get_any_char_no_save_recursive 7@ progress_to 7@ char_to 8@
+    if and
+        051A:   actor 8@ damaged_by_actor $PLAYER_ACTOR
+        803B:   not 8@ == $PLAYER_ACTOR  // (int)
+        803B:   not 8@ == 0@  // (int)
+    then
+        054E: clear_actor 8@ damage
+        0EFF: get_char_simplest_active_task 8@ id_to 11@ pointer_to 10@
+        0ECE: get_time_char_is_dead 8@ store_to 9@
+        0226: 10@ = actor 8@ health
+        if and
+            9@ < 1500 // Время трупика
+            10@ < 1 // Жизни педа
+            not 11@ == 218
+        then
+            0085: 0@ = 8@ // (int)
+            timera = 0
+            timerb = 250
+            Camera_2 = 0
+            gosub @Camera_Position
+        end
+    end
+end
+return
+
+:Buffer
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
+0000: NOP
