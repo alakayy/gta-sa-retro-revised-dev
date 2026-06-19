@@ -1,0 +1,79 @@
+SHOWRM Showroom
+CARDEAL Car Dealer
+CDE_D0 Coutt and Schutz
+CDE_D1 Grotti
+CDE_D2 Ocean Docks
+CDE_D3 Wang Cars
+CDE_D4 Otto's Autos
+CDE_D5 Easter Basin Docks
+CDE_D6 Shody
+CDE_D7 Autobahn
+CDE_D8 Autobahn
+CDE_BSV Select vehicle
+CDE_BN Navigate
+CDE_BB Buy
+CDE_BQ Quit
+CDE_LST List
+CDE_OPT Options
+CDE_COL Colour
+CDE_EXT Extras
+CDE_SPE Specs
+CDE_STA Stats
+CDE_SWE Weight
+CDE_SET Engine
+CDE_SDT Drivetrain
+CDE_STR Transmission
+CDE_SBR Brake Type
+CDE_SLG Lights
+CDE_VAL Value
+CDE_ETP Petrol
+CDE_ETD Diesel
+CDE_ETE Electric
+CDE_DTF FWD
+CDE_DTR RWD
+CDE_DT4 4WD
+CDE_TR %i-speed
+CDE_BRA ABS
+CDE_LGH Halogen
+CDE_STD Standard
+CDE_PTS Top Speed
+CDE_PAC Acceleration
+CDE_PHD Handling
+CDE_PBR Brake
+CDE_VC0 Normal
+CDE_VC1 Poorfamily
+CDE_VC2 Richfamily
+CDE_VC3 Executive
+CDE_VC4 Worker
+CDE_VC5 Big
+CDE_VC6 Taxi
+CDE_VC7 Moped
+CDE_VC8 Motorbike
+CDE_VCN Not Classified
+CDE_SRC Search
+CDE_EVN Enter vehicle name
+CDE_EVM Enter vehicle model
+CDE_SRF Vehicle found!~n~~b~%s
+CDE_CP Custom Plate
+CDE_TD Delete
+CDE_TB Back
+CDE_SBM Search by model
+CDE_SBN Search by name
+CDE_TC Confirm
+CDE_TUC Uppercase
+CDE_OOS ~r~The dealer ran out of stock!
+CDE_NEM ~r~You don't have enough money to buy this.
+CDE_VSD Seed
+CDE_CNF Confirmation
+CDE_BCF Are you sure to buy ~b~%s~s~ for ~g~$%i~s~?
+CDE_YES Yes
+CDE_NO No
+CDE_EX Export
+CDE_EXV Required for export:~n~~y~%s~n~%s~n~%s~n~%s~n~%s
+CDE_EXN No vehicle export request at the moment. Come back on Monday for new request.
+CDE_EXC Are you sure to export this vehicle?
+CDE_NRE This vehicle is not required for export.
+CDE_VNG Vehicle must be in good condition before exported.
+CDE_EX1 This vehicle is required for export in Ocean Docks.
+CDE_EX2 This vehicle is required for export in Easter Basin Docks.
+CDE_EXS Vehicle exported!~n~~s~+$~1~

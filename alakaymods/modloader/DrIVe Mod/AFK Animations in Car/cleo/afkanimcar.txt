@@ -1,0 +1,250 @@
+{$CLEO .cs}
+{$USE CLEO+}
+{$USE newOpcodes}
+{$USE ini}
+
+0000: NOP
+
+script_name "AFKANIMCAR" 
+
+// By ArtemQa146
+
+if
+    0AA2: 31@ = load_dynamic_library "CLEO+.cleo"
+then
+    if
+        0AA4: 30@ = get_dynamic_library_procedure "GetCleoPlusVersion" library 31@
+    then
+        0AA7: call_function_return 30@ num_params 0 pop 0 29@
+        if
+            not 29@ >= 0x1020000
+        then
+            0AD1: show_formatted_text_highpriority "Cleo+ 1.2.0 (or higher) version is required, the DrIVe mod is disabled" time 15000
+            0AA3: free_dynamic_library 31@
+            0A93: terminate_this_custom_script
+        end
+        0AA3: free_dynamic_library 31@
+    end
+else
+    0AD1: show_formatted_text_highpriority "Cleo+ 1.2.0 (or higher) version is required, the DrIVe mod is disabled" time 15000
+    0AA3: free_dynamic_library 31@
+    0A93: terminate_this_custom_script
+end
+
+// Загрузка моделей
+
+if
+    is_game_first_start
+then
+    0F00: load_special_model_dff "modelsAFK\drink_1" txd "modelsAFK\afkcar" store_to 0@
+    0AF1: write_int 0@ to_ini_file "cleo\afkanimcar.ini" section "Models" key "drink_1"
+    0F00: load_special_model_dff "modelsAFK\drink_2" txd "modelsAFK\afkcar" store_to 0@
+    0AF1: write_int 0@ to_ini_file "cleo\afkanimcar.ini" section "Models" key "drink_2"
+    0F00: load_special_model_dff "modelsAFK\drink_3" txd "modelsAFK\afkcar" store_to 0@
+    0AF1: write_int 0@ to_ini_file "cleo\afkanimcar.ini" section "Models" key "drink_3"
+    0F00: load_special_model_dff "modelsAFK\drink_4" txd "modelsAFK\afkcar" store_to 0@
+    0AF1: write_int 0@ to_ini_file "cleo\afkanimcar.ini" section "Models" key "drink_4"
+end
+
+0AF0: 2@ = get_int_from_ini_file "CLEO\afkanimcar.ini" section "Settings" key "Time"
+2@ *= 1000
+
+const
+    Pause = 2@
+    Drink = 9@
+    Gun = 8@
+    Gun_Hiden = 5@
+end
+
+while true
+wait 0 
+if
+   Player.Defined($PLAYER_CHAR) 
+then
+    if and
+        Actor.Driving($PLAYER_ACTOR)
+        8741:   not actor $PLAYER_ACTOR busted
+        not actor.Dead($PLAYER_ACTOR)
+        $ONMISSION == 0
+    then
+    0@ = Actor.CurrentCar($PLAYER_ACTOR)
+    0E12: get_vehicle 0@ subclass_to 10@
+        if
+            10@ == 0
+        then
+            0006: TIMERA = 0
+            Gun_Hiden = 0
+            Gun = 0
+
+        repeat
+        wait 0
+        04ED: load_animation  "DrIVeMod"
+        until 04EE:   animation "DrIVeMod" loaded
+
+repeat
+wait 0
+if and
+    Actor.Driving($PLAYER_ACTOR)
+    056E:   car 0@ defined
+    8741:   not actor $PLAYER_ACTOR busted
+    not actor.Dead($PLAYER_ACTOR)
+    $ONMISSION == 0
+then
+    // Если закончил пить
+    if and
+        timera > 3000
+        drink == 1
+    then
+        0E2F: delete_render_object 6@
+        drink = 0
+    end
+    
+    046C: 1@ = car 0@ driver
+    if
+        803B:   not 1@ == $PLAYER_ACTOR  // (int)
+    then
+        continue
+    end
+    
+    if
+        0E42: is_char_doing_task_id $PLAYER_ACTOR task_id 1022
+    then
+        continue
+    end
+    
+    
+    if or
+        Actor.Animation($PLAYER_ACTOR) == "DrivebyL_L"
+        Actor.Animation($PLAYER_ACTOR) == "DrivebyL_R"
+        Actor.Animation($PLAYER_ACTOR) == "Driveby_L"
+        Actor.Animation($PLAYER_ACTOR) == "Driveby_R"
+        Actor.Animation($PLAYER_ACTOR) == "CAR_TUNE_RADIO"
+    then
+        continue
+    end
+
+    // Проверка на скорость и целиться ли влево или вправо
+    02E3: 1@ = car 0@ speed
+    if and
+        80E1:   not player 0 pressed_key 5
+        80E1:   not player 0 pressed_key 7
+        1@ <= 0.5
+        0E42: is_char_doing_task_id $PLAYER_ACTOR task_id 709
+        not Actor.Animation($PLAYER_ACTOR) == "drrelaxH"
+        not Actor.Animation($PLAYER_ACTOR) == "wopen"
+        not Actor.Animation($PLAYER_ACTOR) == "wclose"
+        not Actor.Animation($PLAYER_ACTOR) == "drrelaxHL"
+    then
+        if and
+            not drink == 1
+            002D:   TIMERA >= pause  // (int)
+        then
+            // Прячем оружие
+            if and
+                Gun == 0
+                82D8:   not actor $PLAYER_ACTOR current_weapon == 0
+                82D8:   not actor $PLAYER_ACTOR current_weapon == 1
+                0EAF: is_char_weapon_visible_set $PLAYER_ACTOR
+            then
+                0605: actor $PLAYER_ACTOR perform_animation "AFKANIMHIDE" IFP "DrIVeMod" framedelta 4.0 loop 0 lockX 0 lockY 0 lockF 0 time -1
+                Gun = 1
+                timerb = 0
+            end
+                if and
+                    Gun == 1
+                    timerb > 1000
+                then
+                    TIMERA -= 3000
+                    06AB: set_actor $PLAYER_ACTOR all_weapons_hidden 1
+                    Gun = 0
+                    Gun_Hiden = 1
+                    continue
+                end
+                    
+            // Когда в руках нет оружия начинаем анимации
+            if or
+                02D8:   actor $PLAYER_ACTOR current_weapon == 0
+                02D8:   actor $PLAYER_ACTOR current_weapon == 1
+                not is_char_weapon_visible_set $PLAYER_ACTOR
+            then
+                0209: 3@ = random_int_in_ranges 1 18
+                if or
+                    3@ == 14
+                    3@ == 15
+                    3@ == 16
+                    3@ == 17
+                then
+                    // Проверка на низкие анимации
+                    if or
+                        Actor.Animation($PLAYER_ACTOR) == "CAR_Lsit"
+                        Actor.Animation($PLAYER_ACTOR) == "Drive_LO_L"
+                        Actor.Animation($PLAYER_ACTOR) == "Drive_LO_R"
+                    then
+                        0209: 3@ = random_int_in_ranges 19 22
+                    end
+                end
+                    // Анимация питья
+                    if or
+                        3@ == 14
+                        3@ == 21
+                    then
+                        0209: 4@ = random_int_in_ranges 1 5
+                        0AD3: 15@v = string_format "Drink_%d" 4@
+                        0AF0: 20@ = read_int_from_ini_file "cleo\afkanimcar.ini" section "models" key 15@v
+                        0F02: create_render_object_to_char_bone_from_special $PLAYER_ACTOR special_model 20@ bone 24 offset 0.04 0.055 -0.01 rotation 0 0 0 store_to 6@
+                        Drink = 1
+                    end
+                // Вручаем анимаци.
+                0AD3: 10@v = string_format "AFKANIM%d" 3@
+                0605: actor $PLAYER_ACTOR perform_animation 10@v IFP "DrIVeMod" framedelta 4.0 loop 0 lockX 0 lockY 0 lockF 0 time -1
+                timera = 0
+            end
+        end
+        
+    else // Если машина двинулась с места или игрок целиться
+    
+        // Возвращаем оружие
+        if
+            Gun_Hiden == 1
+        then
+            if
+                Gun == 0
+            then
+                0605: actor $PLAYER_ACTOR perform_animation "AFKANIMHIDE" IFP "DrIVeMod" framedelta 4.0 loop 0 lockX 0 lockY 0 lockF 0 time -1
+                Gun = 1
+                timerb = 0
+            end
+                if and
+                    Gun == 1
+                    timerb > 1000
+                then
+                    06AB: set_actor $PLAYER_ACTOR all_weapons_hidden 0
+                    Gun = 0
+                    Gun_Hiden = 0
+                    continue
+                end
+            end
+        timera = 0
+        end
+    else
+        break
+    end
+        until not player.Defined(0)
+            04EF: release_animation "DrIVeMod"
+            if or
+                0611:   actor $PLAYER_ACTOR performing_animation "AFKANIMHIDE"
+                0611:   actor $PLAYER_ACTOR performing_animation 10@v
+            then
+                0E97: clear_char_secondary_tasks $PLAYER_ACTOR
+            end
+            06AB: set_actor $PLAYER_ACTOR all_weapons_hidden 0
+                if
+                    drink == 1
+                then
+                    0E2F: delete_render_object 6@
+                    drink = 0
+                end
+            end
+        end
+    end
+end

@@ -1,0 +1,325 @@
+{$CLEO .cs}
+{$USE CLEO+}
+{$USE newOpcodes}
+{$USE ini}
+
+0000: NOP
+
+script_name "DRIVEQA" 
+
+if
+    0AA2: 31@ = load_dynamic_library "CLEO+.cleo"
+then
+    if
+        0AA4: 30@ = get_dynamic_library_procedure "GetCleoPlusVersion" library 31@
+    then
+        0AA7: call_function_return 30@ num_params 0 pop 0 29@
+        if
+            not 29@ >= 0x1020000
+        then
+            0AD1: show_formatted_text_highpriority "Cleo+ 1.2.0 (or higher) version is required, the DrIVe mod is disabled" time 15000
+            0AA3: free_dynamic_library 31@
+            0A93: terminate_this_custom_script
+        end
+        0AA3: free_dynamic_library 31@
+    end
+else
+    0AD1: show_formatted_text_highpriority "Cleo+ 1.2.0 (or higher) version is required, the DrIVe mod is disabled" time 15000
+    0AA3: free_dynamic_library 31@
+    0A93: terminate_this_custom_script
+end
+
+0AF0: 26@ = read_int_from_ini_file "cleo\Stop Like GTA 4.ini" section "settings" key "Animation speed"
+0AF2: 25@ = get_float_from_ini_file "cleo\Stop Like GTA 4.ini" section "settings" key "Animation progress"
+ 
+ const
+    Check = 22@
+    Check_Global = 23@
+    Key_Stop = 24@
+    key_pad = 21@
+    Progress = 25@
+    Speed_Animation = 26@
+    Speed_Start = 5.0
+    Speed_low = 2.0
+ end
+ 
+ 0AF0: key_pad = read_int_from_ini_file "cleo\Stop Like GTA 4.ini" section "settings" key "Gamepad Key"
+
+while true
+wait 0 
+if
+   Player.Defined($PLAYER_CHAR) 
+then
+    gosub @Check_Global
+    if
+        Check_Global == true
+    then
+        repeat
+        wait 0
+        04ED: load_animation  "DrIVeMod"
+        until 04EE:   animation "DrIVeMod" loaded
+        
+while true
+wait 0
+gosub @Check_Global
+    if
+        Check_Global == true
+    then
+        gosub @Animation
+        if
+            0E42: is_char_doing_task_id $PLAYER_ACTOR task_id 1022
+        then
+            continue
+        end
+        
+        if or
+            Actor.Animation($PLAYER_ACTOR) == "DrivebyL_L"
+            Actor.Animation($PLAYER_ACTOR) == "DrivebyL_R"
+            Actor.Animation($PLAYER_ACTOR) == "Driveby_L"
+            Actor.Animation($PLAYER_ACTOR) == "Driveby_R"
+            Actor.Animation($PLAYER_ACTOR) == "CAR_TUNE_RADIO"
+        then
+            continue
+        end
+        
+                0@ = Actor.CurrentCar($PLAYER_ACTOR)
+                0EFD: get_car_pedals 0@ gas_to 1@ break_to 2@
+                Key_Stop = 6 // Проблем
+                if
+                    0A4B:   controls_set_to_joystick
+                then
+                    0085: Key_Stop = key_pad // Для геймпадов
+                end
+                0AAA: 1@ = get_script_struct_named "Hdbrake"
+                if
+                    not 1@ == 0
+                then
+                    Key_Stop = -1
+                end
+                
+                    046C: 1@ = car 0@ driver
+                    if
+                        803B:   not 1@ == $PLAYER_ACTOR  // (int)
+                    then
+                        continue
+                    end
+                
+                
+                    if or
+                        00E1:   player 0 pressed_key Key_Stop
+                        2@ == 1.0
+                    then
+                    
+                        if or
+                            Actor.Animation($PLAYER_ACTOR) == "drrelaxH"
+                            Actor.Animation($PLAYER_ACTOR) == "drrelaxHL"
+                        then
+                            continue
+                        end
+                    
+                        02E3: 1@ = car 0@ speed
+                        0AB8: get_car 0@ current_gear_to 2@
+                            if and
+                                timerb > 300
+                                1@ > Speed_Start
+                                not 2@ == 0
+                            then
+                                1@ /= 5.0
+                                    if
+                                        1@ < 0.5
+                                    then
+                                        1@ = 0.5
+                                    end
+                                0605: actor $PLAYER_ACTOR perform_animation 5@v IFP "DrIVeMod" framedelta 1@ loop 0 lockX 0 lockY 0 lockF 1 time -1
+                                4@ = 1.0
+                                timera = 0
+                                31@ = 0
+                                
+                                // Цикл, когда игрок наклоняется
+                                repeat
+                                wait 0
+                                gosub @Check
+                                gosub @Check_Global
+                                    if and
+                                        Check == true
+                                        Check_Global == true
+                                    then
+                                        if
+                                            31@ == 0
+                                        then
+                                            02E3: 3@ = car 0@ speed
+                                            31@ = 1
+                                        end
+                                            if and
+                                                31@ == 1
+                                                001D:   timera > Speed_Animation  // (int)
+                                            then
+                                                02E3: 2@ = car 0@ speed
+                                                0063: 3@ -= 2@  // (float)
+                                                31@ = 0
+                                                timera = 0
+                                                0087: 4@ = 3@ // (float)
+                                            end
+                                            
+                                                0613: 1@ = actor $PLAYER_ACTOR animation 5@v time
+                                                if
+                                                    0025:   1@ > Progress  // (float)
+                                                then
+                                                    0612: set_actor $PLAYER_ACTOR animation 5@v paused 0
+                                                end
+                                                    
+                                        0393: actor $PLAYER_ACTOR perform_animation 5@v at 4@ times_normal_rate
+                                    else
+                                        break
+                                    end
+                                    until not player.Defined(0)
+                                    timerb = 0
+                                        if
+                                            Check_Global == true
+                                        then
+                                            if
+                                                Actor.Animation($PLAYER_ACTOR) == 5@v
+                                            then
+                                                0613: 1@ = actor $PLAYER_ACTOR animation 5@v time
+                                                if
+                                                    1@ > 0.7
+                                                then
+                                                    0605: actor $PLAYER_ACTOR perform_animation 13@v IFP "DrIVeMod" framedelta 5.0 loop 0 lockX 0 lockY 0 lockF 0 time 0
+                                                else
+                                                    0687: clear_actor $PLAYER_ACTOR task
+                                                end
+                                            end
+                                        else
+                                            0687: clear_actor $PLAYER_ACTOR task
+                                        end
+                                    continue
+                                end
+                            end
+                // При ударе анимация
+                0E65: get_car_collision_intensity 0@ store_to 1@
+                    if and
+                        timera > 500
+                        1@ > 100.0
+                    then
+                        1@ /= 100.0
+                            if
+                                1@ > 8.0
+                            then
+                                1@ = 8.0
+                            end
+                                if
+                                    1@ < 2.0
+                                then
+                                    1@ = 2.0
+                                end
+                        0605: actor $PLAYER_ACTOR perform_animation 17@v IFP "DrIVeMod" framedelta 1@ loop 0 lockX 0 lockY 0 lockF 0 time 0
+                        timera = 0
+                    end
+                else
+                    04EF: release_animation "DrIVeMod"
+                    break
+                end
+            end
+        end
+    end
+end
+
+
+:Check 
+Check = false
+    if
+        056E:   car 0@ defined
+    then
+        0EFD: get_car_pedals 0@ gas_to 1@ break_to 2@
+            if or
+                2@ == 1.0
+                00E1:   player 0 pressed_key Key_Stop
+            then
+                02E3: 1@ = car 0@ speed
+                if
+                    1@ > Speed_Low
+                then
+                    Check = true
+                end
+            end
+        end
+return
+
+:Check_Global
+Check_Global = false
+    if and
+        Actor.Driving($PLAYER_ACTOR)
+        8741:   not actor $PLAYER_ACTOR busted
+        not actor.Dead($PLAYER_ACTOR)
+        not is_on_cutscene
+    then
+        if and
+            84C8:   not actor $PLAYER_ACTOR driving_flying_vehicle
+            847A:   not actor $PLAYER_ACTOR driving_bike
+            84A7:   not actor $PLAYER_ACTOR driving_boat
+            84A9:   not actor $PLAYER_ACTOR driving_heli
+            89AE:   not actor $PLAYER_ACTOR driving_train
+        then
+            0@ = Actor.CurrentCar($PLAYER_ACTOR)
+            0E12: get_vehicle 0@ subclass_to 1@
+            if
+                1@ == 0
+            then
+                Check_Global = true
+            end
+        end
+    end
+return
+
+
+:Animation
+    // Машины с низкой посадкой
+    if or
+        Actor.Animation($PLAYER_ACTOR) == "CAR_Lsit"
+        Actor.Animation($PLAYER_ACTOR) == "Drive_LO_L"
+        Actor.Animation($PLAYER_ACTOR) == "Drive_LO_R"
+    then
+        0AD3: 5@v = string_format "sportNAZAD"
+        0AD3: 13@v = string_format "sportVOZVRAT"
+        0AD3: 17@v = string_format "sportVOZVRAT2"
+        return
+    end
+    // Грузовики, трактор и т.д
+    if or
+        Actor.Animation($PLAYER_ACTOR) == "DRIVE_TRUCK"
+        Actor.Animation($PLAYER_ACTOR) == "DRIVE_TRUCK_L"
+        Actor.Animation($PLAYER_ACTOR) == "DRIVE_TRUCK_R"
+    then
+        0AD3: 5@v = string_format "NAZADTRUCK"
+        0AD3: 13@v = string_format "VOZVRATTRUCK"
+        0AD3: 17@v = string_format "VOZVRAT2TRUCK"
+        return
+    end
+    // Карт
+    if or
+        Actor.Animation($PLAYER_ACTOR) == "KART_drive"
+        Actor.Animation($PLAYER_ACTOR) == "KART_L"
+        Actor.Animation($PLAYER_ACTOR) == "KART_R"
+    then
+        0AD3: 5@v = string_format "NAZADKART"
+        0AD3: 13@v = string_format "VOZVRATKART"
+        0AD3: 17@v = string_format "VOZVRAT2KART"
+        return
+    end
+    // Низкий уровень мастерства, двумя рукам руль держит
+    0653: 1@ = float_stat 160
+    if
+        1@ < 100.0
+    then
+        0AD3: 5@v = string_format "NAZAD"
+        0AD3: 13@v = string_format "VOZVRAT"
+        0AD3: 17@v = string_format "VOZVRAT2"
+        return
+    else
+    // Высокий уровень мастерства, держит руль одной рукой
+        0AD3: 5@v = string_format "NAZADPRO"
+        0AD3: 13@v = string_format "VOZVRATPRO"
+        0AD3: 17@v = string_format "VOZVRATPRO2"
+        return
+    end
+return

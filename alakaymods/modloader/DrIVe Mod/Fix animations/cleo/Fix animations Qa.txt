@@ -1,0 +1,168 @@
+{$CLEO .cs}
+
+0000: NOP
+
+script_name "ANFIXQ"
+
+// By ArtemQa146
+
+
+while true
+wait 0
+    if
+        Player.Defined(0)
+    then
+        if
+            actor.Driving($PLAYER_ACTOR)
+        then
+        
+            repeat
+            wait 0
+            until not actor.Driving($PLAYER_ACTOR)
+            
+            timera = 0
+            
+            repeat
+            wait 0
+                if
+                    not actor.Driving($PLAYER_ACTOR)
+                then
+                    if or
+                        Actor.Animation($PLAYER_ACTOR) == "drrelaxH"
+                        Actor.Animation($PLAYER_ACTOR) == "handbrake"
+                        Actor.Animation($PLAYER_ACTOR) == "handbrakeL"
+                        Actor.Animation($PLAYER_ACTOR) == "gear_ch"
+                        Actor.Animation($PLAYER_ACTOR) == "gear_chL"
+                        Actor.Animation($PLAYER_ACTOR) == "gear_ch2"
+                        Actor.Animation($PLAYER_ACTOR) == "drrelaxHL"
+                    then
+                        0687: clear_actor $PLAYER_ACTOR task
+                        wait 1000
+                        break
+                    end
+
+                    if or
+                        Actor.Animation($PLAYER_ACTOR) == "VOZVRAT"
+                        Actor.Animation($PLAYER_ACTOR) == "VOZVRAT2"
+                        Actor.Animation($PLAYER_ACTOR) == "NAZADPRO"
+                        Actor.Animation($PLAYER_ACTOR) == "VOZVRATPRO"
+                    then
+                        0687: clear_actor $PLAYER_ACTOR task
+                        wait 1000
+                        break
+                    end
+
+                    if or
+                        Actor.Animation($PLAYER_ACTOR) == "sportNAZAD"
+                        Actor.Animation($PLAYER_ACTOR) == "sportVOZVRAT"
+                        Actor.Animation($PLAYER_ACTOR) == "sportVOZVRAT2"
+                        Actor.Animation($PLAYER_ACTOR) == "NAZADTRUCK"
+                        Actor.Animation($PLAYER_ACTOR) == "VOZVRATTRUCK"
+                        Actor.Animation($PLAYER_ACTOR) == "VOZVRAT2TRUCK"
+                        Actor.Animation($PLAYER_ACTOR) == "NAZAD"
+                    then
+                        0687: clear_actor $PLAYER_ACTOR task
+                        wait 1000
+                        break
+                    end
+
+                    if or
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM1"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM2"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM3"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM4"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM5"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM6"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM7"
+                    then
+                        0687: clear_actor $PLAYER_ACTOR task
+                        wait 1000
+                        break
+                    end
+
+                    if or
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM8"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM9"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM10"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM11"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM12"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM13"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM14"
+                    then
+                        0687: clear_actor $PLAYER_ACTOR task
+                        wait 1000
+                        break
+                    end
+
+                    if or
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM15"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM16"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM17"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM18"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM19"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM20"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIM21"
+                    then
+                        0687: clear_actor $PLAYER_ACTOR task
+                        wait 1000
+                        break
+                    end
+
+                    if or
+                        Actor.Animation($PLAYER_ACTOR) == "VOZVRATPRO2"
+                        Actor.Animation($PLAYER_ACTOR) == "AFKANIMhide"
+                        Actor.Animation($PLAYER_ACTOR) == "BIKED_FWD"
+                        Actor.Animation($PLAYER_ACTOR) == "BMX_BUNNYHOP"
+                        Actor.Animation($PLAYER_ACTOR) == "QUAD_FWD"
+                        Actor.Animation($PLAYER_ACTOR) == "WF_FWD"
+                    then
+                        0687: clear_actor $PLAYER_ACTOR task
+                        wait 1000
+                        break
+                    end
+
+                    if or
+                        Actor.Animation($PLAYER_ACTOR) == "BIKEV_FWD"
+                        Actor.Animation($PLAYER_ACTOR) == "BIKEH_FWD"
+                        Actor.Animation($PLAYER_ACTOR) == "BIKES_FWD"
+                        Actor.Animation($PLAYER_ACTOR) == "startgta41"
+                        Actor.Animation($PLAYER_ACTOR) == "startgta4LOW"
+                        Actor.Animation($PLAYER_ACTOR) == "startgta4Wayfare"
+                        Actor.Animation($PLAYER_ACTOR) == "startgta4LOWG"
+                    then
+                        0687: clear_actor $PLAYER_ACTOR task
+                        wait 1000
+                        break
+                    end
+
+                    if or
+                        Actor.Animation($PLAYER_ACTOR) == "startgta4KartG"
+                        Actor.Animation($PLAYER_ACTOR) == "startgta4garage"
+                        Actor.Animation($PLAYER_ACTOR) == "startgta4bikes1"
+                        Actor.Animation($PLAYER_ACTOR) == "startgta4bikes11"
+                        Actor.Animation($PLAYER_ACTOR) == "startgta4bikes3"
+                        Actor.Animation($PLAYER_ACTOR) == "startgta4Pizza"
+                        Actor.Animation($PLAYER_ACTOR) == "startgta4Pizza2"
+                    then
+                        0687: clear_actor $PLAYER_ACTOR task
+                        wait 1000
+                        break
+                    end
+
+                    if or
+                        Actor.Animation($PLAYER_ACTOR) == "startgta4Wayfare2"
+                        Actor.Animation($PLAYER_ACTOR) == "startgta4bikes2"
+                        Actor.Animation($PLAYER_ACTOR) == "startgta4bikes22"
+                    then
+                        0687: clear_actor $PLAYER_ACTOR task
+                        wait 1000
+                        break
+                    end
+                else
+                    break
+                end
+
+            until timera > 10000
+        end
+    end
+end

@@ -1,0 +1,170 @@
+{$CLEO .cs}
+{$USE CLEO+}
+{$USE newOpcodes}
+{$USE ini}
+
+0000: NOP
+
+script_name "Horn"
+
+// By ArtemQa146
+
+if
+    0AA2: 31@ = load_dynamic_library "CLEO+.cleo"
+then
+    if
+        0AA4: 30@ = get_dynamic_library_procedure "GetCleoPlusVersion" library 31@
+    then
+        0AA7: call_function_return 30@ num_params 0 pop 0 29@
+        if
+            not 29@ >= 0x1020000
+        then
+            0AD1: show_formatted_text_highpriority "Cleo+ 1.2.0 (or higher) version is required, the DrIVe mod is disabled" time 15000
+            0AA3: free_dynamic_library 31@
+            0A93: terminate_this_custom_script
+        end
+        0AA3: free_dynamic_library 31@
+    end
+else
+    0AD1: show_formatted_text_highpriority "Cleo+ 1.2.0 (or higher) version is required, the DrIVe mod is disabled" time 15000
+    0AA3: free_dynamic_library 31@
+    0A93: terminate_this_custom_script
+end
+
+const
+    Check = 31@
+    Check_Global = 30@
+end
+
+while true
+wait 0
+    if
+        player.Defined(0)
+    then
+    gosub @Check_Global
+    if
+        Check_Global == true
+    then
+        repeat
+        wait 0
+        04ED: load_animation  "DrIVeMod"
+        until 04EE:   animation "DrIVeMod" loaded
+
+timera = 0
+
+while true
+wait 0
+    gosub @Check_Global
+        if
+            Check_Global == true
+        then
+        
+                    046C: 1@ = car 0@ driver
+                    if
+                        803B:   not 1@ == $PLAYER_ACTOR  // (int)
+                    then
+                        continue
+                    end
+
+                    if or
+                        Actor.Animation($PLAYER_ACTOR) == "DrivebyL_L"
+                        Actor.Animation($PLAYER_ACTOR) == "DrivebyL_R"
+                        Actor.Animation($PLAYER_ACTOR) == "Driveby_L"
+                        Actor.Animation($PLAYER_ACTOR) == "Driveby_R"
+                        Actor.Animation($PLAYER_ACTOR) == "CAR_TUNE_RADIO"
+                    then
+                        continue
+                    end
+
+                    if or
+                        Actor.Animation($PLAYER_ACTOR) == "DRIVE_L"
+                        Actor.Animation($PLAYER_ACTOR) == "DRIVE_R"
+                        Actor.Animation($PLAYER_ACTOR) == "VOZVRAT"
+                        Actor.Animation($PLAYER_ACTOR) == "VOZVRAT2"
+                        Actor.Animation($PLAYER_ACTOR) == "NAZADPRO"
+                        Actor.Animation($PLAYER_ACTOR) == "VOZVRATPRO"
+                        0E42: is_char_doing_task_id $PLAYER_ACTOR task_id 1022
+                    then
+                        timera = 0
+                        continue
+                    end
+
+                    if or
+                        Actor.Animation($PLAYER_ACTOR) == "sportNAZAD"
+                        Actor.Animation($PLAYER_ACTOR) == "sportVOZVRAT"
+                        Actor.Animation($PLAYER_ACTOR) == "sportVOZVRAT2"
+                        Actor.Animation($PLAYER_ACTOR) == "NAZADTRUCK"
+                        Actor.Animation($PLAYER_ACTOR) == "VOZVRATTRUCK"
+                        Actor.Animation($PLAYER_ACTOR) == "VOZVRAT2TRUCK"
+                        Actor.Animation($PLAYER_ACTOR) == "NAZAD"
+                    then
+                        timera = 0
+                        continue
+                    end
+
+                    if or
+                        Actor.Animation($PLAYER_ACTOR) == "gear_ch"
+                        Actor.Animation($PLAYER_ACTOR) == "gear_ch2"
+                        Actor.Animation($PLAYER_ACTOR) == "gear_chL"
+                        Actor.Animation($PLAYER_ACTOR) == "VOZVRATPRO2"
+                        0803:   car 0@ have_hydraulics
+                    then
+                        timera = 0
+                        continue
+                    end
+                    
+                    0@ = Actor.CurrentCar($PLAYER_ACTOR)
+                    if and
+                        0122:   player $PLAYER_CHAR pressing_horn
+                        not is_char_exiting_any_car $Player_actor
+                        80E1:   not player 0 pressed_key 15 // Выход/ Enter/ F
+                    then
+                        if
+                            Actor.Animation($PLAYER_ACTOR) == "horn"
+                        then
+                            0614: set_actor $player_actor animation "horn" progress_to 0.5
+                        else
+                            0605: actor $Player_actor perform_animation "horn" IFP "DrIVeMod" framedelta 8.0 loop 0 lockX 0 lockY 0 lockF 0 time 0
+                        end
+                    end
+
+
+
+                else
+                    04EF: release_animation "DrIVeMod"
+                    break
+                end
+            end
+
+
+        end
+    end
+end
+
+:Check_Global
+Check_Global = false
+    if and
+        Actor.Driving($PLAYER_ACTOR)
+        8741:   not actor $PLAYER_ACTOR busted
+        not actor.Dead($PLAYER_ACTOR)
+        not is_on_cutscene
+        not is_on_scripted_cutscene
+    then
+        if and
+            84C8:   not actor $PLAYER_ACTOR driving_flying_vehicle
+            847A:   not actor $PLAYER_ACTOR driving_bike
+            84A7:   not actor $PLAYER_ACTOR driving_boat
+            84A9:   not actor $PLAYER_ACTOR driving_heli
+            89AE:   not actor $PLAYER_ACTOR driving_train
+        then
+            0@ = Actor.CurrentCar($PLAYER_ACTOR)
+            0E12: get_vehicle 0@ subclass_to 1@
+            if or
+                1@ == 1
+                1@ == 0
+            then
+                Check_Global = true
+            end
+        end
+    end
+return

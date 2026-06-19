@@ -1,0 +1,327 @@
+{$CLEO .cs}
+{$USE CLEO+}
+{$USE Audio}
+{$USE newOpcodes}
+{$USE ini}
+
+0000: NOP 
+
+script_name "DestroyWGTA4"
+
+if
+    0AA2: 31@ = load_dynamic_library "CLEO+.cleo"
+then
+    if
+        0AA4: 30@ = get_dynamic_library_procedure "GetCleoPlusVersion" library 31@
+    then
+        0AA7: call_function_return 30@ num_params 0 pop 0 29@
+        if
+            not 29@ >= 0x1020000
+        then
+            0AD1: show_formatted_text_highpriority "Cleo+ 1.2.0 (or higher) version is required, the DrIVe mod is disabled" time 15000
+            0AA3: free_dynamic_library 31@
+            0A93: terminate_this_custom_script
+        end
+        0AA3: free_dynamic_library 31@
+    end
+else
+    0AD1: show_formatted_text_highpriority "Cleo+ 1.2.0 (or higher) version is required, the DrIVe mod is disabled" time 15000
+    0AA3: free_dynamic_library 31@
+    0A93: terminate_this_custom_script
+end
+
+0AF0: 24@ = get_int_from_ini_file "CLEO\DestroyWGta4.ini" section "settings" key "alarm" 
+0AF2: 20@ = get_float_from_ini_file "cleo\DestroyWGta4.ini" section "settings" key "Volume"
+0AF4: 25@v = read_string_from_ini_file "cleo\DestroyWGta4.ini" section "settings" key "Particle name"
+
+if
+    0E20: is_on_samp
+then
+    0A93: terminate_this_custom_script
+end
+
+while true
+wait 0 
+if
+   Player.Defined($PLAYER_CHAR) 
+then
+    if and
+        8741:   not actor $PLAYER_ACTOR busted
+        not actor.Dead($PLAYER_ACTOR)
+        not Actor.Driving($PLAYER_ACTOR)
+        $ONMISSION == 0
+    then
+        0E43: get_char_task_pointer_by_id $player_actor 803 store_to 2@ // TASK_SIMPLE_CAR_OPEN_LOCKED_DOOR_FROM_OUTSIDE
+        0E43: get_char_task_pointer_by_id $player_actor 800 store_to 1@ // TASK_COMPLEX_GO_TO_CAR_DOOR_AND_STAND_STILL
+        if or
+            2@ <> 0
+            1@ <> 0
+        then
+            if 1@ <> 0
+            then 0D4E: 1@ = read_struct 1@ offset 0xc size 4 // CTaskComplexCarDrive struc -> C m_pVehicle      dd ?
+            else 0D4E: 1@ = read_struct 2@ offset 0x10 size 4 // CTaskSimpleCarOpenDoorFromOutside struc -> 10 m_pEntity       dd ?
+            end
+            0AEB: 6@ = vehicle_struct 1@ handle
+            0E12: get_vehicle 6@ subclass_to 1@
+            0441: 0@ = car 6@ model
+            15@ = 0
+            16@ = 0
+            17@ = 0
+            if
+                1@ == 0
+            then
+                0A97: 10@ = car 6@ struct
+                0D4E: 22@ = struct 10@ offset 0x4A4 size 1 //  m_nCreatedBy    db ?
+                0D4E: 23@ = struct 10@ offset 0x428 size 1 // Engine State
+                    if and
+                        23@ == 128 // 128 street car engine off, garage car off 0, street bike off 160, garage bike off 32
+                        22@ == 3 // 3 - PARKED_VEHICLE
+                    then
+                        095F: get_car 6@ door 2 angle_to 10@
+                        095F: get_car 6@ door 3 angle_to 11@
+                        if and
+                            10@ == 0.0
+                            11@ == 0.0
+                            not Car.Wrecked(6@)
+                            81F4:   not car 6@ flipped
+                            8495:   not car 6@ burning
+                        then
+                            04C4: store_coords_to 0@ 1@ 3@ from_actor $PLAYER_ACTOR with_offset 0.0 0.0 -1.0
+                            get_car_dummy_coord 6@ dummy 4 world_coords 1 invert_x 1 store_to 0@ 1@ 2@ // 4 dummy "ped_frontseat", we find the position (height) of the seat
+                            0063: 2@ -= 3@  // (float)
+                            if
+                                2@ < 1.5
+                            then
+                                09B3: get_car 6@ door_status 2@
+                                if
+                                    not 2@ == 2
+                                then
+                                    0441: 5@ = car 6@ model
+                                    0AD3: 0@v = string_format "%d" 5@
+                                    0AF0: 0@ = get_int_from_ini_file "CLEO\DestroyWGta4.ini" section "Car Exception" key 0@v
+                                    if
+                                        not 0@ == 1
+                                    then
+                                        020A: set_car 6@ door_status_to 2
+                                    else
+                                        0A97: 10@ = car 6@ struct
+                                        0E28: write_struct 10@ offset 0x4A4 size 1 value 1
+                                        continue
+                                    end
+                                end
+                            if or
+                                Actor.Animation($PLAYER_ACTOR) == "CAR_doorlocked_RHS" // animation for all lock doors R
+                                Actor.Animation($PLAYER_ACTOR) == "CAR_doorlocked_LHS" // animation for all lock doors L
+                            then
+                                0613: 0@ = actor $PLAYER_ACTOR animation "CAR_doorlocked_LHS" time
+                                0613: 1@ = actor $PLAYER_ACTOR animation "CAR_doorlocked_RHS" time
+                                    if or
+                                        0@ >= 0.8
+                                        1@ >= 0.8
+                                    then
+                                        if and
+                                            80E1:   not player 0 pressed_key 0 // if player not moving
+                                            80E1:   not player 0 pressed_key 1
+                                        then
+                                            if
+                                                Actor.Animation($PLAYER_ACTOR) == "CAR_doorlocked_LHS" // animation for all lock doors L
+                                            then
+                                                31@ = 10 // door L for windows 0D33
+                                                30@ = 2 // door L for angle door
+                                                19@ = 0 // for 10 dummy "ped_arm" left
+                                                    if
+                                                        09BB:   car 6@ has_visible_damage_on_component 2
+                                                    then
+                                                        020A: set_car 6@ door_status_to 1
+                                                        08A6: set_car 6@ door 30@ rotation_to 0.1
+                                                        continue
+                                                    end
+                                            end
+                                            if
+                                                Actor.Animation($PLAYER_ACTOR) == "CAR_doorlocked_RHS" // animation for all lock doors R
+                                            then
+                                                31@ = 8 // door R for windows 0D33
+                                                30@ = 3 // door R for angle door
+                                                19@ = 1 // for 10 dummy "ped_arm" right
+                                                    if
+                                                        09BB:   car 6@ has_visible_damage_on_component 3
+                                                    then
+                                                        020A: set_car 6@ door_status_to 1
+                                                        08A6: set_car 6@ door 30@ rotation_to 0.1
+                                                        continue
+                                                    end
+                                            end
+                                        
+                                        repeat
+                                        wait 0
+                                        04ED: load_animation  "DrIVeMod"
+                                        until 04EE:   animation "DrIVeMod" loaded
+                                        
+                                9@ = -1
+                                        
+                                if
+                                    056E:   car 6@ defined
+                                then
+
+                                set_player_control_pad_movement 0 0  // player cant move
+                                get_car_dummy_coord 6@ dummy 10 world_coords 1 invert_x 19@ store_to 21@ 22@ 23@  // 10 dummy "ped_arm"
+                                04C4: store_coords_to 0@ 1@ 3@ from_actor $PLAYER_ACTOR with_offset 0.0 0.0 -1.0
+                                get_car_dummy_coord 6@ dummy 4 world_coords 1 invert_x 1 store_to 0@ 1@ 2@ // 4 dummy "ped_frontseat", we find the position (height) of the seat
+                                0063: 2@ -= 3@  // (float)
+                                    if and
+                                        Actor.Animation($PLAYER_ACTOR) == "CAR_doorlocked_LHS"
+                                        2@ > 0.9
+                                        2@ < 1.5
+                                    then
+                                        06D2: 10@v = "WindowLeft_H"
+                                    end
+                                        if and
+                                            2@ > 0.9
+                                            2@ < 1.5
+                                            Actor.Animation($PLAYER_ACTOR) == "CAR_doorlocked_RHS"
+                                        then
+                                            06D2: 10@v = "WindowRight_H"
+                                        end
+                                            if and
+                                                Actor.Animation($PLAYER_ACTOR) == "CAR_doorlocked_LHS"
+                                                2@ < 0.4
+                                            then
+                                                06D2: 10@v = "WindowLeft_L"
+                                            end
+                                                if and
+                                                    2@ < 0.4
+                                                    Actor.Animation($PLAYER_ACTOR) == "CAR_doorlocked_RHS"
+                                                then
+                                                    06D2: 10@v = "WindowRight_L"
+                                                end
+                                                    if and
+                                                        Actor.Animation($PLAYER_ACTOR) == "CAR_doorlocked_LHS"
+                                                        2@ < 0.9
+                                                        2@ > 0.4
+                                                    then
+                                                        06D2: 10@v = "WindowLeft"
+                                                    end
+                                                        if and
+                                                            2@ < 0.9
+                                                            2@ > 0.4
+                                                            Actor.Animation($PLAYER_ACTOR) == "CAR_doorlocked_RHS"
+                                                        then
+                                                            06D2: 10@v = "WindowRight"
+                                                        end
+                                                        
+                                0E97: clear_char_secondary_tasks $PLAYER_ACTOR
+                                0812: AS_actor $PLAYER_ACTOR perform_animation 10@v IFP "DrIVeMod" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1  // versionB
+                                0006: TIMERA = 0
+                                0AC1: 9@ = load_audio_stream_with_3d_support "CLEO/SoundsQa/WinCrsh.mp3" // IF and SET
+                                0AC5: link_3d_audio_stream 9@ to_car 6@
+                                15@ = 0
+                                23@ += 0.25 // for particle, because 10 dummy "ped_arm" it's a door handle
+                                064B: 18@ = create_particle 25@v at 21@ 22@ 23@ type 1
+                                
+                                end
+
+
+repeat
+wait 0
+if 056E:   car 6@ defined
+then
+else break
+end
+0613: 4@ = actor $PLAYER_ACTOR animation 10@v time
+    if and
+        4@ > 0.4
+        4@ < 0.6
+    then
+        0EC0: add_fx_system_particle 18@ coord 21@ 22@ 23@ vel 0.0 0.0 0.0 size 0.3 brightness 1.0 rgba 0.8 0.8 0.8 0.1 lastFactor 1.0
+    end
+        if and
+            15@ == 0
+            4@ > 0.4
+        then
+            15@ = 1
+            0AAD: set_audio_stream 9@ state 1
+            0ABC: set_audio_stream 9@ volume 20@
+            0D33: set_car 6@ door 31@ window_state 1  // hide window
+            0209: 5@ = random_int_in_ranges 1 4
+            if and
+                24@ == 1
+                5@ == 1
+            then
+                0E61: set_car_alarm 6@ mode 2  // 0 - destroy alarm, 1 - if you seat in car It turns on, 2 - always turns on
+            end
+        end
+            if and
+                15@ == 1
+                4@ > 0.7
+            then
+                15@ = 2
+                08A6: set_car 6@ door 30@ rotation_to 0.1
+                020A: set_car 6@ door_status_to 1  // open all doors
+                    if and
+                        80E1:   not player 0 pressed_key 0 // if player not moving
+                        80E1:   not player 0 pressed_key 1
+                    then
+                        1@ = 0.1
+                        repeat
+                        wait 0
+                        if 056E:   car 6@ defined
+                        then
+                        else break
+                        end
+                        08A6: set_car 6@ door 30@ rotation_to 1@
+                        1@ += 0.05
+                        until 1@ >= 1.0
+                        if
+                            056E:   car 6@ defined
+                        then
+                            08A6: set_car 6@ door 30@ rotation_to 1.0
+                            05CB: AS_actor $PLAYER_ACTOR enter_car 6@ as_driver -1 ms
+                        else
+                            break
+                        end
+                    end
+                break
+            end
+                if
+                    0019:   TIMERA > 1000  // because there is a check for animation, without delay does not work
+                then
+                    if or
+                        actor.Dead($PLAYER_ACTOR)
+                        not Actor.Animation($PLAYER_ACTOR) == 10@v
+                        0741:   actor $PLAYER_ACTOR busted
+                    then
+                        break
+                    end
+                end
+            00A0: store_actor $PLAYER_ACTOR position_to 0@ 1@ 2@
+                if and
+                    15@ == 1
+                    get_random_char_in_sphere_no_save_recursive 16@ = random_char_near_point 0@ 1@ 2@ in_radius 25.0 find_next 1 pass_deads 1  // find cop
+                then
+                    089F: get_actor 16@ pedtype_to 1@
+                        if
+                            1@ == 6  // cop pedtype
+                        then
+                            010E: set_player $PLAYER_CHAR minimum_wanted_level_to 1
+                        end
+                    end
+    until not player.Defined(0)
+        04EF: release_animation "DrIVeMod"
+        0650: destroy_particle 18@
+        if not 9@ == -1
+        then 0AAE: remove_audio_stream 9@
+        end
+        set_player_control_pad_movement 0 1 // player can move
+        wait 500
+            end
+                end
+                    end
+                        end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
