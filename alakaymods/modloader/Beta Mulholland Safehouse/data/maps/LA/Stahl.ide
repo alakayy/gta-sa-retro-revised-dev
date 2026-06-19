@@ -1,0 +1,13 @@
+objs
+12723, ce_safehaus_int, lahills_safe1, 299, 0
+12724, cj_mlight17, cj_lighting, 299, 0
+12725, ce_safeglas, lahills_safe1, 299, 68
+12726, cj_mulfurn1, lahills_safe1, 299, 0
+12727, cj_mulfurn2, lahills_safe1, 299, 0
+12728, cj_mulfurn3, lahills_safe1, 299, 4
+12729, ce_safeshad, lahills_safe1, 299, 232
+12730, cj_mulfurn4, lahills_safe1, 299, 0
+end
+tobj
+12731, ce_safeglas2, lahills_safe1, 299, 2, 21, 6
+end
