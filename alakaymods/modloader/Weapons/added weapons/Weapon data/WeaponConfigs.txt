@@ -1,0 +1,9 @@
+IDE DATA\MAPS\Weapons.ide
+
+£ SKATE		    MELEE	10.0  1.6	12534	-1		11		DILDO		1			1		null
+£ MED			MELEE	10.0  1.6	12535	-1		10		DILDO		1			1		null
+£ STUNGUN		MELEE	10.0  1.6	12536	-1	    1		KNIFE		1			1	    null
+£ MACHET		MELEE	10.0  1.6	12537	-1		1		SWORD		1			1		null 
+£ HAMMER	    MELEE	10.0  1.6	12538	-1		1		DILDO	    1			1		null
+£ CLEAVER		MELEE	10.0  1.6	12539	-1		1		DILDO		1			1		stealth_kn
+£ SCRW			MELEE	10.0  1.6	12540	-1		1		KNIFE		1			1		null

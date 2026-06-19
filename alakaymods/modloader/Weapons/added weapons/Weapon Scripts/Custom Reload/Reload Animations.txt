@@ -1,0 +1,334 @@
+{$CLEO .cs}
+{$USE CLEO+}
+{$USE Audio}
+{$USE newOpcodes}
+{$USE ini}
+
+0000: NOP
+
+script_name "Reload Animations"
+
+repeat
+    wait 0
+    04ED: load_animation "reloadanim"
+until 04EE: animation "reloadanim" loaded
+
+repeat
+    wait 0
+until player.Defined(0)
+
+while true
+    wait 0
+
+    // 1 --------------------------------------------
+    if or
+        02D8: actor $PLAYER_ACTOR current_weapon == 72
+        02D8: actor $PLAYER_ACTOR current_weapon == 91
+        02D8: actor $PLAYER_ACTOR current_weapon == 97
+        02D8: actor $PLAYER_ACTOR current_weapon == 109 // Replace YOUR_M249_WEAPON_ID with your M249 weapon ID
+    then
+        if and
+            8611:   not actor $PLAYER_ACTOR performing_animation "PLOAD"
+            8611:   not actor $PLAYER_ACTOR performing_animation "PLOAD_IDLE"
+        then
+            if or
+                Actor.Animation($PLAYER_ACTOR) == "python_reload"
+                Actor.Animation($PLAYER_ACTOR) == "Rifle_load"
+                Actor.Animation($PLAYER_ACTOR) == "buddy_reload"
+            then
+                if or // When player aims or reloads
+                    Actor.Animation($PLAYER_ACTOR) == "Gun_stand"
+                    Actor.Animation($PLAYER_ACTOR) == "GunMove_BWD"
+                    Actor.Animation($PLAYER_ACTOR) == "GunMove_FWD"
+                    Actor.Animation($PLAYER_ACTOR) == "GunMove_L"
+                    Actor.Animation($PLAYER_ACTOR) == "GunMove_R"
+                then
+                    0812: actor $PLAYER_ACTOR perform_animation "PLOAD" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1
+                    wait 100
+                    continue
+                else
+                    0605: actor $PLAYER_ACTOR perform_animation "PLOAD_IDLE" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1
+                    wait 100
+                    continue
+                end
+            end
+        end
+
+        // After crouch reload, keep the player crouched
+        if
+            8611: not actor $PLAYER_ACTOR performing_animation "PCLOAD"
+        then
+            if or
+                Actor.Animation($PLAYER_ACTOR) == "python_crouchreload"
+                Actor.Animation($PLAYER_ACTOR) == "Rifle_crouchload"
+                Actor.Animation($PLAYER_ACTOR) == "buddy_crouchreload"
+            then
+                0812: actor $PLAYER_ACTOR perform_animation "PCLOAD" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 1 lockY 1 lockF 0 time -1
+                wait 100
+                continue
+            end
+        end
+
+        if
+            0611: actor $PLAYER_ACTOR performing_animation "PCLOAD"
+        then
+            0613: 1@ = actor $PLAYER_ACTOR animation "PCLOAD" time
+
+            if
+                1@ > 0.999
+            then
+                04EB: actor $PLAYER_ACTOR crouch 1
+            end
+        end
+    end
+
+    // 2 --------------------------------------------
+    if or
+        02D8: actor $PLAYER_ACTOR current_weapon == 77
+        02D8: actor $PLAYER_ACTOR current_weapon == 70
+        02D8: actor $PLAYER_ACTOR current_weapon == 110 // Replace YOUR_M249_WEAPON_ID with your M249 weapon ID
+    then
+        if and
+            8611:   not actor $PLAYER_ACTOR performing_animation "MHLOAD"
+            8611:   not actor $PLAYER_ACTOR performing_animation "MHLOAD_IDLE"
+            Actor.Animation($PLAYER_ACTOR) == "Rifle_load"
+        then
+            if or // When player aims or reloads
+                Actor.Animation($PLAYER_ACTOR) == "Gun_stand"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_BWD"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_FWD"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_L"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_R"
+            then
+                0812: actor $PLAYER_ACTOR perform_animation "MHLOAD" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1
+                wait 100
+                continue
+            else
+                0605: actor $PLAYER_ACTOR perform_animation "MHLOAD_IDLE" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1
+                wait 100
+                continue
+            end
+        end
+
+        // After crouch reload, keep the player crouched
+        if and
+            8611:   not actor $PLAYER_ACTOR performing_animation "MHCLOAD"
+            Actor.Animation($PLAYER_ACTOR) == "Rifle_crouchload"
+        then
+            0812: actor $PLAYER_ACTOR perform_animation "MHCLOAD" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 1 lockY 1 lockF 0 time -1
+            wait 100
+            continue
+        end
+
+        if
+            0611: actor $PLAYER_ACTOR performing_animation "MHCLOAD"
+        then
+            0613: 1@ = actor $PLAYER_ACTOR animation "MHCLOAD" time
+
+            if
+                1@ > 0.999
+            then
+                04EB: actor $PLAYER_ACTOR crouch 1
+            end
+        end
+    end
+
+    // 3 --------------------------------------------
+    if or
+        02D8: actor $PLAYER_ACTOR current_weapon == 83
+        02D8: actor $PLAYER_ACTOR current_weapon == 100 // Replace YOUR_M249_WEAPON_ID with your M249 weapon ID
+    then
+        if and
+            8611:   not actor $PLAYER_ACTOR performing_animation "ALOAD"
+            8611:   not actor $PLAYER_ACTOR performing_animation "ALOAD_IDLE"
+            Actor.Animation($PLAYER_ACTOR) == "Rifle_load"
+        then
+            if or // When player aims or reloads
+                Actor.Animation($PLAYER_ACTOR) == "Gun_stand"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_BWD"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_FWD"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_L"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_R"
+            then
+                0812: actor $PLAYER_ACTOR perform_animation "ALOAD" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1
+                wait 100
+                continue
+            else
+                0605: actor $PLAYER_ACTOR perform_animation "ALOAD_IDLE" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1
+                wait 100
+                continue
+            end
+        end
+
+        // After crouch reload, keep the player crouched
+        if and
+            8611:   not actor $PLAYER_ACTOR performing_animation "ACLOAD"
+            Actor.Animation($PLAYER_ACTOR) == "Rifle_crouchload"
+        then
+            0812: actor $PLAYER_ACTOR perform_animation "ACLOAD" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 1 lockY 1 lockF 0 time -1
+            wait 100
+            continue
+        end
+
+        if
+            0611: actor $PLAYER_ACTOR performing_animation "ACLOAD"
+        then
+            0613: 1@ = actor $PLAYER_ACTOR animation "ACLOAD" time
+
+            if
+                1@ > 0.999
+            then
+                04EB: actor $PLAYER_ACTOR crouch 1
+            end
+        end
+    end
+
+    // 4 --------------------------------------------
+    if
+        02D8: actor $PLAYER_ACTOR current_weapon == 94 // Replace YOUR_M249_WEAPON_ID with your M249 weapon ID
+    then
+        if and
+            8611:   not actor $PLAYER_ACTOR performing_animation "MGLOAD"
+            8611:   not actor $PLAYER_ACTOR performing_animation "MGLOAD_IDLE"
+            Actor.Animation($PLAYER_ACTOR) == "Rifle_load"
+        then
+            if or // When player aims or reloads
+                Actor.Animation($PLAYER_ACTOR) == "Gun_stand"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_BWD"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_FWD"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_L"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_R"
+            then
+                0812: actor $PLAYER_ACTOR perform_animation "MGLOAD" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1
+                wait 100
+                continue
+            else
+                0605: actor $PLAYER_ACTOR perform_animation "MGLOAD_IDLE" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1
+                wait 100
+                continue
+            end
+        end
+
+        // After crouch reload, keep the player crouched
+        if and
+            8611:   not actor $PLAYER_ACTOR performing_animation "MGCLOAD"
+            Actor.Animation($PLAYER_ACTOR) == "Rifle_crouchload"
+        then
+            0812: actor $PLAYER_ACTOR perform_animation "MGCLOAD" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 1 lockY 1 lockF 0 time -1
+            wait 100
+            continue
+        end
+
+        if
+            0611: actor $PLAYER_ACTOR performing_animation "MGCLOAD"
+        then
+            0613: 1@ = actor $PLAYER_ACTOR animation "MGCLOAD" time
+
+            if
+                1@ > 0.999
+            then
+                04EB: actor $PLAYER_ACTOR crouch 1
+            end
+        end
+    end
+
+    // 5 --------------------------------------------
+    if
+        02D8: actor $PLAYER_ACTOR current_weapon == 82 // Replace YOUR_M249_WEAPON_ID with your M249 weapon ID
+    then
+        if and
+            8611:   not actor $PLAYER_ACTOR performing_animation "MLOAD"
+            8611:   not actor $PLAYER_ACTOR performing_animation "MLOAD_IDLE"
+            Actor.Animation($PLAYER_ACTOR) == "Rifle_load"
+        then
+            if or // When player aims or reloads
+                Actor.Animation($PLAYER_ACTOR) == "Gun_stand"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_BWD"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_FWD"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_L"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_R"
+            then
+                0812: actor $PLAYER_ACTOR perform_animation "MLOAD" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1
+                wait 100
+                continue
+            else
+                0605: actor $PLAYER_ACTOR perform_animation "MLOAD_IDLE" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1
+                wait 100
+                continue
+            end
+        end
+
+        // After crouch reload, keep the player crouched
+        if and
+            8611:   not actor $PLAYER_ACTOR performing_animation "MCLOAD"
+            Actor.Animation($PLAYER_ACTOR) == "Rifle_crouchload"
+        then
+            0812: actor $PLAYER_ACTOR perform_animation "MCLOAD" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 1 lockY 1 lockF 0 time -1
+            wait 100
+            continue
+        end
+
+        if
+            0611: actor $PLAYER_ACTOR performing_animation "MCLOAD"
+        then
+            0613: 1@ = actor $PLAYER_ACTOR animation "MCLOAD" time
+
+            if
+                1@ > 0.999
+            then
+                04EB: actor $PLAYER_ACTOR crouch 1
+            end
+        end
+    end
+
+    // 6 --------------------------------------------
+    if
+        02D8: actor $PLAYER_ACTOR current_weapon == 95 // Replace YOUR_M249_WEAPON_ID with your M249 weapon ID
+    then
+        if and
+            8611:   not actor $PLAYER_ACTOR performing_animation "PLOAD"
+            8611:   not actor $PLAYER_ACTOR performing_animation "PLOAD_IDLE"
+            Actor.Animation($PLAYER_ACTOR) == "python_reload"
+            Actor.Animation($PLAYER_ACTOR) == "gang_gunstand"
+        then
+            if or // When player aims or reloads
+                Actor.Animation($PLAYER_ACTOR) == "Gun_stand"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_BWD"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_FWD"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_L"
+                Actor.Animation($PLAYER_ACTOR) == "GunMove_R"
+            then
+                0812: actor $PLAYER_ACTOR perform_animation "PLOAD" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1
+                wait 100
+                continue
+            else
+                0605: actor $PLAYER_ACTOR perform_animation "PLOAD_IDLE" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1
+                wait 100
+                continue
+            end
+        end
+
+        // After crouch reload, keep the player crouched
+        if and
+            8611:   not actor $PLAYER_ACTOR performing_animation "PCLOAD"
+            Actor.Animation($PLAYER_ACTOR) == "colt45_crouchreload"
+        then
+            0812: actor $PLAYER_ACTOR perform_animation "PCLOAD" IFP "reloadanim" framedelta 4.0 loopA 0 lockX 1 lockY 1 lockF 0 time -1
+            wait 100
+            continue
+        end
+
+        if
+            0611: actor $PLAYER_ACTOR performing_animation "PCLOAD"
+        then
+            0613: 1@ = actor $PLAYER_ACTOR animation "PCLOAD" time
+
+            if
+                1@ > 0.999
+            then
+                04EB: actor $PLAYER_ACTOR crouch 1
+            end
+        end
+    end
+
+end

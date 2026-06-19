@@ -1,0 +1,154 @@
+// This file was decompiled using SASCM.ini published on 2022-03-20
+{$CLEO .cs}
+{$USE ini}
+
+0000: NOP 
+Actor.EmulateFromPlayer(2@, 0)
+if 
+  not read_float_from_ini_file 5@ = read_float_from_ini_file "cleo\GTA V Sniper Vision.ini" section "Audio" key "Volume" 
+jf @NONAME_80 
+5@ = 0.0 
+
+:NONAME_80
+3@ = Audiostream.Load("audio\off.mp3")
+4@ = Audiostream.Load("audio\on.mp3")
+Audiostream.Volume(3@) = 5@
+Audiostream.Volume(4@) = 5@
+
+:NONAME_135
+if 
+0485:   return_true 
+jf @NONAME_571 
+wait 0 
+if and
+00E1:   player 0 pressed_key 6 
+044B:   actor 2@ on_foot
+Actor.Animation(2@) == "RIFLE_fire"
+jf @NONAME_443 
+if or
+02D8:   actor 2@ current_weapon == 81
+02D8:   actor 2@ current_weapon == 96  
+jf @NONAME_443 
+if 
+  is_key_pressed 81 
+jf @NONAME_312 
+if 
+  1@ == 0 
+jf @NONAME_268 
+if 
+  0@ == 1 
+jf @NONAME_243 
+0@ = 0 
+08B2: enable_thermal_vision 0 
+
+:NONAME_243
+if and
+044B:   actor 2@ on_foot
+Actor.Animation(2@) == "RIFLE_fire"
+then
+08B1: enable_night_vision 1
+end 
+1@ = 1 
+Audiostream.PerformAction(4@, AudioStreamState.Play)
+jump @NONAME_286 
+
+:NONAME_268
+08B1: enable_night_vision 0 
+1@ = 0 
+Audiostream.PerformAction(3@, AudioStreamState.Play)
+
+:NONAME_286
+if 
+  is_key_pressed 81 
+jf @NONAME_312 
+wait 0 
+jump @NONAME_286 
+
+:NONAME_312
+if 
+  is_key_pressed 69 
+jf @NONAME_443 
+if 
+  0@ == 0 
+jf @NONAME_399 
+if 
+  1@ == 1 
+jf @NONAME_374 
+1@ = 0 
+08B1: enable_night_vision 0 
+
+:NONAME_374
+if and
+044B:   actor 2@ on_foot
+Actor.Animation(2@) == "RIFLE_fire"
+then
+08B2: enable_thermal_vision 1
+end 
+0@ = 1 
+Audiostream.PerformAction(4@, AudioStreamState.Play)
+jump @NONAME_417 
+
+:NONAME_399
+08B2: enable_thermal_vision 0 
+0@ = 0 
+Audiostream.PerformAction(3@, AudioStreamState.Play)
+
+:NONAME_417
+if 
+  is_key_pressed 69 
+jf @NONAME_443 
+wait 0 
+jump @NONAME_417 
+
+:NONAME_443
+if 
+  0@ == 1 
+jf @NONAME_507 
+if and
+00E1:   player 0 pressed_key 6
+044B:   actor 2@ on_foot
+jf @NONAME_496
+if or 
+02D8:   actor 2@ current_weapon == 81 
+02D8:   actor 2@ current_weapon == 96
+jf @NONAME_496 
+if and
+044B:   actor 2@ on_foot
+Actor.Animation(2@) == "RIFLE_fire"
+jf @NONAME_496
+08B2: enable_thermal_vision 1 
+jump @NONAME_500 
+
+:NONAME_496
+08B2: enable_thermal_vision 0 
+
+:NONAME_500
+jump @NONAME_564 
+
+:NONAME_507
+if 
+  1@ == 1 
+jf @NONAME_564 
+if and
+00E1:   player 0 pressed_key 6
+044B:   actor 2@ on_foot  
+jf @NONAME_560
+if or
+02D8:   actor 2@ current_weapon == 81 
+02D8:   actor 2@ current_weapon == 96
+jf @NONAME_560
+if and
+044B:   actor 2@ on_foot
+Actor.Animation(2@) == "RIFLE_fire"
+jf @NONAME_560 
+08B1: enable_night_vision 1 
+jump @NONAME_564 
+
+:NONAME_560
+08B1: enable_night_vision 0 
+
+:NONAME_564
+jump @NONAME_135 
+
+:NONAME_571
+terminate_this_custom_script 

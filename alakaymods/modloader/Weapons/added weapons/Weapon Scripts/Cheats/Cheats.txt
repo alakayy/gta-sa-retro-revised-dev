@@ -1,0 +1,248 @@
+{$CLEO .cs}
+
+0000:
+
+:VAR
+7@ = 0
+
+:CHEAT1
+wait 0
+if
+0ADC: test_cheat "BARGAINBANG"
+then
+    // Load necessary weapon models
+    Model.Load(12538)
+    Model.Load(12503)
+    Model.Load(12510)
+    Model.Load(12514)
+    Model.Load(12522)
+    Model.Load(12526)
+    Model.Load(12530)
+    Model.Load(342)
+    038B: load_requested_models
+    01B2: give_actor $PLAYER_ACTOR weapon 106 ammo 1   // Hammer
+    01B2: give_actor $PLAYER_ACTOR weapon 86 ammo 36   // M9
+    01B2: give_actor $PLAYER_ACTOR weapon 84 ammo 20   // Stubby Shotgun
+    01B2: give_actor $PLAYER_ACTOR weapon 85 ammo 120  // Skorpion
+    01B2: give_actor $PLAYER_ACTOR weapon 78 ammo 140  // Ruger
+    01B2: give_actor $PLAYER_ACTOR weapon 101 ammo 60  // M21
+    01B2: give_actor $PLAYER_ACTOR weapon 97 ammo 150  // MG34
+    01B2: give_actor $PLAYER_ACTOR weapon 16 ammo 5    // Grenades
+    0623: add 1 to_integer_stat 137
+    0625: decrease_integer_stat 226 by 10
+    03E5: show_text_box 'CHEAT1'
+    end
+
+    // Unload models
+    Model.Destroy(12538)
+    Model.Destroy(12503)
+    Model.Destroy(12510)
+    Model.Destroy(12514)
+    Model.Destroy(12522)
+    Model.Destroy(12526)
+    Model.Destroy(12530)
+    Model.Destroy(342)
+
+jump @CHEAT2
+
+:CHEAT2
+wait 0
+if
+0ADC: test_cheat "MIDWAYMAYHEM"
+then
+    // Load necessary weapon models
+    Model.Load(12539)
+    Model.Load(12507)
+    Model.Load(12512)
+    Model.Load(12515)
+    Model.Load(12523)
+    Model.Load(12527)
+    Model.Load(12530)
+    Model.Load(342)
+    038B: load_requested_models
+    01B2: give_actor $PLAYER_ACTOR weapon 106 ammo 1   // Cleaver
+    01B2: give_actor $PLAYER_ACTOR weapon 86 ammo 24   // Snub
+    01B2: give_actor $PLAYER_ACTOR weapon 84 ammo 20   // 2Shot
+    01B2: give_actor $PLAYER_ACTOR weapon 75 ammo 180  // Mp5k
+    01B2: give_actor $PLAYER_ACTOR weapon 100 ammo 100  // Famas
+    01B2: give_actor $PLAYER_ACTOR weapon 74 ammo 30  // SVD
+    01B2: give_actor $PLAYER_ACTOR weapon 97 ammo 150  // MG34
+    01B2: give_actor $PLAYER_ACTOR weapon 16 ammo 10   // Grenades
+    0623: add 1 to_integer_stat 137 
+    0625: decrease_integer_stat 226 by 10
+    03E5: show_text_box 'CHEAT1'
+    end
+
+    // Unload models
+    Model.Destroy(12539)
+    Model.Destroy(12507)
+    Model.Destroy(12512)
+    Model.Destroy(12515)
+    Model.Destroy(12523)
+    Model.Destroy(12527)
+    Model.Destroy(12530)
+    Model.Destroy(342)
+
+jump @CHEAT3
+
+:CHEAT3
+wait 0
+if
+0ADC: test_cheat "POWERPLAY"
+then
+    // Load necessary weapon models
+    Model.Load(12537)
+    Model.Load(12506)
+    Model.Load(12513)
+    Model.Load(12519)
+    Model.Load(12524)
+    Model.Load(12528)
+    Model.Load(359)
+    Model.Load(342)
+    038B: load_requested_models
+    01B2: give_actor $PLAYER_ACTOR weapon 105 ammo 1   // Machete
+    01B2: give_actor $PLAYER_ACTOR weapon 99 ammo 120  // Glocka
+    01B2: give_actor $PLAYER_ACTOR weapon 110 ammo 40   // Usas
+    01B2: give_actor $PLAYER_ACTOR weapon 98 ammo 150  // G3
+    01B2: give_actor $PLAYER_ACTOR weapon 73 ammo 120  // M16
+    01B2: give_actor $PLAYER_ACTOR weapon 74 ammo 30  // SVD
+    01B2: give_actor $PLAYER_ACTOR weapon 35 ammo 20  // RPG
+    01B2: give_actor $PLAYER_ACTOR weapon 16 ammo 10   // Grenades
+    0623: add 1 to_integer_stat 137
+    0625: decrease_integer_stat 226 by 10
+    03E5: show_text_box 'CHEAT1'
+    end
+
+    // Unload models
+    Model.Destroy(12537)
+    Model.Destroy(12506)
+    Model.Destroy(12513)
+    Model.Destroy(12519)
+    Model.Destroy(12524)
+    Model.Destroy(12528)
+    Model.Destroy(359)
+    Model.Destroy(342)
+
+jump @CHEAT4
+
+:CHEAT4
+wait 0
+if
+0ADC: test_cheat "CLEANSHOT"
+then
+    // Load necessary weapon models
+    Model.Load(12540)
+    Model.Load(12508)
+    Model.Load(12513)
+    Model.Load(12520)
+    Model.Load(12524)
+    Model.Load(12528)
+    Model.Load(360)
+    Model.Load(342)
+    038B: load_requested_models
+    01B2: give_actor $PLAYER_ACTOR weapon 108 ammo 1   // Scrw
+    01B2: give_actor $PLAYER_ACTOR weapon 72 ammo 24  // Pyth
+    01B2: give_actor $PLAYER_ACTOR weapon 110 ammo 40   // Usas
+    01B2: give_actor $PLAYER_ACTOR weapon 71 ammo 160  // Uzi
+    01B2: give_actor $PLAYER_ACTOR weapon 73 ammo 120  // M16
+    01B2: give_actor $PLAYER_ACTOR weapon 96 ammo 30  // PSg1
+    01B2: give_actor $PLAYER_ACTOR weapon 36 ammo 20  // HS
+    01B2: give_actor $PLAYER_ACTOR weapon 16 ammo 10   // Grenades
+    0623: add 1 to_integer_stat 137
+    0625: decrease_integer_stat 226 by 10
+    03E5: show_text_box 'CHEAT1'
+    end
+
+    // Unload models
+    Model.Destroy(12540)
+    Model.Destroy(12508)
+    Model.Destroy(12513)
+    Model.Destroy(12520)
+    Model.Destroy(12524)
+    Model.Destroy(12528)
+    Model.Destroy(360)
+    Model.Destroy(342)
+
+jump @CHEAT5
+
+:CHEAT5
+wait 0
+if
+0ADC: test_cheat "REAPERSCALL"
+then
+    if
+        0039:   7@ == 0
+    then
+        // First activation: give Set A
+        Model.Load(12536)
+        Model.Load(12509)
+        Model.Load(12511)
+        Model.Load(12521)
+        Model.Load(12525)
+        Model.Load(12529)
+        Model.Load(12532)
+        Model.Load(342)
+        038B: load_requested_models
+
+       01B2: give_actor $PLAYER_ACTOR weapon 103 ammo 1   // Scrw
+       01B2: give_actor $PLAYER_ACTOR weapon 87 ammo 49  // Pyth
+       01B2: give_actor $PLAYER_ACTOR weapon 77 ammo 80   // Usas
+       01B2: give_actor $PLAYER_ACTOR weapon 89 ammo 200  // Uzi
+       01B2: give_actor $PLAYER_ACTOR weapon 83 ammo 240  // M16
+       01B2: give_actor $PLAYER_ACTOR weapon 81 ammo 20  // PSg1
+       01B2: give_actor $PLAYER_ACTOR weapon 70 ammo 200  // HS
+       01B2: give_actor $PLAYER_ACTOR weapon 16 ammo 10   // Grenades
+       0623: add 1 to_integer_stat 137
+       0625: decrease_integer_stat 226 by 10
+       03E5: show_text_box 'CHEAT1'
+
+        // Unload models
+        Model.Destroy(12538)
+        Model.Destroy(12503)
+        Model.Destroy(12510)
+        Model.Destroy(12514)
+        Model.Destroy(12522)
+        Model.Destroy(12526)
+        Model.Destroy(12532)
+        Model.Destroy(342)
+
+        0006: 7@ = 1
+
+    else
+        // Second activation: give Set B
+       Model.Load(12536)
+       Model.Load(12509)
+       Model.Load(12511)
+       Model.Load(12521)
+       Model.Load(12525)
+       Model.Load(12529)
+       Model.Load(12531)
+       Model.Load(342)
+       038B: load_requested_models
+       01B2: give_actor $PLAYER_ACTOR weapon 103 ammo 1   // Scrw
+       01B2: give_actor $PLAYER_ACTOR weapon 87 ammo 49  // Pyth
+       01B2: give_actor $PLAYER_ACTOR weapon 77 ammo 80   // Usas
+       01B2: give_actor $PLAYER_ACTOR weapon 89 ammo 200  // Uzi
+       01B2: give_actor $PLAYER_ACTOR weapon 83 ammo 240  // M16
+       01B2: give_actor $PLAYER_ACTOR weapon 81 ammo 20  // PSg1
+       01B2: give_actor $PLAYER_ACTOR weapon 82 ammo 400  // HS
+       01B2: give_actor $PLAYER_ACTOR weapon 16 ammo 10   // Grenades
+       0623: add 1 to_integer_stat 137
+       0625: decrease_integer_stat 226 by 10
+        03E5: show_text_box 'CHEAT1'
+
+        // Unload models
+         Model.Destroy(12536)
+         Model.Destroy(12509)
+         Model.Destroy(12511)
+         Model.Destroy(12521)
+         Model.Destroy(12525)
+         Model.Destroy(12529)
+         Model.Destroy(12531)
+         Model.Destroy(342)
+
+        0006: 7@ = 0  // reset toggle
+    end
+end
+
+jump @CHEAT1

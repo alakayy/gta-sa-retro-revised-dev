@@ -1,0 +1,73 @@
+weap
+# Handguns
+12500, nailgun, nailgun, silenced, 1, 30, 0
+12501, glock, glock, colt45, 1, 30, 0
+12502, glocksi, glocksi, silenced, 1, 30, 0
+12503, m9, m9, colt45, 1, 30, 0
+12504, m9s, m9s, silenced, 1, 30, 0
+12505, c96, c96, python, 1, 30, 0
+12506, glocka, glocka, colt45, 1, 30, 0
+12507, snub, snub, colt45, 1, 30, 0
+12508, pyth, pyth, python, 1, 30, 0
+12509, wildey, wildey, python, 1, 30, 0
+#
+# Shotguns
+#
+12510, stubby, stubby, buddy, 1, 30, 0
+12511, aa12, aa12, rifle, 1, 50, 0
+12512, 2shot, 2shot, rifle, 1, 50, 0
+12513, usas, usas, rifle, 1, 50, 0
+#
+# Single Handed Sub-Machineguns
+#
+12514, skorp, skorp, colt45, 1, 30, 0
+12515, mp5k, mp5k, colt45, 1, 50, 0
+12516, mac10, mac10, colt45, 1, 30, 0
+12517, mac10s, mac10s, colt45, 1, 30, 0
+#
+# Dual Handed Sub-Machineguns
+#
+12518, jatimac, jatimac, uzi, 1, 50, 0
+12519, hk51, hk51, rifle, 1, 50, 0
+12520, uzi, uzi, uzi, 1, 50, 0
+12521, p90, p90, uzi, 1, 50, 0
+#
+# Assualt Rifles
+#
+12522, ruger, ruger, rifle, 1, 50, 0
+12523, famas, famas, rifle, 1, 30, 0
+12524, m16, m16, rifle, 1, 30, 0
+12525, aug, aug, rifle, 1, 30, 0
+#
+# Sniper Rifles
+#
+12526, m21, m21, rifle, 1, 50, 0
+12527, svd, svd, rifle, 1, 50, 0
+12528, sr9t, sr9t, rifle, 1, 50, 0
+12529, m82, m82, rifle, 1, 50, 0
+#
+# Heavy Weapons
+#
+12530, grenlanc, grenlanc, buddy, 1, 50, 0
+12531, m249, m249, rifle, 1, 30, 0
+12532, m60, m60, rifle, 1, 30, 0
+12533, mgl, mgl, rifle, 1, 50, 0
+#
+# Grenade Projectile
+#
+11418, 37mm, 37mm, grenade, 1, 100, 0
+11419, 40mm, 40mm, grenade, 1, 100, 0
+#
+# Special Weapons
+#
+12534, SKATE, SKATE, null, 1, 50, 0
+12535, med, med, null, 1, 50, 0
+#
+# Melee Weapons
+#
+12536, stungun, stungun, null, 1, 50, 0
+12537, machet, machet, null, 1, 50, 0
+12538, hammer, hammer, null, 1, 50, 0
+12539, cleaver, cleaver, null, 1, 50
+12540, scrw, scrw, null, 1, 50, 0
+end
