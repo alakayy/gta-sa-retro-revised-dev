@@ -1,0 +1,224 @@
+{$CLEO .qa}
+{$USE CLEO+}
+{$USE newOpcodes}
+{$USE ini}
+
+0000: NOP
+
+script_name "VLSMQ2"
+
+// By ArtemQa146
+
+const
+    trash_car = 0@
+    trash_select = 31@
+    trash_dash = 10@
+    trash_mark = 20@
+    timer_local = 9@
+    check_bit = 30@
+    mission_check = 8@
+end
+
+if
+    0@ == 1
+then
+
+    00BA: show_text_styled GXT 'vlssm15' time 3000 style 2  // Beefy Baron
+    016A: fade 0 time 2000
+    01B4: set_player $PLAYER_CHAR can_move 0
+    wait 2000
+    01B4: set_player $PLAYER_CHAR can_move 1
+
+    model.Load(408)
+    model.Load(1372)
+    038B: load_requested_models
+    00A5: trash_car = create_car 408 at 2102.4336 -2070.4404 11.5544
+    0175: set_car trash_car Z_angle_to 188.1693
+    036A: put_actor $player_actor in_car trash_car
+    02EB: restore_camera_with_jumpcut
+    model.Destroy(408)
+    wait 500
+    016A: fade 1 time 500
+    trash_select = 0
+    
+    0E01: create_object_no_save 1372 at 1984.1091 -2051.8599 12.5496 offset 0 ground 0 to 10@
+    0E01: create_object_no_save 1372 at 2129.8359 -1939.8246 12.5469 offset 0 ground 0 to 11@
+    0E01: create_object_no_save 1372 at 2229.6611 -1995.7301 12.5469 offset 0 ground 0 to 12@
+    0E01: create_object_no_save 1372 at 2166.1191 -1788.9091 12.5198 offset 0 ground 0 to 13@
+    0E01: create_object_no_save 1372 at 2044.9034 -1654.767 12.5469 offset 0 ground 0 to 14@
+    0E01: create_object_no_save 1372 at 1806.913 -1713.9266 12.5461 offset 0 ground 0 to 15@
+    0E01: create_object_no_save 1372 at 1584.8365 -1715.8442 12.5546 offset 0 ground 0 to 16@
+    0E01: create_object_no_save 1372 at 2554.6396 -1127.343 62.7406 offset 0 ground 0 to 17@
+    0E01: create_object_no_save 1372 at 2640.3423 -2002.8574 13.0176 offset 0 ground 0 to 18@
+    model.Destroy(1372)
+    
+    0E2A: add_cleo_blip 56 position 1984.1091 -2051.8599 is_short 0 RGBA 0 255 0 255 store_to 20@
+    0E2A: add_cleo_blip 56 position 2129.8359 -1939.8246 is_short 0 RGBA 0 255 0 255 store_to 21@
+    0E2A: add_cleo_blip 56 position 2229.6611 -1995.7301 is_short 0 RGBA 0 255 0 255 store_to 22@
+    0E2A: add_cleo_blip 56 position 2166.1191 -1788.9091 is_short 0 RGBA 0 255 0 255 store_to 23@
+    0E2A: add_cleo_blip 56 position 2044.9034 -1654.76 is_short 0 RGBA 0 255 0 255 store_to 24@
+    0E2A: add_cleo_blip 56 position 1806.913 -1713.9266 is_short 0 RGBA 0 255 0 255 store_to 25@
+    0E2A: add_cleo_blip 56 position 1584.8365 -1715.8442 is_short 0 RGBA 0 255 0 255 store_to 26@
+    0E2A: add_cleo_blip 56 position 2554.6396 -1127.343 is_short 0 RGBA 0 255 0 255 store_to 27@
+    0E2A: add_cleo_blip 56 position 2640.3423 -2002.8574 is_short 0 RGBA 0 255 0 255 store_to 28@
+    
+    for trash_select = 0 to 8 step 1
+    0382: set_object trash_dash(trash_select,1i) collision_detection 0
+    07F7: set_object  trash_dash(trash_select,1i) destructible 0
+    end
+    Timer_local = 120000
+    0E4E: display_onscreen_timer_local Timer_local direction 1
+    08C3: clear check_bit bit 1
+    08C3: clear check_bit bit 2
+    mission_check = true
+    
+    00BC: show_text_highpriority GXT 'vlssm22' time 5000 flag 1  // ~s~Come back between 9:00 and 17:00.
+    
+    repeat
+    wait 0
+    if and
+        mission_check == true
+        056E:   car trash_car defined
+    then
+        if or
+            0119:   car trash_car wrecked
+            not locate_char_distance_to_car $player_actor car trash_car radius 30.0
+            timer_local < 1
+        then
+            gosub @Mission_F
+            break
+        end
+        
+        if
+            80DB:   not actor $PLAYER_ACTOR in_car trash_car
+        then
+            00BC: show_text_highpriority GXT 'vlssm27' time 1000 flag 1  // ~s~Come back between 9:00 and 17:00.
+        end
+        
+        if and
+            83CA:   not object 10@ exists
+            83CA:   not object 11@ exists
+            83CA:   not object 12@ exists
+            83CA:   not object 13@ exists
+            83CA:   not object 14@ exists
+            83CA:   not object 15@ exists
+            83CA:   not object 16@ exists
+        then
+            08BD: set check_bit bit 1
+        end
+        
+        if and
+            83CA:   not object 17@ exists
+            83CA:   not object 18@ exists
+        then
+            08BD: set check_bit bit 2
+        end
+        
+        if and
+            08B7:   test check_bit bit 1
+            08B7:   test check_bit bit 2
+        then
+            0E2A: add_cleo_blip 56 position 2102.4336 -2070.440 is_short 0 RGBA 255 255 255 255 store_to 29@
+            00BC: show_text_highpriority GXT 'vlssm23' time 5000 flag 1  // ~s~Come back between 9:00 and 17:00.
+            
+            repeat
+            wait 0
+            if
+                056E:   car trash_car defined
+            then
+                if or
+                    0119:   car trash_car wrecked
+                    timer_local < 1
+                    not locate_char_distance_to_car $player_actor car trash_car radius 30.0
+                then
+                    gosub @Mission_F
+                    break
+                end
+                
+                if
+                    80DB:   not actor $PLAYER_ACTOR in_car trash_car
+                then
+                    00BC: show_text_highpriority GXT 'vlssm27' time 1000 flag 1  // ~s~Come back between 9:00 and 17:00.
+                end
+                
+                if
+                    00F1:   actor $PLAYER_ACTOR sphere 1 near_point 2102.4336 -2070.4404 radius 8.0 8.0 stopped_in_car
+                then
+                    00BA: show_text_styled GXT 'vlssm16' time 3000 style 1  // Beefy Baron
+                    0109: player $PLAYER_CHAR money += 1000
+                    mission_check = false
+                    break
+                end
+            
+            else
+                break
+            end
+            until not player.Defined(0)
+            0E2B: remove_cleo_blip 29@
+            continue
+        end
+
+
+        
+        for trash_select = 0 to 8 step 1
+            if
+                03CA:   object trash_dash(trash_select,1i) exists
+            then
+                if
+                    0EE7: locate_car_distance_to_object trash_car object trash_dash(trash_select,1i) radius 50.0
+                then
+                    0400: store_coords_to 1@ 2@ 3@ from_object trash_dash(trash_select,1i) with_offset 0.0 0.0 0.0
+                    024F: create_corona_with_radius 1.5 type 9 lensflares 0 with_color 10 50 0 at 1@ 2@ 3@
+                end
+                if
+                    0EE7: locate_car_distance_to_object trash_car object trash_dash(trash_select,1i) radius 7.0
+                then
+                    0108: destroy_object trash_dash(trash_select,1i)
+                    0E2B: remove_cleo_blip trash_mark(trash_select,1i)
+                    trash_dash(trash_select,1i) = -1
+                    Timer_local += 40000
+                    gosub @Sound
+                end
+            end
+        end
+        
+    else
+        break
+    end
+    until not player.Defined(0)
+    
+end
+
+for trash_select = 0 to 8 step 1
+    if
+        03CA:   object trash_dash(trash_select,1i) exists
+    then
+        0108: destroy_object trash_dash(trash_select,1i)
+        0E2B: remove_cleo_blip trash_mark(trash_select,1i)
+    end
+end
+if 056E:   car trash_car defined
+then 01C3: remove_references_to_car trash_car
+end
+
+0E54: clear_onscreen_timer_local Timer_local
+
+0A93: terminate_this_custom_script
+
+
+:Mission_F
+00BA: show_text_styled GXT 'vlssm11' time 3000 style 1  // Beefy Baron
+mission_check = false
+return
+
+:Sound
+repeat
+wait 0
+03CF: load_wav 17000 as 1
+until 03D0:   wav 1 loaded
+03D1: play_wav 1
+repeat
+wait 0
+until 03D2:   wav 1 ended
+040D: unload_wav 1
+return

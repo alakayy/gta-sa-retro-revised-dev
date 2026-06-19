@@ -1,0 +1,189 @@
+{$CLEO .cs}
+{$USE CLEO+}
+{$USE newOpcodes}
+{$USE ini}
+
+0000: NOP
+
+script_name "VCS&LCS Side Missions"
+
+// By ArtemQa146
+
+const
+    blip_car = 31@
+    blip_trush = 30@
+    blip_fire = 29@
+    blip_rescue = 28@
+    blip_beach = 27@
+    icon_1 = 26@
+    icon_2 = 25@
+    icon_3 = 24@
+    icon_4 = 23@
+end
+
+0390: load_txd_dictionary 'vlssm'
+038F: load_texture "icon1" as 1 // Load dictionary with 0390 first
+038F: load_texture "icon2" as 2 // Load dictionary with 0390 first
+038F: load_texture "icon3" as 3 // Load dictionary with 0390 first
+038F: load_texture "icon4" as 4 // Load dictionary with 0390 first
+0E3C: get_texture_from_sprite 1 store_to icon_1
+0E3C: get_texture_from_sprite 2 store_to icon_2
+0E3C: get_texture_from_sprite 3 store_to icon_3
+0E3C: get_texture_from_sprite 4 store_to icon_4
+0391: release_textures
+
+gosub @Icon_create
+
+while true
+wait 0
+    if
+        player.Defined(0)
+    then
+        // Car Sellerman
+        if and
+            0EEA: locate_char_distance_to_coordinates $PLAYER_ACTOR pos -1898.2969 245.3125 41.0469 radius 50.0
+            80DF:   not actor $PLAYER_ACTOR driving
+            810F:   not player $PLAYER_CHAR wanted_level > 0
+        then
+            if
+                00FE:   actor $PLAYER_ACTOR sphere 1 in_sphere -1898.2969 245.3125 41.0469 radius 1.5 1.5 3.0
+            then
+                0AAA: 1@ = get_script_struct_named "VLSMQ1"
+                if
+                    1@ == 0
+                then
+                    1@ = 1
+                    gosub @Icon_destroy
+                    0A92: stream_custom_script "VLSMQ1.qa" 1@
+                    repeat
+                    wait 300
+                    0AAA: 0@ = get_script_struct_named "VLSMQ1"
+                    until 0@ == 0
+                    gosub @Icon_create
+                    continue
+                end
+            end
+        end
+        
+        // Trash Dash
+        if and
+            0EEA: locate_char_distance_to_coordinates $PLAYER_ACTOR pos 2102.4336 -2070.4404 11.5544 radius 50.0
+            80DF:   not actor $PLAYER_ACTOR driving
+            810F:   not player $PLAYER_CHAR wanted_level > 0
+        then
+            if
+                00FE:   actor $PLAYER_ACTOR sphere 1 in_sphere 2102.4336 -2070.4404 11.5544 radius 1.5 1.5 3.0
+            then
+                0AAA: 1@ = get_script_struct_named "VLSMQ2"
+                if
+                    1@ == 0
+                then
+                    1@ = 1
+                    gosub @Icon_destroy
+                    0A92: stream_custom_script "VLSMQ2.qa" 1@
+                    repeat
+                    wait 300
+                    0AAA: 0@ = get_script_struct_named "VLSMQ2"
+                    until 0@ == 0
+                    gosub @Icon_create
+                    continue
+                end
+            end
+        end
+        
+        // Beach Patrol
+        if and
+            0EEA: locate_char_distance_to_coordinates $PLAYER_ACTOR pos 165.4971 -1780.6997 4.2404 radius 50.0
+            80DF:   not actor $PLAYER_ACTOR driving
+            810F:   not player $PLAYER_CHAR wanted_level > 0
+        then
+            if
+                00FE:   actor $PLAYER_ACTOR sphere 1 in_sphere 165.4971 -1780.6997 4.2404 radius 1.5 1.5 3.0
+            then
+                0AAA: 1@ = get_script_struct_named "VLSMQ3"
+                if
+                    1@ == 0
+                then
+                    1@ = 1
+                    gosub @Icon_destroy
+                    0A92: stream_custom_script "VLSMQ3.qa" 1@
+                    repeat
+                    wait 300
+                    0AAA: 0@ = get_script_struct_named "VLSMQ3"
+                    until 0@ == 0
+                    gosub @Icon_create
+                    continue
+                end
+            end
+        end
+        
+        // Fire Copter
+        if and
+            0EEA: locate_char_distance_to_coordinates $PLAYER_ACTOR pos 1766.4031 -1482.9987 13.2895 radius 50.0
+            80DF:   not actor $PLAYER_ACTOR driving
+            810F:   not player $PLAYER_CHAR wanted_level > 0
+        then
+            if
+                00FE:   actor $PLAYER_ACTOR sphere 1 in_sphere 1766.4031 -1482.9987 13.2895 radius 1.5 1.5 3.0
+            then
+                0AAA: 1@ = get_script_struct_named "VLSMQ4"
+                if
+                    1@ == 0
+                then
+                    1@ = 1
+                    gosub @Icon_destroy
+                    0A92: stream_custom_script "VLSMQ4.qa" 1@
+                    repeat
+                    wait 300
+                    0AAA: 0@ = get_script_struct_named "VLSMQ4"
+                    until 0@ == 0
+                    gosub @Icon_create
+                    continue
+                end
+            end
+        end
+        
+        // Air Rescue
+        if and
+            0EEA: locate_char_distance_to_coordinates $PLAYER_ACTOR pos -2594.5442 624.3792 27.8125 radius 50.0
+            80DF:   not actor $PLAYER_ACTOR driving
+            810F:   not player $PLAYER_CHAR wanted_level > 0
+        then
+            if
+                00FE:   actor $PLAYER_ACTOR sphere 1 in_sphere -2594.5442 624.3792 27.8125 radius 1.5 1.5 3.0
+            then
+                0AAA: 1@ = get_script_struct_named "VLSMQ5"
+                if
+                    1@ == 0
+                then
+                    1@ = 1
+                    gosub @Icon_destroy
+                    0A92: stream_custom_script "VLSMQ5.qa" 1@
+                    repeat
+                    wait 300
+                    0AAA: 0@ = get_script_struct_named "VLSMQ5"
+                    until 0@ == 0
+                    gosub @Icon_create
+                    continue
+                end
+            end
+        end
+    
+    end
+end
+
+:Icon_create
+0E2A: add_cleo_blip icon_3 position -1898.3809 245.2267  is_short 1 RGBA 255 255 255 255 store_to blip_car
+0E2A: add_cleo_blip icon_1 position 2102.4336 -2070.4404 is_short 1 RGBA 255 255 255 255 store_to blip_trush
+0E2A: add_cleo_blip icon_2 position 165.5568 -1780.7383 is_short 1 RGBA 255 255 255 255 store_to blip_beach
+0E2A: add_cleo_blip icon_4 position 1766.4503 -1483.1224 is_short 1 RGBA 255 255 255 255 store_to blip_fire
+0E2A: add_cleo_blip icon_2 position -2594.4421 624.1767 is_short 1 RGBA 255 255 255 255 store_to blip_rescue
+return
+
+:Icon_destroy
+0E2B: remove_cleo_blip blip_car
+0E2B: remove_cleo_blip blip_trush
+0E2B: remove_cleo_blip blip_beach
+0E2B: remove_cleo_blip blip_fire
+0E2B: remove_cleo_blip blip_rescue
+return

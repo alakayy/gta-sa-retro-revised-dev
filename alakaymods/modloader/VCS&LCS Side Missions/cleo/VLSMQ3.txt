@@ -1,0 +1,518 @@
+{$CLEO .qa}
+{$USE CLEO+}
+{$USE newOpcodes}
+{$USE ini}
+
+0000: NOP
+
+script_name "VLSMQ3"
+
+// By ArtemQa146
+
+const
+    car_1 = 0@
+    med_1 = 31@
+    level = 30@
+    next = 29@
+    ped_1 = 28@
+    blip_1 = 27@
+    mission_check = 26@
+    Timer_local = 25@
+    select = 24@
+    save_ped = 23@
+    another_ped = 22@
+end
+
+if
+    0@ == 1
+then
+
+    00BA: show_text_styled GXT 'vlssm17' time 3000 style 2  // Beefy Baron
+    016A: fade 0 time 2000
+    01B4: set_player $PLAYER_CHAR can_move 0
+    wait 2000
+    01B4: set_player $PLAYER_CHAR can_move 1
+    
+    model.Load(424)
+    model.Load(274)
+    038B: load_requested_models
+    00A5: car_1 = create_car 424 at 165.5568 -1780.7383 4.2392
+    0175: set_car car_1 Z_angle_to 180.0
+    036A: put_actor $player_actor in_car car_1
+    02EB: restore_camera_with_jumpcut
+    009A: med_1 = create_actor_pedtype 4 model 274 at 0.0 0.0 0.0
+    0430: put_actor med_1 into_car car_1 passenger_seat 0
+    model.Destroy(274)
+    model.Destroy(424)
+    
+    wait 500
+    016A: fade 1 time 500
+    level = 0
+    next = true
+    mission_check = true
+    
+    repeat
+    wait 0
+    04ED: load_animation "MEDIC"
+    until 04EE:   animation "MEDIC" loaded
+    
+    Timer_local = 60000
+    select = 0
+    0E4E: display_onscreen_timer_local Timer_local direction 1
+    00BC: show_text_highpriority GXT 'vlssm20' time 5000 flag 1  // ~s~Come back between 9:00 and 17:00.
+    
+    repeat
+    wait 0
+    if and
+        mission_check == true
+        056E:   car car_1 defined
+        056D:   actor med_1 defined
+    then
+        gosub @Draw_Info
+        
+        if and
+            level < 10
+            next == true
+        then
+            0209: 1@ = random_int_in_ranges 1 14
+            if
+                003B:   select == 1@  // (int)
+            then
+                1@ += 1
+                if 1@ > 13
+                then 1@ = 0
+                end
+            end
+
+            if 1@ == 1
+            then 0376: ped_1 = create_random_actor_at 347.4077 -1827.9805 3.9861
+            end
+            if 1@ == 2
+            then 0376: ped_1 = create_random_actor_at 234.7429 -1865.0563 2.863
+            end
+            if 1@ == 3
+            then 0376: ped_1 = create_random_actor_at 417.0503 -1852.031 3.6241
+            end
+            if 1@ == 4
+            then 0376: ped_1 = create_random_actor_at 674.0079 -1895.218 3.5302
+            end
+            if 1@ == 5
+            then 0376: ped_1 = create_random_actor_at 533.4185 -1887.2252 3.4209
+            end
+            if 1@ == 6
+            then 0376: ped_1 = create_random_actor_at 778.8702 -1870.5195 5.2046
+            end
+            if 1@ == 7
+            then 0376: ped_1 = create_random_actor_at 951.4884 -1854.8645 11.0669
+            end
+            if 1@ == 8
+            then 0376: ped_1 = create_random_actor_at 640.8374 -1830.9653 5.9928
+            end
+            if 1@ == 9
+            then 0376: ped_1 = create_random_actor_at 539.9551 -1790.7753 5.961
+            end
+            if 1@ == 10
+            then 0376: ped_1 = create_random_actor_at 484.104 -1819.7927 5.5414
+            end
+            if 1@ == 11
+            then 0376: ped_1 = create_random_actor_at 325.5791 -1895.4283 1.5534
+            end
+            if 1@ == 12
+            then 0376: ped_1 = create_random_actor_at 287.9778 -1793.4026 4.3828
+            end
+            if 1@ == 13
+            then 0376: ped_1 = create_random_actor_at 570.9578 -1863.4657 4.5038
+            end
+            
+            0085: select = 1@ // (int)
+            0E24: fix_char ped_1 ground 0 brightness 1 and_fade_in 0
+            04C4: store_coords_to 1@ 2@ 3@ from_actor ped_1 with_offset 0.0 0.0 0.0
+            0E2A: add_cleo_blip 56 position 1@ 2@ is_short 0 RGBA 0 255 0 255 store_to blip_1
+            next = false
+            level += 1
+            0332: set_actor ped_1 bleeding 1
+            0812: AS_actor ped_1 perform_animation "KO_shot_front" IFP "PED" framedelta 2.0 loopA 0 lockX 1 lockY 1 lockF 1 time -1  // versionB
+            continue
+        end
+        
+        if and
+            level > 9
+            next == true
+        then
+            if level == 10
+            then
+                016A: fade 0 time 1500
+                01B4: set_player $PLAYER_CHAR can_move 0
+                05CD: AS_actor $PLAYER_ACTOR exit_car car_1
+                05CD: AS_actor med_1 exit_car car_1
+                wait 1500
+
+                    repeat
+                    wait 0
+                    if and
+                        056E:   car car_1 defined
+                        056D:   actor med_1 defined
+                    then
+                        if and
+                            80DB:   not actor med_1 in_car car_1
+                            80DB:   not actor $PLAYER_ACTOR in_car car_1
+                        then
+                            00A6: destroy_car car_1
+                            009B: destroy_actor med_1
+                            model.Load(1316)
+                            model.Load(472)
+                            model.Load(97)
+                            038B: load_requested_models
+                            00A5: car_1 = create_car 472 at 230.6924 -1927.7885 -0.476
+                            0175: set_car car_1 Z_angle_to 180.0
+                            036A: put_actor $player_actor in_car car_1
+                            009A: med_1 = create_actor_pedtype 4 model 97 at 0.0 0.0 0.0
+                            0464: put_actor med_1 into_turret_on_car car_1 at_car_offset 0.0 2.0 1.0 position 0 shooting_angle_limit 0.0 with_weapon 0
+                            0E2E: create_render_object_to_char_bone med_1 model 1316 bone 34 offset 0.36 0 0 rotation 0 0 0 store_to 1@
+                            0E37: set_render_object_scale 1@ 0.3 0.3 0.3
+                            02EB: restore_camera_with_jumpcut
+                            model.Destroy(1316)
+                            model.Destroy(472)
+                            model.Destroy(97)
+                            00BC: show_text_highpriority GXT 'vlssm21' time 5000 flag 1  // ~s~Come back between 9:00 and 17:00.
+                            break
+                        end
+                    end
+                until not player.Defined(0)
+                016A: fade 1 time 1000
+                01B4: set_player $PLAYER_CHAR can_move 1
+            end
+            
+            if level == 20
+            then
+                00BA: show_text_styled GXT 'vlssm18' time 3000 style 1  // Beefy Baron
+                0109: player $PLAYER_CHAR money += 2000
+                mission_check = false
+                continue
+            end
+            
+            
+            0209: 1@ = random_int_in_ranges 1 12
+            if
+                003B:   select == 1@  // (int)
+            then
+                1@ += 1
+                if 1@ > 11
+                then 1@ = 0
+                end
+            end
+            
+            if 1@ == 1
+            then 0376: ped_1 = create_random_actor_at 289.3035 -2017.9272 0.3244
+            end
+            if 1@ == 2
+            then 0376: ped_1 = create_random_actor_at 391.8777 -1954.717 -0.2998
+            end
+            if 1@ == 3
+            then 0376: ped_1 = create_random_actor_at 501.5722 -2132.272 1.4253
+            end
+            if 1@ == 4
+            then 0376: ped_1 = create_random_actor_at 624.536 -1953.3236 2.7584
+            end
+            if 1@ == 5
+            then 0376: ped_1 = create_random_actor_at 869.4998 -2027.8237 1.0703
+            end
+            if 1@ == 6
+            then 0376: ped_1 = create_random_actor_at 426.5692 -2062.5249 2.2959
+            end
+            if 1@ == 7
+            then 0376: ped_1 = create_random_actor_at 211.6242 -2058.9956 0.89
+            end
+            if 1@ == 8
+            then 0376: ped_1 = create_random_actor_at 101.4453 -2015.9377 0.1307
+            end
+            if 1@ == 9
+            then 0376: ped_1 = create_random_actor_at 720.3382 -1893.2632 0.2508
+            end
+            if 1@ == 10
+            then 0376: ped_1 = create_random_actor_at 809.1667 -1930.4852 0.5764
+            end
+            if 1@ == 11
+            then 0376: ped_1 = create_random_actor_at 826.7897 -2119.7576 0.6688
+            end
+            
+            0085: select = 1@ // (int)
+            04D8: set_actor ped_1 drowns_in_water 0
+            04C4: store_coords_to 1@ 2@ 3@ from_actor ped_1 with_offset 0.0 0.0 0.0
+            0E2A: add_cleo_blip 56 position 1@ 2@ is_short 0 RGBA 0 255 0 255 store_to blip_1
+            next = false
+            level += 1
+        end
+        
+        if or
+            Timer_local < 1
+            0119:   car car_1 wrecked
+            actor.Dead(med_1)
+            not locate_char_distance_to_char med_1 char $player_actor radius 50.0
+        then
+            gosub @Mission_F
+            break
+        end
+
+        if
+            056D:   actor ped_1 defined
+        then
+            if
+                0EE4: locate_char_distance_to_char $player_actor char ped_1 radius 100.0
+            then
+                0575: set_actor ped_1 pinned_position 0
+            else
+                0575: set_actor ped_1 pinned_position 1
+            end
+            if
+                actor.Dead(ped_1)
+            then
+                gosub @Mission_F
+                break
+            end
+        end
+        
+        if
+            056D:   actor ped_1 defined
+        then
+        
+            if and
+                level < 11
+                0EE5: locate_char_distance_to_car ped_1 car car_1 radius 6.0
+                01C1:   car car_1 stopped
+            then
+                04C4: store_coords_to 1@ 2@ 3@ from_actor ped_1 with_offset 1.0 0.0 0.0
+                0615: define_AS_pack_begin 4@
+                0637: AS_actor -1 goto 1@ 2@ 3@ mode 6 turn_radius 1.0 stop_radius 3.0 look_at_actor ped_1
+                0639: AS_actor -1 rotate_to_actor ped_1
+                0812: AS_actor -1 perform_animation "CPR" IFP "MEDIC" framedelta 4.0 loopA 0 lockX 1 lockY 1 lockF 0 time -1  // versionB
+                05CA: AS_actor -1 enter_car car_1 passenger_seat 0 time 10000
+                0616: define_AS_pack_end 4@
+                0618: assign_actor med_1 to_AS_pack 4@
+                061B: remove_references_to_AS_pack 4@
+                timera = 0
+                00BC: show_text_highpriority GXT 'vlssm25' time 5000 flag 1  // ~s~Come back between 9:00 and 17:00.
+                0396: pause_timer 1
+
+                repeat
+                wait 0
+                if and
+                    056E:   car car_1 defined
+                    056D:   actor med_1 defined
+                then
+                    gosub @Draw_Info
+                    
+                    if or
+                        Timer_local < 1
+                        0119:   car car_1 wrecked
+                        actor.Dead(med_1)
+                        not locate_char_distance_to_char med_1 char $player_actor radius 50.0
+                    then
+                        gosub @Mission_F
+                        break
+                    end
+                    
+                    if
+                        056D:   actor ped_1 defined
+                    then
+                        if
+                            actor.Dead(ped_1)
+                        then
+                            gosub @Mission_F
+                            break
+                        end
+                    end
+                    
+                    if
+                        0611:   actor med_1 performing_animation "CPR"
+                    then
+                        0613: 1@ = actor med_1 animation "CPR" time
+                        if
+                            1@ > 0.7
+                        then
+                            if 056D:   actor ped_1 defined
+                            then
+                                0332: set_actor ped_1 bleeding 0
+                                0E2B: remove_cleo_blip blip_1
+                                01C2: remove_references_to_actor ped_1 // Like turning an actor into a random pedestrian
+                                Timer_local += 30000
+                                gosub @Sound
+                                1@ = 30
+                                01E5: show_text_1number_highpriority GXT 'vlssm19' number 1@ time 3000 flag 1  // ~s~You need $~1~ to compete.
+                            end
+                            ped_1 = -1
+                        end
+                    end
+
+                    if and
+                        timera > 5000
+                        00DB:   actor med_1 in_car car_1
+                    then
+                        next = true
+                        break
+                    end
+                else
+                    break
+                end
+                until not player.Defined(0)
+                0396: pause_timer 0
+                continue
+            end
+            
+            02E3: 1@ = car car_1 speed
+            if and
+                level > 10
+                0EE5: locate_char_distance_to_car ped_1 car car_1 radius 10.0
+                1@ < 5.0
+                8611:   not actor med_1 performing_animation "Walk_DoorPartial"
+            then
+                save_ped = false
+                00BC: show_text_highpriority GXT 'vlssm26' time 5000 flag 1  // ~s~Come back between 9:00 and 17:00.
+                
+                if and
+                    00E1:   player 0 pressed_key 7
+                    00E1:   player 0 pressed_key 6
+                then
+                    0812: AS_actor med_1 perform_animation "Walk_DoorPartial" IFP "PED" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1  // versionB
+                    0407: store_coords_to 1@ 2@ 3@ from_car car_1 with_offset 10.0 0.0 0.0
+                    if
+                        0EEA: locate_char_distance_to_coordinates ped_1 pos 1@ 2@ 3@ radius 10.0
+                    then
+                        save_ped = true
+                    end
+                end
+                
+                if and
+                    00E1:   player 0 pressed_key 5
+                    00E1:   player 0 pressed_key 6
+                then
+                    0812: AS_actor med_1 perform_animation "Walk_DoorPartial" IFP "PED" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1  // versionB
+                    0407: store_coords_to 1@ 2@ 3@ from_car car_1 with_offset -10.0 0.0 0.0
+                    if
+                        0EEA: locate_char_distance_to_coordinates ped_1 pos 1@ 2@ 3@ radius 10.0
+                    then
+                        save_ped = true
+                    end
+                end
+
+                if
+                    save_ped == true
+                then
+                
+                    repeat
+                    wait 0
+                    if and
+                        056E:   car car_1 defined
+                        056D:   actor med_1 defined
+                    then
+                        if
+                            0611:   actor med_1 performing_animation "Walk_DoorPartial"
+                        then
+                            0613: 1@ = actor med_1 animation "Walk_DoorPartial" time
+                            if
+                                1@ > 0.8
+                            then
+                                if 056D:   actor ped_1 defined
+                                then
+                                    0E2B: remove_cleo_blip blip_1
+                                    model.Load(1316)
+                                    0E2E: create_render_object_to_char_bone ped_1 model 1316 bone 8 offset 0 0 0 rotation 90.0 180.0 90.0 store_to 1@
+                                    0E37: set_render_object_scale 1@ 0.3 0.3 0.3
+                                    model.Destroy(1316)
+                                    01C2: remove_references_to_actor ped_1 // Like turning an actor into a random pedestrian
+                                    Timer_local += 30000
+                                end
+                                ped_1 = -1
+                                next = true
+                                gosub @Sound
+                                1@ = 30
+                                01E5: show_text_1number_highpriority GXT 'vlssm19' number 1@ time 3000 flag 1  // ~s~You need $~1~ to compete.
+                                break
+                            end
+                        end
+
+                    else
+                        break
+                    end
+                    until not player.Defined(0)
+                    continue
+                end
+            end
+            
+            if
+                level > 10
+            then
+                04C4: store_coords_to 1@ 2@ 3@ from_actor ped_1 with_offset 0.0 0.0 1.0
+                024F: create_corona_with_radius 1.0 type 9 lensflares 0 with_color 0 30 0 at 1@ 2@ 3@
+            end
+            
+        else
+            gosub @Mission_F
+            break
+        end
+
+        
+        gosub @Ped_car_damage
+    else
+        break
+    end
+    until not player.Defined(0)
+ 
+end
+
+if 056E:   car car_1 defined
+then 01C3: remove_references_to_car car_1
+end
+if 056D:   actor med_1 defined
+then 01C2: remove_references_to_actor med_1 // Like turning an actor into a random pedestrian
+end
+if 056D:   actor ped_1 defined
+then
+    01C2: remove_references_to_actor ped_1 // Like turning an actor into a random pedestrian
+    0E2B: remove_cleo_blip blip_1
+end
+04EF: release_animation "MEDIC"
+0E54: clear_onscreen_timer_local Timer_local
+
+0A93: terminate_this_custom_script
+
+
+:Draw_Info
+03F0: enable_text_draw 1
+0349: set_text_draw_font 1
+033F: set_text_draw_letter_size 0.4 1.1
+0342: set_text_draw_centered 1
+0348: enable_text_draw_proportional 1
+060D: draw_text_shadow 0 rgba 0 0 0 255
+081C: draw_text_outline 1 RGBA 0 0 0 255
+045A: draw_text_1number 563.0 158.0 GXT 'vlssm1' number level  // ALL RACES WON!~n~~w~$~1~
+return
+
+:Mission_F
+00BA: show_text_styled GXT 'vlssm11' time 3000 style 1  // Beefy Baron
+mission_check = false
+return
+
+:Sound
+repeat
+wait 0
+03CF: load_wav 17000 as 1
+until 03D0:   wav 1 loaded
+03D1: play_wav 1
+repeat
+wait 0
+until 03D2:   wav 1 ended
+040D: unload_wav 1
+return
+
+:Ped_car_damage
+1@ = 0
+while 0EA7: get_any_char_no_save_recursive 1@ progress_to 1@ char_to another_ped
+    if
+        051B:   actor another_ped damaged_by_car car_1
+    then
+        Timer_local -= 15000
+        054E: clear_actor another_ped damage
+    end
+end
+return

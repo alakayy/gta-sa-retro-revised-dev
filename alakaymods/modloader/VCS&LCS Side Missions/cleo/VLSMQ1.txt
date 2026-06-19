@@ -1,0 +1,673 @@
+{$CLEO .qa}
+{$USE CLEO+}
+{$USE newOpcodes}
+{$USE ini}
+
+0000: NOP
+
+script_name "VLSMQ1"
+
+// By ArtemQa146
+
+const
+    car_1 = 31@
+    car_2 = 30@
+    car_3 = 29@
+    ped_1 = 28@
+    ped_2 = 27@
+    ped_3 = 26@
+    check = 25@
+    select = 24@
+    mission_check = 23@
+    challenge = 22@
+    progress = 21@
+    sprite_1 = 20@
+    sprite_2 = 19@
+    complete = 18@
+    level = 17@
+    time_game = 16@
+    money_all = 15@
+    money_pay = 14@
+    time_level = 13@
+    regress = 4
+end
+
+if
+    0@ == 1
+then
+    00BA: show_text_styled GXT 'vlssm14' time 3000 style 2  // Beefy Baron
+    016A: fade 0 time 2000
+    01B4: set_player $PLAYER_CHAR can_move 0
+    wait 2000
+    01B4: set_player $PLAYER_CHAR can_move 1
+
+    gosub @Create_car_actor
+    gosub @Put_actor
+    
+    mission_check = true
+    
+    0390: load_txd_dictionary 'vlssm'
+    038F: load_texture "line1" as 1 // Load dictionary with 0390 first
+    038F: load_texture "line2" as 2 // Load dictionary with 0390 first
+    0E3C: get_texture_from_sprite 1 store_to sprite_1
+    0E3C: get_texture_from_sprite 2 store_to sprite_2
+    0391: release_textures
+    
+    level = 1
+    complete = 0
+    timera = 0
+    time_game = 180000
+    time_level = 60000
+    money_all = 0
+    wait 500
+    
+    016A: fade 1 time 500
+    0E4E: display_onscreen_timer_local time_game direction 1
+    00BC: show_text_highpriority GXT 'vlssm24' time 5000 flag 1  // ~s~Come back between 9:00 and 17:00.
+    
+    repeat
+    wait 0
+    gosub @Check
+    if and
+        mission_check == true
+        check == true
+        0EEA: locate_char_distance_to_coordinates $PLAYER_ACTOR pos -1932.1743 266.0508 41.0469 radius 100.0
+    then
+        gosub @Draw_Info
+        
+        if
+            complete >= 3
+        then
+            gosub @Destroy_all
+            gosub @Create_car_actor
+            gosub @Put_actor
+            complete = 0
+            level += 1
+            005A: time_game += time_level  // (int)
+            time_level -= 10000
+            if time_level < 1
+            then time_level = 5000
+            end
+            continue
+        end
+    
+        if
+            00DB:   actor $PLAYER_ACTOR in_car car_3(select,1i)
+        then
+            05CA: AS_actor ped_3(select,1i) enter_car car_3(select,1i) passenger_seat 0 time 10000
+            
+            // садится в машину пед
+
+            repeat
+            wait 0
+            gosub @Check
+            if
+                check == true
+            then
+                gosub @Draw_Info
+                00BC: show_text_highpriority GXT 'vlssm8' time 1000 flag 1  // ~s~Come back between 9:00 and 17:00.
+                if
+                    not locate_char_distance_to_char $PLAYER_ACTOR char ped_3(select,1i) radius 50.0
+                then
+                    gosub @Mission_F
+                    break
+                end
+
+                if
+                    00DB:   actor ped_3(select,1i) in_car car_3(select,1i)
+                then
+                    break
+                end
+            else
+                break
+            end
+            until not player.Defined(0)
+            
+            0396: pause_timer 0
+            timerb = 0
+
+            if select == 0
+            then challenge = 2
+            end
+            if select == 1
+            then challenge = 3
+            end
+            if select == 2
+            then challenge = 1
+            end
+            if
+                0E4D: random_percent 15
+            then
+                0209: challenge = random_int_in_ranges 4 6
+            end
+            
+            progress = 300
+            if challenge == 1
+            then 00BC: show_text_highpriority GXT 'vlssm2' time 7000 flag 1  // ~s~Come back between 9:00 and 17:00.
+            end
+            if challenge == 2
+            then 00BC: show_text_highpriority GXT 'vlssm3' time 7000 flag 1  // ~s~Come back between 9:00 and 17:00.
+            end
+            if challenge == 3
+            then
+                00BC: show_text_highpriority GXT 'vlssm4' time 7000 flag 1  // ~s~Come back between 9:00 and 17:00.
+                progress = 400
+            end
+            if challenge == 4
+            then
+                00BC: show_text_highpriority GXT 'vlssm5' time 7000 flag 1  // ~s~Come back between 9:00 and 17:00.
+                progress = 500
+            end
+            if challenge == 5
+            then
+                00BC: show_text_highpriority GXT 'vlssm13' time 7000 flag 1  // ~s~Come back between 9:00 and 17:00.
+                progress = 500
+            end
+            
+            // начинается миссия
+
+            repeat
+            wait 0
+            gosub @Check
+            if and
+                mission_check == true
+                check == true
+            then
+                gosub @Draw_Info
+                
+                if
+                    timerb > 100
+                then
+                    if challenge == 1
+                    then gosub @challenge_1
+                    end
+                    if challenge == 2
+                    then gosub @challenge_2
+                    end
+                    if challenge == 3
+                    then gosub @challenge_3
+                    end
+                    if challenge == 4
+                    then gosub @challenge_4
+                    end
+                    if challenge == 5
+                    then gosub @challenge_5
+                    end
+                    timerb = 0
+                end
+                
+                    008F: 1@ = integer progress to_float
+                    1@ /= 10.0
+                    0E1E: draw_texture_plus sprite_1 event 2 pos 563.0 168.0 size 50.0 20.0 angle 0.0 depth 0 fix_aspect_ratio 0 maskTrisCount 0 maskTrisArray 0 rgba 255 255 255 255
+                    0E1E: draw_texture_plus sprite_2 event 2 pos 540.0 168.0 size 1@ 20.0 angle 0.0 depth 0 fix_aspect_ratio 0 maskTrisCount 0 maskTrisArray 0 rgba 255 255 255 255
+
+                if or
+                    80DB:   not actor ped_3(select,1i) in_car car_3(select,1i)
+                    80DB:   not actor $PLAYER_ACTOR in_car car_3(select,1i)
+                    progress < 1
+                then
+                    gosub @Mission_F
+                    continue
+                end
+                
+                if
+                    progress >= 999
+                then
+                    gosub @Sound
+                    break
+                end
+
+            else
+                break
+            end
+            until not player.Defined(0)
+            
+            // возврат
+            
+            repeat
+            wait 0
+            gosub @Check
+            if and
+                mission_check == true
+                check == true
+            then
+                gosub @Draw_Info
+
+                if or
+                    80DB:   not actor ped_3(select,1i) in_car car_3(select,1i)
+                    80DB:   not actor $PLAYER_ACTOR in_car car_3(select,1i)
+                    progress < 1
+                then
+                    gosub @Mission_F
+                    continue
+                end
+                
+                if or
+                    challenge == 1
+                    challenge == 2
+                then
+                    if
+                        03C9:   car car_3(select,1i) damaged
+                    then
+                        00BC: show_text_highpriority GXT 'vlssm9' time 1000 flag 1  // ~s~Come back between 9:00 and 17:00.
+                        continue
+                    else
+                        00BC: show_text_highpriority GXT 'vlssm12' time 1000 flag 1  // ~s~Come back between 9:00 and 17:00.
+                    end
+                end
+                
+                if
+                    010F:   player $PLAYER_CHAR wanted_level > 0
+                then
+                    00BC: show_text_highpriority GXT 'vlssm10' time 1000 flag 1  // ~s~Come back between 9:00 and 17:00.
+                    continue
+                else
+                    00BC: show_text_highpriority GXT 'vlssm12' time 1000 flag 1  // ~s~Come back between 9:00 and 17:00.
+                end
+
+                016F: particle 3 rot 0.0 size 5.0 1 150 0 0 at -1921.942 265.4637 41.0469 // Красный свет на земле
+                if
+                    00F1:   actor $PLAYER_ACTOR sphere 1 near_point -1921.942 265.4637 radius 5.0 5.0 stopped_in_car
+                then
+                    016A: fade 0 time 1500
+                    01B4: set_player $PLAYER_CHAR can_move 0
+                    05CD: AS_actor $PLAYER_ACTOR exit_car car_3(select,1i)
+                    05CD: AS_actor ped_3(select,1i) exit_car car_3(select,1i)
+                    wait 1500
+                    
+                    repeat
+                    wait 0
+                    gosub @Check
+                    if
+                        check == true
+                    then
+                        if and
+                            80DB:   not actor ped_3(select,1i) in_car car_3(select,1i)
+                            80DB:   not actor $PLAYER_ACTOR in_car car_3(select,1i)
+                        then
+                            04C4: store_coords_to 1@ 2@ 3@ from_actor $PLAYER_ACTOR with_offset 0.0 0.0 -8.0
+
+                            00A1: put_actor ped_3(select,1i) at 1@ 2@ 3@
+                            00AB: put_car car_3(select,1i) at 1@ 2@ 3@
+                            
+                            0619: enable_actor ped_3(select,1i) collision_detection 0
+                            099A: set_car car_3(select,1i) collision_detection 0
+
+                            0575: set_actor ped_3(select,1i) pinned_position 1
+                            0574: set_car car_3(select,1i) keep_position 1
+                            break
+                        end
+                    end
+                    until not player.Defined(0)
+                    016A: fade 1 time 1000
+                    01B4: set_player $PLAYER_CHAR can_move 1
+                    complete += 1
+                    time_game += 40000
+                    0209: money_pay = random_int_in_ranges 20 31
+                    if challenge == 4
+                    then 0209: money_pay = random_int_in_ranges 60 90
+                    end
+                    006A: money_pay *= level  // (int)
+                    005A: money_all += money_pay  // (int)
+                    01E3: show_text_1number_styled GXT 'vlssm6' number money_pay time 5000 style 4  // NEW HIGH SCORE!!~n~~w~~1~
+                    01E5: show_text_1number_highpriority GXT 'vlssm7' number money_all time 5000 flag 1  // ~s~You need $~1~ to compete.
+                    gosub @Put_actor
+                    break
+                end
+
+            else
+                break
+            end
+            until not player.Defined(0)
+        else
+            0396: pause_timer 1
+        end
+
+        select += 1
+        if select >= 3
+        then select = 0
+        end
+    else
+        gosub @Mission_F
+        break
+    end
+    until not player.Defined(0)
+
+end
+
+if 056E:   car car_1 defined
+then 01C3: remove_references_to_car car_1
+end
+if 056E:   car car_2 defined
+then 01C3: remove_references_to_car car_2
+end
+if 056E:   car car_3 defined
+then 01C3: remove_references_to_car car_3
+end
+if 056D:   actor ped_1 defined
+then 01C2: remove_references_to_actor ped_1 // Like turning an actor into a random pedestrian
+end
+if 056D:   actor ped_2 defined
+then 01C2: remove_references_to_actor ped_2 // Like turning an actor into a random pedestrian
+end
+if 056D:   actor ped_3 defined
+then 01C2: remove_references_to_actor ped_3 // Like turning an actor into a random pedestrian
+end
+
+0E54: clear_onscreen_timer_local time_game
+0A93: terminate_this_custom_script
+
+
+:Check
+check = false
+    if and
+        056E:   car car_1 defined
+        056E:   car car_2 defined
+        056E:   car car_3 defined
+        056D:   actor ped_1 defined
+        056D:   actor ped_2 defined
+        056D:   actor ped_3 defined
+    then
+        if and
+            8118:   not actor ped_1 dead
+            8118:   not actor ped_2 dead
+            8118:   not actor ped_3 dead
+            8119:   not car car_1 wrecked
+            8119:   not car car_2 wrecked
+            8119:   not car car_3 wrecked
+        then
+            if
+                time_game > 1
+            then
+                check = true
+            else
+                gosub @Mission_F
+            end
+        else
+            gosub @Mission_F
+        end
+    end
+return
+
+
+:Create_car_actor
+0209: 1@ = random_int_in_ranges 1 5
+if 1@ == 1
+then 4@ = 411
+end
+if 1@ == 2
+then 4@ = 562
+end
+if 1@ == 3
+then 4@ = 560
+end
+if 1@ == 4
+then 4@ = 603
+end
+
+0209: 1@ = random_int_in_ranges 1 3
+if 1@ == 1
+then 5@ = 424
+end
+if 1@ == 2
+then 5@ = 470
+end
+
+0209: 1@ = random_int_in_ranges 1 5
+if 1@ == 1
+then 6@ = 458
+end
+if 1@ == 2
+then 6@ = 467
+end
+if 1@ == 3
+then 6@ = 479
+end
+if 1@ == 4
+then 6@ = 491
+end
+
+0209: 1@ = random_int_in_ranges 1 4
+if 1@ == 1
+then 7@ = 15
+end
+if 1@ == 2
+then 7@ = 43
+end
+if 1@ == 3
+then 7@ = 59
+end
+
+0209: 1@ = random_int_in_ranges 1 4
+if 1@ == 1
+then 8@ = 93
+end
+if 1@ == 2
+then 8@ = 98
+end
+if 1@ == 3
+then 8@ = 147
+end
+
+0209: 1@ = random_int_in_ranges 1 4
+if 1@ == 1
+then 9@ = 169
+end
+if 1@ == 2
+then 9@ = 170
+end
+if 1@ == 3
+then 9@ = 184
+end
+
+model.Load(4@)
+model.Load(5@)
+model.Load(6@)
+model.Load(7@)
+model.Load(8@)
+model.Load(9@)
+038B: load_requested_models
+00A5: car_1 = create_car 4@ at -1932.1743 273.0508 41.0469
+00A5: car_2 = create_car 5@ at -1932.1743 266.0508 41.0469
+00A5: car_3 = create_car 6@ at -1932.1743 259.0508 41.0469
+0175: set_car car_1 Z_angle_to 270.0
+0175: set_car car_2 Z_angle_to 270.0
+0175: set_car car_3 Z_angle_to 270.0
+
+0407: store_coords_to 1@ 2@ 3@ from_car car_1 with_offset 2.5 0.0 0.0
+009A: ped_1 = create_actor_pedtype 4 model 7@ at 1@ 2@ 3@
+
+0407: store_coords_to 1@ 2@ 3@ from_car car_2 with_offset 2.5 0.0 0.0
+009A: ped_2 = create_actor_pedtype 4 model 8@ at 1@ 2@ 3@
+
+0407: store_coords_to 1@ 2@ 3@ from_car car_3 with_offset 2.5 0.0 0.0
+009A: ped_3 = create_actor_pedtype 4 model 9@ at 1@ 2@ 3@
+
+0173: set_actor ped_1 Z_angle_to 270.0
+0173: set_actor ped_2 Z_angle_to 270.0
+0173: set_actor ped_3 Z_angle_to 270.0
+
+0E24: fix_char ped_1 ground 1 brightness 1 and_fade_in 0
+0E24: fix_char ped_2 ground 1 brightness 1 and_fade_in 0
+0E24: fix_char ped_3 ground 1 brightness 1 and_fade_in 0
+
+060A: create_decision_maker_type 0 store_to 1@ // decision\allowed\m_.ped files
+060B: set_actor ped_1 decision_maker_to 1@
+060B: set_actor ped_2 decision_maker_to 1@
+060B: set_actor ped_3 decision_maker_to 1@
+
+model.Destroy(4@)
+model.Destroy(5@)
+model.Destroy(6@)
+model.Destroy(7@)
+model.Destroy(8@)
+model.Destroy(9@)
+return
+
+:Put_actor
+00A1: put_actor $PLAYER_ACTOR at -1921.942 265.4637 41.0469
+0173: set_actor $PLAYER_ACTOR Z_angle_to 90.0
+0E24: fix_char $PLAYER_ACTOR ground 1 brightness 1 and_fade_in 0
+02EB: restore_camera_with_jumpcut
+return
+
+:Destroy_all
+if 056E:   car car_1 defined
+then 00A6: destroy_car car_1
+end
+if 056E:   car car_2 defined
+then 00A6: destroy_car car_2
+end
+if 056E:   car car_3 defined
+then 00A6: destroy_car car_3
+end
+if 056D:   actor ped_1 defined
+then 009B: destroy_actor ped_1
+end
+if 056D:   actor ped_2 defined
+then 009B: destroy_actor ped_2
+end
+if 056D:   actor ped_3 defined
+then 009B: destroy_actor ped_3
+end
+return
+
+:Mission_F
+00BA: show_text_styled GXT 'vlssm11' time 3000 style 1  // Beefy Baron
+if money_all > 0
+then
+    0109: player $PLAYER_CHAR money += money_all
+    01E5: show_text_1number_highpriority GXT 'vlssm7' number money_all time 5000 flag 1  // ~s~You need $~1~ to compete.
+    money_all = 0
+end
+mission_check = false
+return
+
+:Draw_Info
+03F0: enable_text_draw 1
+0349: set_text_draw_font 1
+033F: set_text_draw_letter_size 0.4 1.1
+0342: set_text_draw_centered 1
+0348: enable_text_draw_proportional 1
+060D: draw_text_shadow 0 rgba 0 0 0 255
+081C: draw_text_outline 1 RGBA 0 0 0 255
+045A: draw_text_1number 563.0 178.0 GXT 'vlssm1' number level  // ALL RACES WON!~n~~w~$~1~
+return
+
+
+
+
+
+:challenge_1
+// Скорость высокая
+02E3: 1@ = car car_3(select,1i) speed
+if
+    1@ > 17.0
+then
+    if 1@ > 35.0
+    then progress += 4
+    end
+    if 1@ > 40.0
+    then progress += 3
+    end
+    if 1@ > 45.0
+    then progress += 5
+    end
+    0092: 1@ = float 1@ to_integer
+    1@ /= 15
+    005A: progress += 1@  // (int)
+else
+    progress -= regress
+    0062: progress -= complete  // (int)
+end
+return
+
+:challenge_2
+// Скорость низкая
+02E3: 1@ = car car_3(select,1i) speed
+if and
+    1@ < 20.0
+    1@ > 3.0
+then
+    if 1@ > 15.0
+    then progress += 1
+    end
+    if 1@ > 18.0
+    then progress += 2
+    end
+    0092: 1@ = float 1@ to_integer
+    1@ /= 7
+    005A: progress += 1@  // (int)
+else
+    progress -= regress
+    0062: progress -= complete  // (int)
+    if or
+        03C9:   car car_3(select,1i) damaged
+        1@ > 20.0
+    then
+        progress -= 10
+    end
+end
+return
+
+:challenge_3
+// Прыжки
+02E3: 1@ = car car_3(select,1i) speed
+if
+    01F3:   car car_3(select,1i) in_air
+then
+    progress += 10
+end
+if and
+    1@ > 3.0
+    89D0:   not car car_3(select,1i) on_wheels
+then
+    progress += 10
+else
+    progress -= regress
+    0062: progress -= complete  // (int)
+end
+return
+
+:challenge_4
+// Сбивать педов
+2@ = 0
+while 0EA7: get_any_char_no_save_recursive 2@ progress_to 2@ char_to 0@
+    if
+        051B:   actor 0@ damaged_by_car car_3(select,1i)
+    then
+        progress += 200
+        054E: clear_actor 0@ damage
+    end
+end
+progress -= regress
+0062: progress -= complete  // (int)
+return
+
+:challenge_5
+// Стукать авто
+2@ = 0
+while 0EA8: get_any_car_no_save_recursive 2@ progress_to 2@ car_to 0@
+    if and
+        timerb > 50
+        051D:   car 0@ damaged_by_car car_3(select,1i)
+    then
+        progress += 200
+        054F: clear_car 0@ damage
+    end
+end
+progress -= regress
+0062: progress -= complete  // (int)
+return
+
+:Sound
+repeat
+wait 0
+03CF: load_wav 17000 as 1
+until 03D0:   wav 1 loaded
+03D1: play_wav 1
+repeat
+wait 0
+until 03D2:   wav 1 ended
+040D: unload_wav 1
+return

@@ -1,0 +1,355 @@
+{$CLEO .qa}
+{$USE CLEO+}
+{$USE newOpcodes}
+{$USE ini}
+
+0000: NOP
+
+script_name "VLSMQ4"
+
+// By ArtemQa146
+
+const
+    level = 31@
+    heli_1 = 0@
+    particle_1 = 30@
+    object_1 = 29@
+    sprite_1 = 28@
+    sprite_2 = 27@
+    water = 26@
+    fire_1 = 25@
+    fire_2 = 24@
+    fire_3 = 23@
+    blip_1 = 22@
+    Timer_local = 21@
+    blip_2 = 20@
+end
+
+if
+    0@ == 1
+then
+
+    00BA: show_text_styled GXT 'vlssm28' time 3000 style 2  // Beefy Baron
+    016A: fade 0 time 2000
+    01B4: set_player $PLAYER_CHAR can_move 0
+    wait 2000
+    01B4: set_player $PLAYER_CHAR can_move 1
+
+    model.Load(563)
+    model.Load(1554)
+    038B: load_requested_models
+    00A5: heli_1 = create_car 563 at 1719.7224 -1462.5481 33.0234
+    0229: set_car heli_1 primary_color_to 3 secondary_color_to 1
+    0175: set_car heli_1 Z_angle_to 0.0
+    036A: put_actor $player_actor in_car heli_1
+    02EB: restore_camera_with_jumpcut
+    0E01: create_object_no_save 1554 at 0.0 0.0 0.0 offset 0 ground 0 to object_1
+    0382: set_object object_1 collision_detection 0
+    08D2: object object_1 scale_model 1.2
+    0788: enable_heli heli_1 magnet 1
+
+    model.Destroy(1554)
+    model.Destroy(563)
+
+    064B: particle_1 = create_particle "water_speed" at 0.0 0.0 0.0 type 1
+    
+    0390: load_txd_dictionary 'vlssm'
+    038F: load_texture "line1" as 1 // Load dictionary with 0390 first
+    038F: load_texture "line2" as 2 // Load dictionary with 0390 first
+    0E3C: get_texture_from_sprite 1 store_to sprite_1
+    0E3C: get_texture_from_sprite 2 store_to sprite_2
+    0391: release_textures
+
+    water = 300
+
+    wait 500
+    016A: fade 1 time 500
+    level = 0
+    fire_1 = -1
+    fire_2 = -1
+    fire_3 = -1
+    
+    1@ = 0
+    while 0EA9: get_any_object_no_save_recursive 1@ progress_to 1@ object_to 2@
+        if and
+            0EE6: locate_char_distance_to_object $player_actor object 2@ radius 15.0
+            09CC:   object 2@ model_is 3053
+        then
+            0750: set_object 2@ visibility 0
+            069A: attach_object object_1 to_object 2@ with_offset 0.0 0.0 0.0 rotation 0.0 0.0 180.0
+            break
+        end
+    end
+    
+    Timer_local = 600000
+    0E4E: display_onscreen_timer_local Timer_local direction 1
+    
+    00BC: show_text_highpriority GXT 'vlssm29' time 5000 flag 1  // ~s~Come back between 9:00 and 17:00.
+    0E2A: add_cleo_blip 56 position 1945.6974 -1201.6234 is_short 0 RGBA 0 255 255 255 store_to blip_2
+    timera = 0
+    
+    repeat
+    wait 0
+    if
+        056E:   car heli_1 defined
+    then
+        if or
+            Timer_local < 1
+            0119:   car heli_1 wrecked
+            80DB:   not actor $PLAYER_ACTOR in_car heli_1
+        then
+            gosub @Mission_F
+            break
+        end
+    
+        if and
+            fire_1 == -1
+            fire_2 == -1
+            fire_3 == -1
+            level < 9
+        then
+            0E2B: remove_cleo_blip blip_1
+            level += 1
+            if
+                level == 1
+            then
+                02CF: fire_1 = create_fire_at 1747.9347 -1191.0133 91.6484 propagation 0 size 3
+                02CF: fire_2 = create_fire_at 1755.2722 -1191.4901 91.6484 propagation 0 size 3
+                02CF: fire_3 = create_fire_at 1748.1664 -1186.6508 91.6484 propagation 0 size 3
+            end
+            if
+                level == 2
+            then
+                02CF: fire_1 = create_fire_at 1824.1808 -1225.1415 63.9687 propagation 0 size 3
+                02CF: fire_2 = create_fire_at 1829.9305 -1214.7045 63.9687 propagation 0 size 3
+                02CF: fire_3 = create_fire_at 1822.2462 -1218.0957 63.9687 propagation 0 size 3
+            end
+            if
+                level == 3
+            then
+                02CF: fire_1 = create_fire_at 1650.9175 -1635.7897 83.7812 propagation 0 size 3
+                02CF: fire_2 = create_fire_at 1657.9165 -1636.9672 83.7812 propagation 0 size 3
+                02CF: fire_3 = create_fire_at 1655.3799 -1631.0479 83.7812 propagation 0 size 3
+            end
+            if
+                level == 4
+            then
+                02CF: fire_1 = create_fire_at 1910.6154 -1580.8514 29.1183 propagation 0 size 3
+                02CF: fire_2 = create_fire_at 1887.5389 -1583.2603 29.05 propagation 0 size 3
+                02CF: fire_3 = create_fire_at 1863.0571 -1583.5557 29.05 propagation 0 size 3
+            end
+            if
+                level == 5
+            then
+                02CF: fire_1 = create_fire_at 2044.8715 -1295.7544 37.2494 propagation 0 size 3
+                02CF: fire_2 = create_fire_at 2043.7493 -1284.4982 37.2494 propagation 0 size 3
+                02CF: fire_3 = create_fire_at 2045.8715 -1290.7544 37.2494 propagation 0 size 3
+            end
+            if
+                level == 6
+            then
+                02CF: fire_1 = create_fire_at 1677.7992 -1347.5426 158.4766 propagation 0 size 3
+                02CF: fire_2 = create_fire_at 1665.0347 -1348.6001 158.4766 propagation 0 size 3
+                02CF: fire_3 = create_fire_at 1663.7507 -1336.5906 158.4766 propagation 0 size 3
+            end
+            if
+                level == 7
+            then
+                02CF: fire_1 = create_fire_at 1829.6027 -1294.8859 131.7344 propagation 0 size 3
+                02CF: fire_2 = create_fire_at 1830.6334 -1300.2421 131.7344 propagation 0 size 3
+                02CF: fire_3 = create_fire_at 1830.3501 -1307.8159 131.7344 propagation 0 size 3
+            end
+            if
+                level == 8
+            then
+                02CF: fire_1 = create_fire_at 1592.064 -1226.5632 277.8731 propagation 0 size 3
+                02CF: fire_2 = create_fire_at 1594.3469 -1239.9215 277.8764 propagation 0 size 3
+                02CF: fire_3 = create_fire_at 1595.3578 -1265.2812 277.8826 propagation 0 size 3
+            end
+            if
+                level == 9
+            then
+                0E2A: add_cleo_blip 56 position 1719.7224 -1462.5481 is_short 0 RGBA 255 255 255 255 store_to blip_1
+                00BC: show_text_highpriority GXT 'vlssm31' time 5000 flag 1  // ~s~Come back between 9:00 and 17:00.
+                gosub @Sound
+                continue
+            end
+            06F5: create_coordinate 1@ 2@ 3@ from_fire fire_1
+            0E2A: add_cleo_blip 56 position 1@ 2@ is_short 0 RGBA 255 100 100 255 store_to blip_1
+            gosub @Sound
+            continue
+        end
+        
+        if
+            level == 9
+        then
+            if
+                00F1:   actor $PLAYER_ACTOR sphere 1 near_point 1719.7224 -1462.5481 radius 10.0 10.0 stopped_in_car
+            then
+                00BA: show_text_styled GXT 'vlssm18' time 3000 style 1  // Beefy Baron
+                0109: player $PLAYER_CHAR money += 2000
+                016A: fade 0 time 1500
+                01B4: set_player $PLAYER_CHAR can_move 0
+                05CD: AS_actor $PLAYER_ACTOR exit_car heli_1
+                wait 1500
+                
+                    repeat
+                    wait 0
+                    if
+                        056E:   car heli_1 defined
+                    then
+                        if
+                            80DB:   not actor $PLAYER_ACTOR in_car heli_1
+                        then
+                            00A6: destroy_car heli_1
+                            00A1: put_actor $PLAYER_ACTOR at 1775.4177 -1484.988 12.7182
+                            0E24: fix_char $PLAYER_ACTOR ground 1 brightness 1 and_fade_in 0
+                            0173: set_actor $PLAYER_ACTOR Z_angle_to 70.6653
+                            02EB: restore_camera_with_jumpcut
+                            break
+                        end
+                    else
+                        break
+                    end
+                until not player.Defined(0)
+                016A: fade 1 time 1000
+                01B4: set_player $PLAYER_CHAR can_move 1
+                break
+            end
+        end
+    
+        gosub @Draw_Info
+        008F: 1@ = integer water to_float
+        1@ /= 10.0
+        0E1E: draw_texture_plus sprite_1 event 2 pos 563.0 168.0 size 50.0 20.0 angle 0.0 depth 0 fix_aspect_ratio 0 maskTrisCount 0 maskTrisArray 0 rgba 255 255 255 255
+        0E1E: draw_texture_plus sprite_2 event 2 pos 540.0 168.0 size 1@ 20.0 angle 0.0 depth 0 fix_aspect_ratio 0 maskTrisCount 0 maskTrisArray 0 rgba 255 255 255 255
+        if and
+            timera > 5000
+            timera < 10000
+        then
+            00BC: show_text_highpriority GXT 'vlssm30' time 5000 flag 1  // ~s~Come back between 9:00 and 17:00.
+        end
+        if and
+            00E1:   player 0 pressed_key 6
+            water > 0
+        then
+            0407: store_coords_to 1@ 2@ 3@ from_car heli_1 with_offset 0.0 0.0 -4.5
+            0EC0: add_fx_system_particle particle_1 coord 1@ 2@ 3@ vel 1.0 1.0 1.0 size 0.6 brightness 1.0 rgba 1.0 1.0 1.0 1.0 lastFactor 1.0
+            water -= 1
+            if
+                fire_1 > 0
+            then
+                06F5: create_coordinate 1@ 2@ 3@ from_fire fire_1
+                if and
+                    timerb > 1000
+                    0EEB: locate_car_distance_to_coordinates heli_1 pos 1@ 2@ 3@ radius 15.0
+                then
+                    02D1: remove_fire fire_1
+                    fire_1 = -1
+                    timerb = 0
+                    continue
+                end
+            end
+            if
+                fire_2 > 0
+            then
+                06F5: create_coordinate 1@ 2@ 3@ from_fire fire_2
+                if and
+                    timerb > 1000
+                    0EEB: locate_car_distance_to_coordinates heli_1 pos 1@ 2@ 3@ radius 15.0
+                then
+                    02D1: remove_fire fire_2
+                    fire_2 = -1
+                    timerb = 0
+                    continue
+                end
+            end
+            if
+                fire_3 > 0
+            then
+                06F5: create_coordinate 1@ 2@ 3@ from_fire fire_3
+                if and
+                    timerb > 1000
+                    0EEB: locate_car_distance_to_coordinates heli_1 pos 1@ 2@ 3@ radius 15.0
+                then
+                    02D1: remove_fire fire_3
+                    fire_3 = -1
+                    timerb = 0
+                    continue
+                end
+            end
+        else
+            timerb = 0
+        end
+        
+        if and
+            water < 1000
+            04E7:   object object_1 in_water
+        then
+            water += 5
+            if water > 1000
+            then water = 1000
+            end
+        end
+
+
+    else
+        break
+    end
+    until not player.Defined(0)
+
+
+end
+
+if not blip_1 == -1
+then 0E2B: remove_cleo_blip blip_1
+end
+if 03CA:   object object_1 exists
+then 0108: destroy_object object_1
+end
+0650: destroy_particle particle_1
+if 056E:   car heli_1 defined
+then
+    0788: enable_heli heli_1 magnet 0
+    01C3: remove_references_to_car heli_1
+end
+if fire_1 > 0
+then 02D1: remove_fire fire_1
+end
+if fire_2 > 0
+then 02D1: remove_fire fire_2
+end
+if fire_3 > 0
+then 02D1: remove_fire fire_3
+end
+
+0E2B: remove_cleo_blip blip_2
+0E54: clear_onscreen_timer_local Timer_local
+0A93: terminate_this_custom_script
+
+:Sound
+repeat
+wait 0
+03CF: load_wav 17000 as 1
+until 03D0:   wav 1 loaded
+03D1: play_wav 1
+repeat
+wait 0
+until 03D2:   wav 1 ended
+040D: unload_wav 1
+return
+
+:Mission_F
+00BA: show_text_styled GXT 'vlssm11' time 3000 style 1  // Beefy Baron
+return
+
+:Draw_Info
+03F0: enable_text_draw 1
+0349: set_text_draw_font 1
+033F: set_text_draw_letter_size 0.4 1.1
+0342: set_text_draw_centered 1
+0348: enable_text_draw_proportional 1
+060D: draw_text_shadow 0 rgba 0 0 0 255
+081C: draw_text_outline 1 RGBA 0 0 0 255
+045A: draw_text_1number 563.0 178.0 GXT 'vlssm1' number level  // ALL RACES WON!~n~~w~$~1~
+return
