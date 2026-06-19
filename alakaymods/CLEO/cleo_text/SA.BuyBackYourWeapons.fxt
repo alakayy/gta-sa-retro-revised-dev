@@ -1,0 +1,7 @@
+# Buy Back Your Weapons Text change from the script.
+# OG Mod by ThirteenAG
+# Edited by: Doomed_Raven420 Changed text to appear as a separate FXT file.
+
+BYB1 Pay $2000 bribe to get back your weapons? ~n~Press ~k~~PED_ANSWER_PHONE~ to buy.~n~~k~~VEHICLE_ENTER_EXIT~ to exit.
+BYB2 You need ~h~$2000~w~ to buy back your weapons.
+BYB3 You don't have any weapons to return.

@@ -1,0 +1,24 @@
+DUMMY -
+
+FOOD Food
+MEAL Meal
+COST Cost
+PRICE $~1~
+
+CB1 Cluckin' Little Meal
+CB2 Cluckin' Big Meal
+CB3 Cluckin' Huge Meal
+CB4 Salad Meal
+
+BS1 Moo Kids Meal
+BS2 Beef Tower
+BS3 Meat Stack
+BS4 Salad Meal
+
+DRT_H2 Use ~u~/~d~ to choose a meal.~n~Press ~k~~PED_SPRINT~ to buy a meal.~n~Press ~k~~VEHICLE_ENTER_EXIT~ to leave.
+DT_FACE Please face forwards to use Drive-Thru Service.
+DT_NOM Not enough money.
+DT_OPEN ~y~Drive-Thru Unlocked!~w~~n~Drive-Thru services are now open across San Andreas.
+
+PURCHAS Purchased
+
