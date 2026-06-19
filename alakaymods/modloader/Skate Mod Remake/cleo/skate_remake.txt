@@ -1,0 +1,548 @@
+{$CLEO .cs}
+{$USE CLEO+}
+{$USE INI}
+//{$USE NewOpcodes}
+{$USE bitwise}
+script_name 'skateRm'
+0000: NOP
+/*
+vars
+0@ - bits
+-- bit 0 - surface limits
+-- bit 1,2 - used for swinging
+-- bit 3 - Urbanize support
+-- bit 4
+1@ - ini, surface
+2@ - swing speed settings
+3@ - used in car creation (ground)
+4@ 5@ 6@ - player coords (surface stuff)
+7@ - used in pick up and surface coords
+8@ - used in pick up coods
+9@ - swing (car speed)
+10@ - car handle
+11@ - audiostream
+12@ - car model
+14@ - weapon type
+15@ - sound volume
+16@ - coords, sound
+17@ - coords
+18@ - coords
+19@ - audiostream volume
+20@ 21@ 22@ - coords
+23@ - Z-angle, m_NumContactWheels
+24@ - veh struct
+25@ - active interion, only on car creation
+26@ - weapon model
+27@ - sound
+28@ - sound 
+29@ - char near skate
+13@ 30@ 31@ - free 
+*/
+
+0@ = 0
+if 8AF0: not 14@ = get_int_from_ini_file "cleo\skate_remake.ini" section "Settings" key "WeaponType"
+then 14@ = 15
+end
+if 8AF0: not 26@ = get_int_from_ini_file "cleo\skate_remake.ini" section "Settings" key "WeaponModel"
+then 26@ = 326 //#GUN_CANE
+end
+if 8AF0: not 12@ = get_int_from_ini_file "cleo\skate_remake.ini" section "Settings" key "VehicleID"
+then 12@ = 12500
+end
+if 8AF2: not 15@ = get_float_from_ini_file "cleo\skate_remake.ini" section "Settings" key "Volume"
+then 15@ = 0.3
+end
+0AF2: 2@ = read_float_from_ini_file "cleo\skate_remake.ini" section "Settings" key "SwingStartSpeed"
+ 
+0AF0: 1@ = read_int_from_ini_file "cleo\skate_remake.ini" section "Settings" key "SurfaceLimits"
+if 
+    1@ == 1
+then
+    08BD: set 0@ bit 0
+end
+
+0AF0: 1@ = read_int_from_ini_file "cleo\skate_remake.ini" section "Settings" key "UrbanizeSupport"
+if 
+    1@ == 1
+then
+    08BD: set 0@ bit 3
+end
+
+0AF0: 1@ = read_int_from_ini_file "cleo\skate_remake.ini" section "Settings" key "SoundWhenLanding"
+if 
+    1@ == 1
+then
+    08BD: set 0@ bit 4
+end
+
+
+
+//ArmsFix
+//0E6A: make_nop 0x601B90 size 6 //fix all (as in bikehandfix.asi mod)
+//0A8C: write_memory 0x601B8D size 1 value 0xA virtual_protect 0 //set subclass to fix 
+
+if
+    08B7:   test 0@ bit 3
+then
+    0A8C: write_memory 0x6BFB81 size 1 value 0 virtual_protect 0 //this should only affect bicycles
+    0A8C: write_memory 0x6BFB88 size 1 value 0 virtual_protect 0
+end
+
+//0247: load_model 12@
+//038B: load_requested_models
+
+:Main
+wait 0
+if
+    00DD:   actor $PLAYER_ACTOR driving_car_with_model 12@
+then
+    gosub @SubPatchMem
+    if
+        88B7:   not test 0@ bit 3
+    then
+        gosub @SubFixHands
+    end
+    03C0: 10@ = actor $PLAYER_ACTOR car // add to mission cleanup
+    0A97: 24@ = vehicle 10@ struct
+    jump @Load_Audio
+end
+
+if and
+    02D8:   actor $PLAYER_ACTOR current_weapon == 14@
+    00E1:   player 0 pressed_key 4 
+//    0AB0:   is_key_pressed 32
+then
+    if and   
+        8118:   not actor $PLAYER_ACTOR dead
+        80DF:   not actor $PLAYER_ACTOR driving
+        8818:   not actor $PLAYER_ACTOR in_air
+        84AD:   not actor $PLAYER_ACTOR in_water
+    then
+//////////
+        if
+            8248:   not model 12@ available
+        then
+            repeat
+            wait 0
+            0247: load_model 12@
+            until 0248:   model 12@ available
+        end
+//////////
+        04C4: store_coords_to 4@ 5@ 6@ from_actor $PLAYER_ACTOR with_offset -1.0 -1.0 0.0
+        04C4: store_coords_to 20@ 21@ 22@ from_actor $PLAYER_ACTOR with_offset 1.0 1.0 0.0
+        if
+            06BD:   no_obstacles_between 4@ 5@ 6@ and 20@ 21@ 22@ solid 1 car 1 actor 0 object 1 particle 0            
+        then
+            04C4: store_coords_to 20@ 21@ 22@ from_actor $PLAYER_ACTOR with_offset 0.5 0.4 0.0            
+            0A3E: unknown_get_actor_in_sphere 20@ 21@ 22@ radius 1.0 1.0 1.0 handle_as 29@        
+            04C4: store_coords_to 20@ 21@ 22@ from_actor $PLAYER_ACTOR with_offset 0.0 0.0 0.0
+            0AE2: 25@ = random_vehicle_near_point 20@ 21@ 22@ in_radius 3.0 find_next 0 pass_wrecked 0
+            if and
+                29@ < 0
+                25@ < 0
+            then
+                0000: NOP
+            else
+                jump @Main
+            end            
+        else
+            jump @Main
+        end
+        04C4: store_coords_to 20@ 21@ 22@ from_actor $PLAYER_ACTOR with_offset 0.6 0.9 0.0 //0.6 0.45 0.0
+        0605: actor $PLAYER_ACTOR perform_animation "skateboard_pickup_L" IFP "CHOPPA" framedelta 4.0 loop 0 lockX 1 lockY 1 lockF 0 time -1
+        0393: actor $PLAYER_ACTOR perform_animation "skateboard_pickup_L" at 0.5 times_normal_rate
+        TIMERA=0
+        repeat
+        wait 0
+        0613: 6@ = actor $PLAYER_ACTOR animation "skateboard_pickup_L" time
+        if
+            TIMERA > 2000
+        then
+           break
+        end 
+        until 6@ > 0.43
+        0555: remove_weapon 14@ from_actor $PLAYER_ACTOR
+        22@ += 0.2
+        if //this handles car reation under roofs or any obstracles
+            86BD:   not no_obstacles_between 20@ 21@ 22@ and 20@ 21@ 500.0 solid 1 car 1 actor 1 object 1 particle 0
+        then
+            00A5: 10@ = create_car 12@ at 20@ 21@ 500.0        
+            0EB4: set_car_coordinates_simple 10@ position 20@ 21@ 22@
+        else
+            00A5: 10@ = create_car 12@ at 20@ 21@ 22@
+        end        
+        0A97: 24@ = vehicle 10@ struct
+        0172: 23@ = actor $PLAYER_ACTOR Z_angle
+        0175: set_car 10@ Z_angle_to 23@
+        09E8: 25@ = actor $PLAYER_ACTOR active_interior
+        if
+            25@ > 0
+        then
+            0840: link_car 10@ to_interior 25@
+        end
+        0249: release_model 12@
+        gosub @SubPatchMem
+        if
+            88B7:   not test 0@ bit 3
+        then
+            gosub @SubFixHands
+        end
+        05CB: AS_actor $PLAYER_ACTOR enter_car 10@ as_driver 10000 ms
+        wait 500
+        TIMERA=0
+        repeat
+        wait 0
+        if
+            TIMERA > 1000
+        then
+            jump @Main
+        end
+        until 00DF:   actor $PLAYER_ACTOR driving
+        0812: AS_actor $PLAYER_ACTOR perform_animation "CHOPPA_sprint" IFP "CHOPPA" framedelta 4.0 loopA 0 lockX 0 lockY 0 lockF 0 time -1 // versionB   
+        04BA: set_car 10@ speed_to 7.0
+        jump @Main
+    end
+end
+
+if and //find and pick up skate
+    80DF:   not actor $PLAYER_ACTOR driving
+    8491:   not actor $PLAYER_ACTOR has_weapon 14@
+    00E1:   player 0 pressed_key 11
+    8E49:   not is_char_entering_any_car $PLAYER_ACTOR
+    89DE:   not actor $PLAYER_ACTOR entering_car
+then    
+    00A0: store_actor $PLAYER_ACTOR position_to 6@ 7@ 8@
+    0AE2: 10@ = random_vehicle_near_point 6@ 7@ 8@ in_radius 2.0 find_next 1 pass_wrecked 0
+    if 
+        10@ > 0
+    then
+        if 
+            056E:   car 10@ defined
+        then
+            if
+                0137:   car 10@ model == 12@
+            then
+                046C: 6@ = car 10@ driver
+                if
+                    0 > 6@
+                then
+                    jump @End
+                end
+            end
+        end
+    end
+end
+if
+    0ADC:   test_cheat "GIMMEABOARD"
+then
+    0247: load_model 26@
+    038B: load_requested_models
+    01B2: give_actor $PLAYER_ACTOR weapon 14@ ammo 1000 // Load the weapon model before using this
+end
+                   
+jump @Main
+
+:Load_Audio
+//0AAC: 11@ = load_audio_stream "CLEO\CLEO_AUDIO\SKATE.MP3"
+0AAC: 28@ = load_audio_stream "CLEO\CLEO_AUDIO\POP.MP3"
+//0AC0: set_audio_stream_looped 11@ to 1
+//0ABC: set_audio_stream_volume 11@ to 0.0
+//0AAD: set_audio_stream 11@ state 1
+0ABC: set_audio_stream_volume 28@ to 0.3
+0AAD: set_audio_stream 28@ state 0
+//0555: remove_weapon 14@ from_actor $PLAYER_ACTOR
+//01B9: set_actor $PLAYER_ACTOR armed_weapon_to 0
+jump @Riding
+
+:Riding
+wait 0
+if or 
+    856E:   not car 10@ defined
+    8256:   not player $PLAYER_CHAR defined
+then
+    jump @End 
+end
+
+////////SurfaceLimit start
+if
+    08B7:   test 0@ bit 0
+then
+    7@ = 0
+    04C4: store_coords_to 4@ 5@ 6@ from_actor $PLAYER_ACTOR with_offset 0.0 0.0 0.0
+    0AA7: call_function_return 0x6114C0 num_params 1 pop 1 4@v 1@
+    if and
+        1@ == 0
+        81F3:   not car 10@ in_air
+    then
+        088B: set_car 10@ form_drag_multiplier_to 400.0
+    else
+        088B: set_car 10@ form_drag_multiplier_to 6.0
+    end    
+end
+/////////SurfaceLimit end   
+
+if and //get off by decision
+    80DD:   not actor $PLAYER_ACTOR driving_car_with_model 12@
+    874F:   not actor $PLAYER_ACTOR ped_event == 8
+then
+    02E3: 6@ = car 10@ speed
+    if 
+        6@ > 6.0
+    then
+        repeat
+        wait 0
+        if
+            8256:   not player $PLAYER_CHAR defined
+        then
+            break
+        end
+        until 044B:   actor $PLAYER_ACTOR on_foot
+        jump @End2
+    end
+    repeat
+    wait 0
+    if
+        8256:   not player $PLAYER_CHAR defined
+    then
+        break
+    end
+    until 044B:   actor $PLAYER_ACTOR on_foot
+    jump @End
+end
+
+if and //get off being knocked off or accident
+    074F:   actor $PLAYER_ACTOR ped_event == 8    
+    80DD:   not actor $PLAYER_ACTOR driving_car_with_model 12@
+then
+    jump @End2
+end    
+
+/*
+if and
+    81F3:   not car 10@ in_air 
+    81C1:   not car 10@ stopped
+then
+    00AA: store_car 10@ position_to 16@ 17@ 18@
+    068D: get_camera_position_to 20@ 21@ 22@              
+    050A: 16@ = distance_between_XYZ 16@ 17@ 18@ and_XYZ 20@ 21@ 22@ 
+    16@ /= 2.0
+    if 16@ < 1.0
+    then 16@ = 1.0
+    end
+    19@ = 1.0
+    0073: 19@ /= 16@
+    02E3: 27@ = car 10@ speed
+    27@ /= 20.0
+    if 27@ > 1.0
+    then 27@ = 1.0
+    end
+    006B: 19@ *= 27@
+    0A8D: 27@ = read_memory 0xB5FCCC size 4 vp 0 
+    006B: 19@ *= 27@ // volume from menu          
+    006B: 19@ *= 15@ //volume from ini
+    0ABC: set_audio_stream_volume 11@ to 19@  
+else
+    0ABC: set_audio_stream_volume 11@ to 0.0
+end
+*/
+
+///swing start
+02E3: 9@ = car 10@ speed
+//0AD1: show_formatted_text_highpriority "Speed:%f" time 200 9@
+if or
+    0E3D: is_key_just_pressed 65
+    0E3D: is_key_just_pressed 37
+then
+    0D4E: 23@ = struct 24@ offset 0x804 size 1
+    if and
+        0025:   9@ > 2@
+        23@ > 2
+        88B7:   not test 0@ bit 1
+        08B7:   test 0@ bit 2
+        TIMERA<1000
+        TIMERA>200  
+    then
+        02E3: 9@ = car 10@ speed
+        9@ += 6.5
+        04BA: set_car 10@ speed_to 9@
+        08C3: clear 0@ bit 2        
+        08BD: set 0@ bit 1
+        TIMERA=0
+    else
+        08C3: clear 0@ bit 2        
+        08BD: set 0@ bit 1
+        TIMERA=0
+    end
+end
+
+if or
+    0E3D: is_key_just_pressed 68 
+    0E3D: is_key_just_pressed 39
+then
+    0D4E: 23@ = struct 24@ offset 0x804 size 1
+    if and
+        0025:   9@ > 2@
+        23@ > 2
+        81F3:   not car 10@ in_air
+        8E93: not is_car_really_in_air 10@
+        88B7:   not test 0@ bit 2
+        08B7:   test 0@ bit 1
+        TIMERA<1000 
+        TIMERA>200
+    then
+        02E3: 9@ = car 10@ speed
+        9@ += 6.5
+        04BA: set_car 10@ speed_to 9@
+        08C3: clear 0@ bit 1        
+        08BD: set 0@ bit 2
+        TIMERA=0
+    else
+        08C3: clear 0@ bit 1        
+        08BD: set 0@ bit 2
+        TIMERA=0
+    end
+end
+///swing end
+
+if and
+    08B7:   test 0@ bit 4
+    89D0:   not car 10@ on_wheels
+then
+    repeat
+    wait 0
+    if or
+        80DD:   not actor $PLAYER_ACTOR driving_car_with_model 12@
+        8256:   not player $PLAYER_CHAR defined
+    then
+        jump @End2
+    end        
+    until 09D0:   car 10@ on_wheels
+    if 
+        19@ < 0.2
+    then
+        19@ = 0.2
+    end
+    0ABC: set_audio_stream_volume 28@ to 19@
+    0AAD: set_audio_stream 28@ state 1
+end    
+
+if
+    0611:   actor $PLAYER_ACTOR performing_animation "CHOPPA_fwd"
+then
+    088B: set_car 10@ form_drag_multiplier_to 2.5
+end
+jump @Riding
+
+:End
+wait 0
+//0AAE: remove_audio_stream 11@
+if
+    0256:   player $PLAYER_CHAR defined
+then
+    if or
+        8248:   not model 12@ available
+        8248:   not model 26@ available
+    then
+        0247: load_model 12@
+        0247: load_model 26@
+        038B: load_requested_models
+    end
+    if
+        04AD:   actor $PLAYER_ACTOR in_water
+    then
+        jump @SkipPickupInWater
+    end
+    0605: actor $PLAYER_ACTOR perform_animation "skateboard_pickup_L" IFP "CHOPPA" framedelta 4.0 loop 0 lockX 1 lockY 1 lockF 0 time -1
+    TIMERA=0
+    repeat
+    wait 0
+    0613: 6@ = actor $PLAYER_ACTOR animation "skateboard_pickup_L" time
+    if
+        TIMERA > 2000
+    then
+        if
+            056E:   car 10@ defined
+        then
+            00A6: destroy_car 10@
+        end
+        01B2: give_actor $PLAYER_ACTOR weapon 14@ ammo 10000
+        0249: release_model 12@
+        0249: release_model 26@
+        jump @Main
+    end
+    if
+        8256:   not player $PLAYER_CHAR defined
+    then
+        jump @End2
+    end
+    until 6@ > 0.33 
+    :SkipPickupInWater
+    wait 0
+    if
+        056E:   car 10@ defined
+    then
+        00A6: destroy_car 10@
+    end
+    01B2: give_actor $PLAYER_ACTOR weapon 14@ ammo 10000
+    0249: release_model 12@
+    0249: release_model 26@
+end
+gosub @SubRestoreMem
+if
+    88B7:   not test 0@ bit 3
+then
+    gosub @SubRemoveFixHands
+end
+jump @Main
+
+:End2
+wait 0
+//0AAD: set_audio_stream 11@ state 0
+//0AAE: remove_audio_stream 11@
+gosub @SubRestoreMem
+if
+    88B7:   not test 0@ bit 3
+then
+    gosub @SubRemoveFixHands
+end
+jump @Main
+
+:SubPatchMem
+0A8C: write_memory 0x8D328C size 1 value 1 virtual_protect 0
+0A8C: write_memory 0x8D328D size 1 value 1 virtual_protect 0
+0A8C: write_memory 0x8D328E size 1 value 1 virtual_protect 0
+0A8C: write_memory 0x8D328F size 1 value 1 virtual_protect 0
+0A8C: write_memory 0x8D3290 size 1 value 1 virtual_protect 0
+0A8C: write_memory 0x8D3291 size 1 value 1 virtual_protect 0
+0A8C: write_memory 0x8D3292 size 1 value 1 virtual_protect 0
+0A8C: write_memory 0x8D3293 size 1 value 1 virtual_protect 0
+0A8C: write_memory 0x8D3294 size 1 value 1 virtual_protect 0
+0A8C: write_memory 0x8D3295 size 1 value 1 virtual_protect 0
+0A8C: write_memory 0x8D3296 size 1 value 1 virtual_protect 0
+0A8C: write_memory 0x8D3297 size 1 value 1 virtual_protect 0
+return
+
+:SubRestoreMem
+0A8C: write_memory 0x8D328C size 1 value 0xDB virtual_protect 0
+0A8C: write_memory 0x8D328D size 1 value 0x0F virtual_protect 0
+0A8C: write_memory 0x8D328E size 1 value 0xC9 virtual_protect 0
+0A8C: write_memory 0x8D328F size 1 value 0x3F virtual_protect 0
+0A8C: write_memory 0x8D3290 size 1 value 0x9A virtual_protect 0
+0A8C: write_memory 0x8D3291 size 1 value 0x99 virtual_protect 0
+0A8C: write_memory 0x8D3292 size 1 value 0x99 virtual_protect 0
+0A8C: write_memory 0x8D3293 size 1 value 0x3E virtual_protect 0
+0A8C: write_memory 0x8D3294 size 1 value 0x29 virtual_protect 0
+0A8C: write_memory 0x8D3295 size 1 value 0x5C virtual_protect 0
+0A8C: write_memory 0x8D3296 size 1 value 0x8F virtual_protect 0
+0A8C: write_memory 0x8D3297 size 1 value 0x3D virtual_protect 0
+return
+
+:SubFixHands
+0A8C: write_memory 0x6BFB81 size 1 value 0 virtual_protect 0 //this should only affect bicycles
+0A8C: write_memory 0x6BFB88 size 1 value 0 virtual_protect 0
+return
+
+:SubRemoveFixHands
+0A8C: write_memory 0x6BFB81 size 1 value 1 virtual_protect 0 //this should only affect bicycles
+0A8C: write_memory 0x6BFB88 size 1 value 1 virtual_protect 0
+return

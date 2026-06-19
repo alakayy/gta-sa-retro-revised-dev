@@ -1,0 +1,185 @@
+{$CLEO .cs}
+{$USE CLEO+}
+{$USE newOpcodes}
+{$USE ini}
+
+0000: NOP
+
+script_name "StrAccs"
+
+// By ArtemQa146
+
+if
+    is_game_first_start
+then
+    0F00: load_special_model_dff "modelsqa\BagCJW" txd "modelsqa\BagCJW" store_to 0@
+    0AF1: write_int 0@ to_ini_file "cleo\Story Accessories.ini" section "Models" key "BagCJ"
+    0F00: load_special_model_dff "modelsqa\maskGng" txd "modelsqa\BagCJW" store_to 0@
+    0AF1: write_int 0@ to_ini_file "cleo\Story Accessories.ini" section "Models" key "maskGng"
+end
+
+const
+    render_model_back = 31@
+    render_player = 30@
+    progress = 29@
+    render_model_mask = 28@
+    activation = 27@
+end
+
+0AF0: render_model_back = read_int_from_ini_file "cleo\Story Accessories.ini" section "Models" key "BagCJ" // mask model
+0AF0: render_model_mask = read_int_from_ini_file "cleo\Story Accessories.ini" section "Models" key "maskGng" // mask model
+
+// ∆дем когда по€витс€ игрок
+repeat
+wait 10
+until player.Defined(0)
+
+0F02:  $PLAYER_ACTOR special_model render_model_back bone 2 offset 0.43 0.02 -0.05 rotation 0 0 350.0 scale render_player // bone 34 left hand, 24 right hand, 9 had, 3 tors, 4 upper tors
+0E37: set_render_object_scale render_player 1.0 1.0 0.95
+0E31: set_render_object_visible render_player 0
+
+wait 1000
+
+progress = 0
+activation = false
+
+while true
+wait 0
+    if
+        player.Defined(0)
+    then
+
+        if
+            progress == 0
+        then
+            0E31: set_render_object_visible render_player 0
+        end
+        
+        if
+            activation == true
+        then
+            0E31: set_render_object_visible render_player 1
+        end
+        
+        if
+            0ADC:   test_cheat "backqa"
+        then
+             03E5: show_text_box 'CHEAT1'
+            if
+                activation == false
+            then
+                activation = true
+            else
+                activation = false
+            end
+            wait 300
+            continue
+        end
+        
+        if
+            $ONMISSION == 0
+        then
+            progress = 0
+            continue
+        end
+        
+        if
+            progress == 0
+        then
+            0AAA: 0@ = get_script_struct_named 'DRIV2'
+            if
+                not 0@ == 0
+            then
+                0D4E: 0@ = read_struct 0xA48960 offset 0x1FC size 4
+                if
+                    0@ == 1
+                then
+                    0E31: set_render_object_visible render_player 1
+                    progress = 1
+                end
+            end
+        end
+        
+        
+        if
+            progress == 0
+        then
+            0AAA: 0@ = get_script_struct_named 'DES3'
+            if
+                not 0@ == 0
+            then
+                if
+                    $Actor_Speech_WAV_File == 13216
+                then
+                    0E31: set_render_object_visible render_player 1
+                    progress = 1
+                end
+            end
+        end
+
+        
+        if
+            progress == 0
+        then
+            0AAA: 0@ = get_script_struct_named 'CASINO2'
+            if
+                not 0@ == 0
+            then
+                0E31: set_render_object_visible render_player 1
+                progress = 1
+            end
+        end
+        
+        if and
+            progress == 0
+            056D:   actor $Actor_Catalina defined
+        then
+            0AAA: 0@ = get_script_struct_named 'CAT2'
+            0AAA: 1@ = get_script_struct_named 'CAT4'
+            if or
+                not 0@ == 0
+                not 1@ == 0
+            then
+                wait 500
+                if
+                    056D:   actor $Actor_Catalina defined
+                then
+                    progress = 1
+                    0F02:  $Actor_Catalina special_model render_model_back bone 2 offset 0.43 0.02 -0.05 rotation 0 0 350.0 scale 0@ // bone 34 left hand, 24 right hand, 9 had, 3 tors, 4 upper tors
+                    0E37: set_render_object_scale 0@ 1.0 1.0 0.95
+                    0F02: create_render_object_to_char_bone_from_special $Actor_Catalina special_model render_model_mask bone 5 offset 0.025 0.02 -0.005 rotation 0 -5.0 90.0 store_to 0@
+                    0E37: set_render_object_scale 0@ 1.10 1.05 1.1
+                    0E31: set_render_object_visible render_player 1
+                end
+            end
+            0AAA: 0@ = get_script_struct_named 'CAT1'
+            0AAA: 1@ = get_script_struct_named 'CAT3'
+            if or
+                not 0@ == 0
+                not 1@ == 0
+            then
+                wait 500
+                if
+                    056D:   actor $Actor_Catalina defined
+                then
+                    progress = 1
+                    0F02:  $Actor_Catalina special_model render_model_back bone 2 offset 0.43 0.02 -0.05 rotation 0 0 350.0 scale 0@ // bone 34 left hand, 24 right hand, 9 had, 3 tors, 4 upper tors
+                    0E37: set_render_object_scale 0@ 1.0 1.0 0.95
+                    0F02: create_render_object_to_char_bone_from_special $Actor_Catalina special_model render_model_mask bone 5 offset 0.025 0.02 -0.005 rotation 0 -5.0 90.0 store_to 0@
+                    0E37: set_render_object_scale 0@ 1.10 1.05 1.1
+                end
+            end
+        else
+            if
+                progress == 1
+            then
+                if
+                    856D:   not actor $Actor_Catalina defined
+                then
+                    progress = 0
+                end
+            end
+        end
+        
+    end
+end
