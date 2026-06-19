@@ -1,0 +1,14 @@
+SV_1 Savanna has been towed. Go to the nearest impound garage to pick up it.
+SV_2 Savanna wrecked. Go to Loco Low Co to get it repaired.
+SV_3 Get Savanna repaired for $~1~. ~k~~CONVERSATION_YES~ to accept, ~k~~CONVERSATION_NO~ to reject.
+SV_4 Pick up Savanna for $~1~. ~k~~CONVERSATION_YES~ to accept, ~k~~CONVERSATION_NO~ to reject.
+SV_5 Are you kidding me? You don't have enough money, you poor.
+SV_6 Savanna is your personal vehicle now. It will be near your safehouse or wherever you go.
+ZR_9 You need your Zr-350 for this race.
+
+ZR_1 ZR-350 has been towed. Go to the nearest impound garage to pick up it. 
+ZR_2 ZR-350 wrecked. Go to the nearest garage to get it repaired.
+ZR_3 Get ZR-350 repaired for $~1~. ~k~~CONVERSATION_YES~ to accept, ~k~~CONVERSATION_NO~ to reject.
+ZR_4 Pick up ZR-350 for $~1~. ~k~~CONVERSATION_YES~ to accept, ~k~~CONVERSATION_NO~ to reject.
+ZR_5 Are you kidding me? You don't have enough money, you poor.
+ZR_6 ZR-350 is your personal vehicle now. It will be near your safehouse or wherever you go.	
