@@ -1,0 +1,6 @@
+# by Junior_Djjr - MixMods.com.br
+# if conflict with other mods, change the ids: https://tuningmod.mixmods.com.br/p/ids.html
+objs
+14984, igtrolley, cstrolley, 100, 0
+14985, igtrolley_lid, cstrolley, 100, 0
+end
