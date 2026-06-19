@@ -1,0 +1,50 @@
+Version Build: Mar 27 2026 00:31:56
+2026-06-19 02:07:20 f0           | ==== Proper Shaders by MixMods.com.br ====
+2026-06-19 02:07:20 f0           | Proper Shaders mod enabled
+2026-06-19 02:07:20 f0           | Logging Enabled Level 3: Errors, warnings and other non important infos will be logged. Prefer using this just for debugging.
+2026-06-19 02:07:20 f0           | Using D3D9 Proxy, required for lots of features. Disable it in ProperShaders.ini if conflicts with other mod.
+2026-06-19 02:07:20 f0           | Using Z/depth buffer. Better shader compatibility, but no MSAA support (use SMAA antialiasing instead).
+2026-06-19 02:07:20 f0           | Using reversed Z/depth buffer. Requires proxy. This improves z-fighting a lot (very close faces flicking), but other graphic mods like ReShade must toggle reversed zbuffer to be compatible, otherwise you will see some rendering order issues.
+2026-06-19 02:07:20 f0           | Using lit map pipeline.
+2026-06-19 02:07:20 f0           | Using lit vehicle pipeline.
+2026-06-19 02:07:20 f0           | Using lit skin pipeline.
+2026-06-19 02:07:20 f0          I| Intercepted: D3D9System _rwD3D9VertexBufferManagerOpen
+2026-06-19 02:07:21 f0          W| Patched_AfterD3D9DeviceInit called.
+2026-06-19 02:07:21 f0          W| Sucessfully installed D3D9 Proxy.
+2026-06-19 02:07:21 f0          W| SkyGfx is installed.
+2026-06-19 02:07:21 f0          W| SilentPatch is installed.
+2026-06-19 02:07:21 f0          W| Open Limit Adjuster is installed.
+2026-06-19 02:07:21 f0          I| Intercepted: CGame::InitialiseRenderWare createRandomRaster
+2026-06-19 02:07:21 f0          I| Data successfully loaded from MaterialsData.json
+2026-06-19 02:07:21 f0          W| Init called.
+2026-06-19 02:07:21 f0          I| Intercepted: Idle RenderScene
+2026-06-19 02:07:21 f0          I| Intercepted: RenderScene CPlantMgr::Render as after rendering transparent effects
+2026-06-19 02:07:21 f0          I| Intercepted: RenderEffects CPostEffects::Render as after rendering
+2026-06-19 02:07:21 f0          I| Intercepted: CPostEffects::Render GtaColorCorrection as final screen rendering
+2026-06-19 02:07:21 f0          I| Intercepted: RenderFadingEntities
+2026-06-19 02:07:38 f0          I| PatchedRenderScene called.
+2026-06-19 02:07:38 f0          W| Shadows enabled.
+2026-06-19 02:07:38 f0          W| SunRays enabled.
+2026-06-19 02:07:38 f0          W| SoftParticles enabled.
+2026-06-19 02:07:38 f0          W| HBAO enabled.
+2026-06-19 02:07:38 f0          I| SMAA: Applied preset 2 (threshold=0.10, steps=16, diag=8, corner=25)
+2026-06-19 02:07:38 f0          W| SMAA enabled (Preset: 2).
+2026-06-19 02:07:38 f0          I| SimpleSky: Created dome with 561 vertices, 3072 indices
+2026-06-19 02:07:38 f0          I| SimpleSky shader initialized successfully.
+2026-06-19 02:07:38 f0          W| SimpleSky enabled.
+2026-06-19 02:07:38 f0          I| Attempting to install SkyHooks...
+2026-06-19 02:07:38 f0          I| SkyHooks installed: 0x53D81C -> RenderAtmosphericSky (Clear Black), Clouds NOP'd.
+2026-06-19 02:07:38 f0          I| Not using Depth Pre Pass. Required to optimize the GPU usage, and for features, such as soft blurred shadows.
+2026-06-19 02:07:38 f0          I| Creating resources for Direct3D Device: 4ed0618
+2026-06-19 02:07:38 f0          W| Resources created successfully.
+2026-06-19 02:07:38 f0          I| PatchedRenderFadingEntities called.
+2026-06-19 02:07:38 f0          I| PatchedPostEffectsFirst called.
+2026-06-19 02:07:38 f0          I| PostEffectsFirst called.
+2026-06-19 02:07:38 f0          I| ProcessPostFxFeatures_PostEffectsFirst called
+2026-06-19 02:07:38 f0          I| PatchedPostEffectsLast called.
+2026-06-19 02:07:38 f0          I| ColorFilterProcessing called.
+2026-06-19 02:07:38 f0          I| ProcessPostFxFeatures_AfterRendering called
+2026-06-19 02:07:38 f0          I| SMAA: Loaded texture from resources/textures/AreaTexDX9.dds
+2026-06-19 02:07:38 f0          I| SMAA: Loaded texture from resources/textures/SearchTex.dds
+2026-06-19 02:07:38 f0          I| SMAA: Resources created for 2560x1440
+2026-06-19 02:07:38 f1          I| InitShadowsFeature 1
